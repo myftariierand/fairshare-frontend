@@ -1,0 +1,42 @@
+import { createFileRoute } from '@tanstack/react-router'
+
+import { Route as GroupLayout } from '@/routes/_auth/$group'
+
+import { Image } from '@/components/ui/image'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import TransactionList from '@/components/group/transaction-list'
+import MemberList from '@/components/group/member-list'
+import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
+
+export const Route = createFileRoute('/_auth/$group/')({
+    component: RouteComponent
+})
+
+function RouteComponent() {
+    const data = GroupLayout.useLoaderData()
+
+    return (
+        <>
+            <div className='flex flex-col gap-4'>
+                <div className='flex gap-3 justify-between'>
+                    <Image src='' className='size-20 rounded' />
+                </div>
+                <Tabs defaultValue='transactions'>
+                    <TabsList>
+                        <TabsTrigger value='transactions'>
+                            Transactions
+                        </TabsTrigger>
+                        <TabsTrigger value='members'>Members</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value='transactions'>
+                        <TransactionList transactions={data.transactions} />
+                        <CreateTransactionDrawer members={data.members} />
+                    </TabsContent>
+                    <TabsContent value='members'>
+                        <MemberList members={data.members} />
+                    </TabsContent>
+                </Tabs>
+            </div>
+        </>
+    )
+}

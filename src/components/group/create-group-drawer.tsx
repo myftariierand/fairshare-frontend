@@ -1,0 +1,113 @@
+import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { toast } from 'sonner'
+
+import { useCreateGroupMutation } from '@/app/services/group'
+
+import { getErrorMessage } from '@/lib/utils'
+
+import { Loader, Users } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from '@/components/ui/form'
+import {
+    Drawer,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger
+} from '@/components/ui/drawer'
+
+const GroupSchema = z.object({
+    name: z.string().min(4, {
+        message: 'Name must be at least 4 characters.'
+    })
+})
+type GroupData = z.infer<typeof GroupSchema>
+
+const CreateGroupSheet = () => {
+    const [open, setOpen] = useState(false)
+    const form = useForm<GroupData>({
+        resolver: zodResolver(GroupSchema),
+        defaultValues: {
+            name: ''
+        }
+    })
+
+    const [createGroup, { isLoading }] = useCreateGroupMutation()
+
+    const onSubmit = async (data: GroupData) => {
+        try {
+            await createGroup(data).unwrap()
+            setOpen(false)
+            form.reset()
+            toast.success('Group created successfully')
+        } catch (error) {
+            toast.error(getErrorMessage(error))
+        }
+    }
+
+    return (
+        <Drawer open={open} onOpenChange={setOpen}>
+            <DrawerTrigger asChild>
+                <Button size={'sm'} variant={'outline'} className='ml-auto'>
+                    <Users /> New Group
+                </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+                <DrawerHeader>
+                    <DrawerTitle>CREATE A NEW GROUP</DrawerTitle>
+                    <DrawerDescription>
+                        Create a group and invite friends for your future trip.
+                    </DrawerDescription>
+                </DrawerHeader>
+                <Form {...form}>
+                    <form
+                        id='group-form'
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className='space-y-8 px-4'
+                    >
+                        <FormField
+                            control={form.control}
+                            name='name'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Group Name</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder='Summer 2024 Trip'
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </form>
+                </Form>
+                <DrawerFooter>
+                    <Button form='group-form' type='submit' className='w-full'>
+                        {isLoading ? (
+                            <Loader className='animate-spin' />
+                        ) : (
+                            'Create'
+                        )}
+                    </Button>
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
+    )
+}
+
+export default CreateGroupSheet
