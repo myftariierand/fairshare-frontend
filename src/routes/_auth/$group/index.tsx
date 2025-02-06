@@ -29,7 +29,7 @@ function RouteComponent() {
                         <TabsTrigger value='members'>Members</TabsTrigger>
                     </TabsList>
                     <TabsContent value='transactions'>
-                        <TransactionList transactions={data.transactions} />
+                        <TransactionList />
                         <CreateTransactionDrawer members={data.members} />
                     </TabsContent>
                     <TabsContent value='members'>

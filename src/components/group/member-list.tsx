@@ -20,13 +20,13 @@ const MemberList = (props: Props) => {
                     <Button asChild variant={'ghost'} className='p-1'>
                         <Link
                             to='/$user'
-                            params={{ user: member.user.id }}
+                            params={{ user: member.id }}
                             className='flex gap-4 items-center w-full h-auto'
                         >
                             <Image className='size-12 rounded-lg' />
                             <div className='flex flex-col flex-grow'>
                                 <span className='font-semibold'>
-                                    {member.user.name}
+                                    {member.name}
                                 </span>
                                 <span className='text-xs text-muted-foreground'>
                                     Member since{' '}

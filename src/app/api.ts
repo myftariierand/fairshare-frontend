@@ -56,6 +56,13 @@ const baseQueryWithReauth: BaseQueryFn<
 export const api = createApi({
     baseQuery: baseQueryWithReauth,
     keepUnusedDataFor: Infinity,
-    tagTypes: ['Group', 'GroupInvite', 'Friend', 'FriendRequest', 'User'],
+    tagTypes: [
+        'Group',
+        'GroupInvite',
+        'Friend',
+        'FriendRequest',
+        'User',
+        'Transaction'
+    ],
     endpoints: () => ({})
 })

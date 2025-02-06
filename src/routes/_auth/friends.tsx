@@ -17,8 +17,6 @@ export const Route = createFileRoute('/_auth/friends')({
 })
 
 function RouteComponent() {
-    const context = Route.useRouteContext()
-
     const { data } = useGetFriendRequestsQuery()
     const [unfriend, unfriendMutation] = useUnfriendUserMutation()
 
@@ -53,10 +51,7 @@ function RouteComponent() {
                                 disabled={unfriendMutation.isLoading}
                                 onClick={() =>
                                     unfriend({
-                                        id:
-                                            context.user.id === data.receiverId
-                                                ? data.senderId
-                                                : data.receiverId
+                                        id: data.id
                                     })
                                 }
                             >

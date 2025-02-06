@@ -25,7 +25,7 @@ export type Transaction = {
     id: string
     groupId: string
     createdById: string
-    createdBy: User
+    paidBy: User
     amount: number
     description: string
     createdAt: Date

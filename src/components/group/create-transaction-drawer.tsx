@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { useRouter } from '@tanstack/react-router'
 
 import { useCreateTransactionMutation } from '@/app/services/transaction'
 
@@ -80,15 +81,16 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
         name: 'splits',
         control: form.control
     })
+    const router = useRouter()
 
     const [createTransaction, { isLoading }] = useCreateTransactionMutation()
 
     const onSubmit = async (data: TransactionData) => {
         try {
             const transformedData = {
-                groupId: params.group,
+                ...data,
                 amount: +data.amount,
-                description: data.description,
+                groupId: params.group,
                 splits: data.splits.map(({ amount, userId }) => ({
                     userId,
                     amount: +amount
@@ -96,9 +98,10 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
             }
 
             await createTransaction(transformedData).unwrap()
+            router.invalidate()
             setOpen(false)
             form.reset()
-            toast.success('Group created successfully')
+            toast.success('Transaction added successfully')
         } catch (error) {
             toast.error(getErrorMessage(error))
         }
@@ -119,8 +122,6 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
 
         form.setValue('splits', updatedSplits)
     }, [amount, form, members, splitEqually])
-
-    console.log(form.watch('splits'))
 
     return (
         <Drawer open={open} onOpenChange={setOpen}>

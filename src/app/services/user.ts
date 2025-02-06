@@ -1,10 +1,10 @@
 import { api } from '@/app/api'
 
 import type { User } from '@/types/user'
-import type { FriendRequest } from '@/types/friend'
 
 type SearchResult = User & {
-    friendshipsReceiver: FriendRequest[]
+    // eslint-disable-next-line
+    friendshipsReceiver: any[]
 }
 
 export const userApi = api.injectEndpoints({

@@ -22,6 +22,7 @@ import { Route as AuthUserImport } from './routes/_auth/$user'
 import { Route as AuthGroupImport } from './routes/_auth/$group'
 import { Route as AuthGroupIndexImport } from './routes/_auth/$group/index'
 import { Route as AuthGroupSettingsImport } from './routes/_auth/$group/settings'
+import { Route as AuthGroupTransactionsTransactionImport } from './routes/_auth/$group/transactions.$transaction'
 
 // Create/Update Routes
 
@@ -89,6 +90,13 @@ const AuthGroupSettingsRoute = AuthGroupSettingsImport.update({
   path: '/settings',
   getParentRoute: () => AuthGroupRoute,
 } as any)
+
+const AuthGroupTransactionsTransactionRoute =
+  AuthGroupTransactionsTransactionImport.update({
+    id: '/transactions/$transaction',
+    path: '/transactions/$transaction',
+    getParentRoute: () => AuthGroupRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -171,6 +179,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthGroupIndexImport
       parentRoute: typeof AuthGroupImport
     }
+    '/_auth/$group/transactions/$transaction': {
+      id: '/_auth/$group/transactions/$transaction'
+      path: '/transactions/$transaction'
+      fullPath: '/$group/transactions/$transaction'
+      preLoaderRoute: typeof AuthGroupTransactionsTransactionImport
+      parentRoute: typeof AuthGroupImport
+    }
   }
 }
 
@@ -179,11 +194,13 @@ declare module '@tanstack/react-router' {
 interface AuthGroupRouteChildren {
   AuthGroupSettingsRoute: typeof AuthGroupSettingsRoute
   AuthGroupIndexRoute: typeof AuthGroupIndexRoute
+  AuthGroupTransactionsTransactionRoute: typeof AuthGroupTransactionsTransactionRoute
 }
 
 const AuthGroupRouteChildren: AuthGroupRouteChildren = {
   AuthGroupSettingsRoute: AuthGroupSettingsRoute,
   AuthGroupIndexRoute: AuthGroupIndexRoute,
+  AuthGroupTransactionsTransactionRoute: AuthGroupTransactionsTransactionRoute,
 }
 
 const AuthGroupRouteWithChildren = AuthGroupRoute._addFileChildren(
@@ -222,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthIndexRoute
   '/$group/settings': typeof AuthGroupSettingsRoute
   '/$group/': typeof AuthGroupIndexRoute
+  '/$group/transactions/$transaction': typeof AuthGroupTransactionsTransactionRoute
 }
 
 export interface FileRoutesByTo {
@@ -234,6 +252,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthIndexRoute
   '/$group/settings': typeof AuthGroupSettingsRoute
   '/$group': typeof AuthGroupIndexRoute
+  '/$group/transactions/$transaction': typeof AuthGroupTransactionsTransactionRoute
 }
 
 export interface FileRoutesById {
@@ -249,6 +268,7 @@ export interface FileRoutesById {
   '/_auth/': typeof AuthIndexRoute
   '/_auth/$group/settings': typeof AuthGroupSettingsRoute
   '/_auth/$group/': typeof AuthGroupIndexRoute
+  '/_auth/$group/transactions/$transaction': typeof AuthGroupTransactionsTransactionRoute
 }
 
 export interface FileRouteTypes {
@@ -265,6 +285,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$group/settings'
     | '/$group/'
+    | '/$group/transactions/$transaction'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -276,6 +297,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$group/settings'
     | '/$group'
+    | '/$group/transactions/$transaction'
   id:
     | '__root__'
     | '/_auth'
@@ -289,6 +311,7 @@ export interface FileRouteTypes {
     | '/_auth/'
     | '/_auth/$group/settings'
     | '/_auth/$group/'
+    | '/_auth/$group/transactions/$transaction'
   fileRoutesById: FileRoutesById
 }
 
@@ -341,7 +364,8 @@ export const routeTree = rootRoute
       "parent": "/_auth",
       "children": [
         "/_auth/$group/settings",
-        "/_auth/$group/"
+        "/_auth/$group/",
+        "/_auth/$group/transactions/$transaction"
       ]
     },
     "/_auth/$user": {
@@ -370,6 +394,10 @@ export const routeTree = rootRoute
     },
     "/_auth/$group/": {
       "filePath": "_auth/$group/index.tsx",
+      "parent": "/_auth/$group"
+    },
+    "/_auth/$group/transactions/$transaction": {
+      "filePath": "_auth/$group/transactions.$transaction.tsx",
       "parent": "/_auth/$group"
     }
   }
