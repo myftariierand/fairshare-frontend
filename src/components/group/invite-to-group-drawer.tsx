@@ -1,6 +1,6 @@
 import { useInviteToGroupMutation } from '@/app/services/group'
 
-import { Route } from '@/routes/_auth/$group/settings'
+import { Route } from '@/routes/_auth/$group'
 
 import { UserPlus, SendHorizonal } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -24,8 +24,8 @@ const InviteToGroupDrawer = () => {
     return (
         <Drawer>
             <DrawerTrigger asChild>
-                <Button size={'sm'} variant={'ghost'} className='ml-auto'>
-                    <UserPlus /> Add people to group
+                <Button size={'icon'} variant={'secondary'} className='ml-auto'>
+                    <UserPlus />
                 </Button>
             </DrawerTrigger>
             <DrawerContent className='h-[90vh] px-3'>

@@ -7,13 +7,13 @@ import { useRouter } from '@tanstack/react-router'
 
 import { useCreateTransactionMutation } from '@/app/services/transaction'
 
-import { getErrorMessage } from '@/lib/utils'
+import { getErrorMessage, formatAmount } from '@/lib/utils'
 
 import type { Member } from '@/types/group'
 
 import { Route } from '@/routes/_auth/$group'
 
-import { Loader } from 'lucide-react'
+import { ListPlus, Loader } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
@@ -126,8 +126,8 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
     return (
         <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
-                <Button size={'sm'} variant={'outline'} className='ml-auto'>
-                    Add Transaction
+                <Button size={'icon'} variant={'secondary'} className='ml-auto'>
+                    <ListPlus />
                 </Button>
             </DrawerTrigger>
             <DrawerContent>
@@ -195,7 +195,10 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                 <FormItem>
                                     <FormLabel>Total Amount</FormLabel>
                                     <FormControl>
-                                        <Input placeholder='$600' {...field} />
+                                        <Input
+                                            placeholder={formatAmount(600)}
+                                            {...field}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
