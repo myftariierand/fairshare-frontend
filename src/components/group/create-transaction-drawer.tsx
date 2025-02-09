@@ -3,7 +3,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { useRouter } from '@tanstack/react-router'
 
 import { useCreateTransactionMutation } from '@/app/services/transaction'
 
@@ -81,7 +80,6 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
         name: 'splits',
         control: form.control
     })
-    const router = useRouter()
 
     const [createTransaction, { isLoading }] = useCreateTransactionMutation()
 
@@ -98,7 +96,6 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
             }
 
             await createTransaction(transformedData).unwrap()
-            router.invalidate()
             setOpen(false)
             form.reset()
             toast.success('Transaction added successfully')
