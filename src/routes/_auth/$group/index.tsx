@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as GroupLayout } from '@/routes/_auth/$group'
@@ -7,12 +8,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import TransactionList from '@/components/group/transaction-list'
 import MemberList from '@/components/group/member-list'
 import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
+import InviteToGroupDrawer from '@/components/group/invite-to-group-drawer'
 
 export const Route = createFileRoute('/_auth/$group/')({
     component: RouteComponent
 })
 
 function RouteComponent() {
+    const [tab, setTab] = useState('transactions')
     const data = GroupLayout.useLoaderData()
 
     return (
@@ -21,16 +24,21 @@ function RouteComponent() {
                 <div className='flex gap-3 justify-between'>
                     <Image src='' className='size-20 rounded' />
                 </div>
-                <Tabs defaultValue='transactions'>
-                    <TabsList>
-                        <TabsTrigger value='transactions'>
-                            Transactions
-                        </TabsTrigger>
-                        <TabsTrigger value='members'>Members</TabsTrigger>
-                    </TabsList>
+                <Tabs defaultValue={tab} onValueChange={setTab}>
+                    <div className='flex items-center'>
+                        <TabsList>
+                            <TabsTrigger value='transactions'>
+                                Transactions
+                            </TabsTrigger>
+                            <TabsTrigger value='members'>Members</TabsTrigger>
+                        </TabsList>
+                        {tab === 'transactions' && (
+                            <CreateTransactionDrawer members={data.members} />
+                        )}
+                        {tab === 'members' && <InviteToGroupDrawer />}
+                    </div>
                     <TabsContent value='transactions'>
                         <TransactionList />
-                        <CreateTransactionDrawer members={data.members} />
                     </TabsContent>
                     <TabsContent value='members'>
                         <MemberList members={data.members} />
