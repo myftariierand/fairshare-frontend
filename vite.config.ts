@@ -1,8 +1,8 @@
-import path from "path";
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { VitePWA } from "vite-plugin-pwa";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import path from 'path'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { VitePWA } from 'vite-plugin-pwa'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,38 +10,38 @@ export default defineConfig({
         TanStackRouterVite(),
         react(),
         VitePWA({
-            registerType: "autoUpdate",
+            registerType: 'autoUpdate',
             injectRegister: false,
 
             pwaAssets: {
                 disabled: false,
-                config: true,
+                config: true
             },
 
             manifest: {
-                name: "FairShare",
-                short_name: "FS",
-                description: "FairShare",
-                theme_color: "#ffffff",
+                name: 'FairShare',
+                short_name: 'FairShare',
+                description: 'FairShare',
+                theme_color: '#ffffff'
             },
 
             workbox: {
-                globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
+                globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
                 cleanupOutdatedCaches: true,
-                clientsClaim: true,
+                clientsClaim: true
             },
 
             devOptions: {
                 enabled: false,
-                navigateFallback: "index.html",
+                navigateFallback: 'index.html',
                 suppressWarnings: true,
-                type: "module",
-            },
-        }),
+                type: 'module'
+            }
+        })
     ],
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "./src"),
-        },
-    },
-});
+            '@': path.resolve(__dirname, './src')
+        }
+    }
+})
