@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 
 import EditTransactionDrawer from '@/components/group/edit-transaction-drawer'
+import DeleteTransactionDialog from '@/components/group/delete-transaction-dialog'
 
 export const Route = createFileRoute('/_auth/$group/transactions/$transaction')(
     {
@@ -35,8 +36,8 @@ function RouteComponent() {
     return (
         <div className='space-y-4'>
             <Separator />
-            <div className='flex justify-between'>
-                <div>
+            <div className='flex space-x-3'>
+                <div className='flex-1'>
                     <h2 className='text-xl font-medium'>{data.description}</h2>
                     <h3 className='text-3xl font-bold'>
                         {formatAmount(data.amount)}
@@ -53,6 +54,7 @@ function RouteComponent() {
                     </div>
                 </div>
                 <EditTransactionDrawer transaction={data} />
+                <DeleteTransactionDialog transactionId={data.id} />
             </div>
 
             <Separator />

@@ -71,6 +71,15 @@ export const transactionApi = api.injectEndpoints({
                 { type: 'Transaction', id },
                 { type: 'Transaction', id: 'LIST' }
             ]
+        }),
+        deleteTransaction: builder.mutation<void, { id: string }>({
+            query: ({ id }) => ({
+                url: `/transactions/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: (_result, _error, { id }) => [
+                { type: 'Transaction', id }
+            ]
         })
     })
 })
@@ -79,5 +88,6 @@ export const {
     useGetTransactionsQuery,
     useGetTransactionByIdQuery,
     useCreateTransactionMutation,
-    useUpdateTransactionMutation
+    useUpdateTransactionMutation,
+    useDeleteTransactionMutation
 } = transactionApi
