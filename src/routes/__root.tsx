@@ -66,7 +66,10 @@ function RootComponent() {
                 case SseEventType.TRANSACTION_ADDED:
                 case SseEventType.TRANSACTION_UPDATED:
                 case SseEventType.TRANSACTION_DELETED:
-                    store.dispatch(api.util.invalidateTags(['Transaction']))
+                    store.dispatch(
+                        api.util.invalidateTags(['Transaction', 'Group'])
+                    )
+                    router.invalidate()
                     break
                 default:
                     break
