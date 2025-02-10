@@ -19,7 +19,7 @@ const MemberList = (props: Props) => {
                 <li key={member.id}>
                     <Button asChild variant={'ghost'} className='p-1'>
                         <Link
-                            to='/$user'
+                            to='/user/$user'
                             params={{ user: member.id }}
                             className='flex gap-4 items-center w-full h-auto'
                         >
