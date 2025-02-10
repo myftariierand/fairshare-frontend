@@ -3,6 +3,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as GroupLayout } from '@/routes/_auth/$group'
 
+import { formatAmount } from '@/lib/utils'
+
 import { Image } from '@/components/ui/image'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import TransactionList from '@/components/group/transaction-list'
@@ -21,8 +23,23 @@ function RouteComponent() {
     return (
         <>
             <div className='flex flex-col gap-4'>
-                <div className='flex gap-3 justify-between'>
+                <div className='flex gap-3 font-medium'>
                     <Image src='' className='size-20 rounded' />
+                    <ul className='text-sm'>
+                        {data.settlements.map(({ from, to, amount }) => (
+                            <li key={from.name + to.name}>
+                                {from.name}{' '}
+                                <span className='text-muted-foreground'>
+                                    owes
+                                </span>{' '}
+                                {formatAmount(amount)}{' '}
+                                <span className='text-muted-foreground'>
+                                    to
+                                </span>{' '}
+                                {to.name}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
                 <Tabs defaultValue={tab} onValueChange={setTab}>
                     <div className='flex items-center'>

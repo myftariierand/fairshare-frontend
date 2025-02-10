@@ -36,7 +36,20 @@ export type SingleGroup = {
     createdBy: User
     members: Member[]
     transactions: Transaction[]
+    settlements: Settelment[]
 } & Group
+
+type Settelment = {
+    from: {
+        id: string
+        name: string
+    }
+    to: {
+        id: string
+        name: string
+    }
+    amount: number
+}
 
 export type GroupInvite = {
     id: string
