@@ -14,7 +14,7 @@ const App = () => {
 
     return (
         <>
-            <Toaster richColors position='top-center' />
+            <Toaster richColors theme='light' position='top-center' />
             <RouterProvider router={router} context={{ user: data }} />
         </>
     )
