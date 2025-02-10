@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
@@ -70,6 +71,7 @@ const EditTransactionDrawer = ({
         )
     )
 
+    const router = useRouter()
     const params = Route.useParams()
 
     const form = useForm<TransactionData>({
@@ -111,6 +113,7 @@ const EditTransactionDrawer = ({
             setOpen(false)
             form.reset()
             toast.success('Transaction updated successfully')
+            router.invalidate()
         } catch (error) {
             toast.error(getErrorMessage(error))
         }
