@@ -3,6 +3,8 @@ import { api } from '@/app/api'
 import { LoginData } from '@/schema/login'
 import { RegisterData } from '@/schema/register'
 
+import { logout } from '@/features/auth/authSlice'
+
 import type { User } from '@/types/user'
 
 type AuthResponse = {
@@ -17,6 +19,26 @@ export const authApi = api.injectEndpoints({
                 method: 'POST',
                 body: credentials
             })
+        }),
+        logout: builder.mutation<void, void>({
+            query: () => ({
+                url: '/auth/logout',
+                method: 'POST'
+            }),
+            onQueryStarted: async (
+                _queryArgument,
+                { dispatch, queryFulfilled }
+            ) => {
+                try {
+                    await queryFulfilled
+                    dispatch(logout())
+                    setTimeout(() => {
+                        dispatch(api.util.resetApiState())
+                    }, 1000)
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         }),
         register: builder.mutation<AuthResponse, RegisterData>({
             query: credentials => ({
@@ -36,6 +58,7 @@ export const authApi = api.injectEndpoints({
 
 export const {
     useLoginMutation,
+    useLogoutMutation,
     useRegisterMutation,
     useGetProfileQuery,
     useLazyGetProfileQuery
