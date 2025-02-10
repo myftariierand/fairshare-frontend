@@ -10,8 +10,7 @@ import { getErrorMessage } from '@/lib/utils'
 
 import { GroupInviteStatus } from '@/types/common'
 
-import { Check, EllipsisVertical, X } from 'lucide-react'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Check, EllipsisVertical, X, Inbox, Loader } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 import {
@@ -49,15 +48,7 @@ const GroupInvitesList = () => {
     let content
 
     if (isLoading) {
-        return (
-            <div className='flex items-center gap-4'>
-                <Skeleton className='size-12 rounded-lg' />
-                <div className='flex flex-col gap-1'>
-                    <Skeleton className='w-20 h-5' />
-                    <Skeleton className='w-20 h-4' />
-                </div>
-            </div>
-        )
+        content = <Loader className='animate-spin mx-auto mt-12' />
     }
 
     if (isError) {
@@ -69,56 +60,71 @@ const GroupInvitesList = () => {
     }
 
     if (isSuccess) {
-        content = (
-            <ul>
-                {data.map(invitation => (
-                    <li
-                        key={invitation.id}
-                        className='text-sm border-b p-2 flex items-center'
-                    >
-                        <span className='font-semibold '>
-                            {invitation.sender.name}
-                        </span>
-                        &nbsp; invites you to join &nbsp;
-                        <span className='font-semibold'>
-                            {invitation.group.name}
-                        </span>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    size={'icon'}
-                                    variant={'ghost'}
-                                    className='ml-auto'
-                                >
-                                    <EllipsisVertical />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className='min-w-max'>
-                                <DropdownMenuItem
-                                    className='justify-between'
-                                    disabled={acceptInviteMutation.isLoading}
-                                    onClick={() =>
-                                        handleAccept(
-                                            invitation.groupId,
-                                            invitation.id
-                                        )
-                                    }
-                                >
-                                    Join <Check />
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className='justify-between'
-                                    disabled={rejectInviteMutation.isLoading}
-                                    onClick={() => handleReject(invitation.id)}
-                                >
-                                    Decline <X />
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </li>
-                ))}
-            </ul>
-        )
+        if (!data.length) {
+            content = (
+                <div className='grid place-items-center mt-12 text-muted-foreground space-y-2'>
+                    <Inbox />
+                    <span className='text-sm font-medium'>No Invites</span>
+                </div>
+            )
+        } else {
+            content = (
+                <ul>
+                    {data.map(invitation => (
+                        <li
+                            key={invitation.id}
+                            className='text-sm border-b p-2 flex items-center'
+                        >
+                            <span className='font-semibold '>
+                                {invitation.sender.name}
+                            </span>
+                            &nbsp; invites you to join &nbsp;
+                            <span className='font-semibold'>
+                                {invitation.group.name}
+                            </span>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        size={'icon'}
+                                        variant={'ghost'}
+                                        className='ml-auto'
+                                    >
+                                        <EllipsisVertical />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className='min-w-max'>
+                                    <DropdownMenuItem
+                                        className='justify-between'
+                                        disabled={
+                                            acceptInviteMutation.isLoading
+                                        }
+                                        onClick={() =>
+                                            handleAccept(
+                                                invitation.groupId,
+                                                invitation.id
+                                            )
+                                        }
+                                    >
+                                        Join <Check />
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        className='justify-between'
+                                        disabled={
+                                            rejectInviteMutation.isLoading
+                                        }
+                                        onClick={() =>
+                                            handleReject(invitation.id)
+                                        }
+                                    >
+                                        Decline <X />
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </li>
+                    ))}
+                </ul>
+            )
+        }
     }
 
     return content
