@@ -57,7 +57,10 @@ export const transactionApi = api.injectEndpoints({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: () => [{ type: 'Transaction', id: 'LIST' }]
+            invalidatesTags: (_result, _error, { groupId }) => [
+                { type: 'Transaction', id: 'LIST' },
+                { type: 'Group', id: groupId }
+            ]
         }),
         updateTransaction: builder.mutation<void, UpdateTransaction>({
             query: ({ id, ...rest }) => ({
@@ -66,7 +69,8 @@ export const transactionApi = api.injectEndpoints({
                 body: rest
             }),
             invalidatesTags: (_result, _error, { id }) => [
-                { type: 'Transaction', id }
+                { type: 'Transaction', id },
+                { type: 'Transaction', id: 'LIST' }
             ]
         }),
         deleteTransaction: builder.mutation<void, { id: string }>({

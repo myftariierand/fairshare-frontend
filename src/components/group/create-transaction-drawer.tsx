@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
@@ -60,6 +61,8 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
     const [open, setOpen] = useState(false)
     const [splitEqually, setSplitEqually] = useState(true)
 
+    const router = useRouter()
+
     const params = Route.useParams()
     const context = Route.useRouteContext()
 
@@ -99,6 +102,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
             setOpen(false)
             form.reset()
             toast.success('Transaction added successfully')
+            router.invalidate()
         } catch (error) {
             toast.error(getErrorMessage(error))
         }
