@@ -252,21 +252,20 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                             )}
                         </form>
                     </Form>
+                    <DrawerFooter>
+                        <Button
+                            form='transaction-form'
+                            type='submit'
+                            className='w-full'
+                        >
+                            {isLoading ? (
+                                <Loader className='animate-spin' />
+                            ) : (
+                                'Create'
+                            )}
+                        </Button>
+                    </DrawerFooter>
                 </ScrollArea>
-
-                <DrawerFooter>
-                    <Button
-                        form='transaction-form'
-                        type='submit'
-                        className='w-full'
-                    >
-                        {isLoading ? (
-                            <Loader className='animate-spin' />
-                        ) : (
-                            'Create'
-                        )}
-                    </Button>
-                </DrawerFooter>
             </DrawerContent>
         </Drawer>
     )
