@@ -42,6 +42,7 @@ import {
     DrawerTitle,
     DrawerTrigger
 } from '@/components/ui/drawer'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const TransactionSchema = z.object({
     description: z.string(),
@@ -138,117 +139,121 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                         Create a transaction and share it with your group.
                     </DrawerDescription>
                 </DrawerHeader>
-                <Form {...form}>
-                    <form
-                        id='transaction-form'
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className='space-y-4 px-4'
-                    >
-                        <FormField
-                            control={form.control}
-                            name='description'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='Plane Tickets'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='paidBy'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Paid By</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
+                <ScrollArea className='overflow-y-auto'>
+                    <Form {...form}>
+                        <form
+                            id='transaction-form'
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className='space-y-4 px-4'
+                        >
+                            <FormField
+                                control={form.control}
+                                name='description'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description</FormLabel>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue />
-                                            </SelectTrigger>
+                                            <Input
+                                                placeholder='Plane Tickets'
+                                                {...field}
+                                            />
                                         </FormControl>
-                                        <SelectContent>
-                                            {members.map(member => (
-                                                <SelectItem
-                                                    key={member.id}
-                                                    value={member.id}
-                                                >
-                                                    {member.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </FormItem>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='paidBy'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Paid By</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {members.map(member => (
+                                                    <SelectItem
+                                                        key={member.id}
+                                                        value={member.id}
+                                                    >
+                                                        {member.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='amount'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Total Amount</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder={formatAmount(600)}
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                                <div className='space-y-0.5'>
+                                    <FormLabel className='text-base'>
+                                        Split Equally
+                                    </FormLabel>
+                                    <FormDescription>
+                                        Disable this if you want to manually
+                                        specify the split amounts for each group
+                                        member.
+                                    </FormDescription>
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                        checked={splitEqually}
+                                        onCheckedChange={setSplitEqually}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                            {!splitEqually && (
+                                <ul className='space-y-2'>
+                                    {fields.map((split, index) => (
+                                        <li key={split.id}>
+                                            <FormField
+                                                control={form.control}
+                                                name={`splits.${index}.amount`}
+                                                render={({ field }) => (
+                                                    <FormItem className='flex flex-row items-center justify-between space-y-0'>
+                                                        <FormLabel className='text-base'>
+                                                            {split.name}
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                {...field}
+                                                                className='w-auto'
+                                                            />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
                             )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='amount'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Total Amount</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder={formatAmount(600)}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                            <div className='space-y-0.5'>
-                                <FormLabel className='text-base'>
-                                    Split Equally
-                                </FormLabel>
-                                <FormDescription>
-                                    Disable this if you want to manually specify
-                                    the split amounts for each group member.
-                                </FormDescription>
-                            </div>
-                            <FormControl>
-                                <Switch
-                                    checked={splitEqually}
-                                    onCheckedChange={setSplitEqually}
-                                />
-                            </FormControl>
-                        </FormItem>
-                        {!splitEqually && (
-                            <ul className='space-y-2'>
-                                {fields.map((split, index) => (
-                                    <li key={split.id}>
-                                        <FormField
-                                            control={form.control}
-                                            name={`splits.${index}.amount`}
-                                            render={({ field }) => (
-                                                <FormItem className='flex flex-row items-center justify-between space-y-0'>
-                                                    <FormLabel className='text-base'>
-                                                        {split.name}
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            {...field}
-                                                            className='w-auto'
-                                                        />
-                                                    </FormControl>
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </form>
-                </Form>
+                        </form>
+                    </Form>
+                </ScrollArea>
+
                 <DrawerFooter>
                     <Button
                         form='transaction-form'
