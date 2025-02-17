@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { z } from 'zod'
 
 import {
     useGetFriendRequestsQuery,
@@ -12,11 +13,22 @@ import AddFriendDrawer from '@/components/friend/add-friend-drawer'
 import FriendRequestsList from '@/components/friend/friend-requests-list'
 import FriendsList from '@/components/friend/friends-list'
 
+const TabSchema = z.enum(['friends', 'requests'])
+type Tab = z.infer<typeof TabSchema>
+
+const SearchSchema = z.object({
+    t: z.enum(['friends', 'requests']).default('requests')
+})
+
 export const Route = createFileRoute('/_auth/friends')({
+    validateSearch: SearchSchema,
     component: RouteComponent
 })
 
 function RouteComponent() {
+    const search = Route.useSearch()
+    const navigate = Route.useNavigate()
+
     const { data } = useGetFriendRequestsQuery()
     const [unfriend, unfriendMutation] = useUnfriendUserMutation()
 
@@ -26,7 +38,12 @@ function RouteComponent() {
                 <h1 className='font-bold text-xl'>Friends</h1>
                 <AddFriendDrawer />
             </header>
-            <Tabs defaultValue='requests'>
+            <Tabs
+                value={search.t}
+                onValueChange={value =>
+                    navigate({ search: { t: value as Tab } })
+                }
+            >
                 <TabsList className='w-full'>
                     <TabsTrigger value='requests' className='w-full'>
                         Requests{' '}
