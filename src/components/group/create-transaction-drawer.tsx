@@ -123,8 +123,22 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
         form.setValue('splits', updatedSplits)
     }
 
+    const handleOpenChange = (open: boolean) => {
+        setOpen(open)
+        form.reset({
+            description: '',
+            amount: '',
+            paidBy: context.user.id,
+            splits: members.map(({ name, id }) => ({
+                name,
+                userId: id,
+                amount: ''
+            }))
+        })
+    }
+
     return (
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
                 <Button size={'icon'} variant={'secondary'} className='ml-auto'>
                     <ListPlus />
