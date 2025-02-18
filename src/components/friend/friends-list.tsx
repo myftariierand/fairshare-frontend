@@ -34,7 +34,7 @@ const FriendsList = (props: Props) => {
             )
         } else {
             content = (
-                <ul>
+                <ul className='space-y-2'>
                     {data.map(friend => (
                         <li key={friend.id} className='flex items-center'>
                             <Image className='size-12 rounded-lg' />
