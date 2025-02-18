@@ -51,7 +51,7 @@ const TransactionList = () => {
                                     params={{ transaction: transaction.id }}
                                     className='flex gap-4 items-center w-full h-auto'
                                 >
-                                    <Image className='size-12 rounded-lg' />
+                                    <Image className='size-12 rounded-lg shrink-0' />
                                     <div className='flex-1'>
                                         <span className='font-semibold'>
                                             {transaction.description}
