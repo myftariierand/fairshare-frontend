@@ -32,58 +32,77 @@ const TransactionList = () => {
     }
 
     if (isSuccess) {
-        content = data.map(transaction => (
-            <li key={transaction.id}>
-                <Button asChild variant={'ghost'} className='p-1'>
-                    <Link
-                        from='/$group'
-                        to='/$group/transactions/$transaction'
-                        params={{ transaction: transaction.id }}
-                        className='flex gap-4 items-center w-full h-auto'
-                    >
-                        <Image className='size-12 rounded-lg' />
-                        <div className='flex-1'>
-                            <span className='font-semibold'>
-                                {transaction.description}
-                            </span>
-                            <div className='text-xs text-muted-foreground'>
-                                Paid by{' '}
-                                <span className='font-semibold text-foreground'>
-                                    {transaction.paidBy}
-                                </span>{' '}
-                                {formatDistance(transaction.createdAt, now, {
-                                    addSuffix: true
-                                })}
-                            </div>
-                        </div>
-                        <div className='flex flex-col items-end'>
-                            <span className='text-xs text-muted-foreground'>
-                                {transaction.balance < 0
-                                    ? 'You borrowed'
-                                    : transaction.balance === 0
-                                      ? ''
-                                      : 'You lent'}
-                            </span>
-                            <span
-                                className={cn(
-                                    'font-semibold',
-                                    transaction.balance < 0
-                                        ? 'text-red-800'
-                                        : transaction.balance === 0
-                                          ? ''
-                                          : 'text-green-800'
-                                )}
-                            >
-                                {formatAmount(Math.abs(transaction.balance))}
-                            </span>
-                        </div>
-                    </Link>
-                </Button>
-            </li>
-        ))
+        if (!data.length) {
+            content = (
+                <div className='grid place-items-center mt-12 text-muted-foreground space-y-2'>
+                    <Inbox />
+                    <span className='text-sm font-medium'>No Transactions</span>
+                </div>
+            )
+        } else {
+            content = (
+                <ul>
+                    {data.map(transaction => (
+                        <li key={transaction.id}>
+                            <Button asChild variant={'ghost'} className='p-1'>
+                                <Link
+                                    from='/$group'
+                                    to='/$group/transactions/$transaction'
+                                    params={{ transaction: transaction.id }}
+                                    className='flex gap-4 items-center w-full h-auto'
+                                >
+                                    <Image className='size-12 rounded-lg' />
+                                    <div className='flex-1'>
+                                        <span className='font-semibold'>
+                                            {transaction.description}
+                                        </span>
+                                        <div className='text-xs text-muted-foreground'>
+                                            Paid by{' '}
+                                            <span className='font-semibold text-foreground'>
+                                                {transaction.paidBy}
+                                            </span>{' '}
+                                            {formatDistance(
+                                                transaction.createdAt,
+                                                now,
+                                                {
+                                                    addSuffix: true
+                                                }
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-col items-end'>
+                                        <span className='text-xs text-muted-foreground'>
+                                            {transaction.balance < 0
+                                                ? 'You borrowed'
+                                                : transaction.balance === 0
+                                                  ? ''
+                                                  : 'You lent'}
+                                        </span>
+                                        <span
+                                            className={cn(
+                                                'font-semibold',
+                                                transaction.balance < 0
+                                                    ? 'text-red-800'
+                                                    : transaction.balance === 0
+                                                      ? ''
+                                                      : 'text-green-800'
+                                            )}
+                                        >
+                                            {formatAmount(
+                                                Math.abs(transaction.balance)
+                                            )}
+                                        </span>
+                                    </div>
+                                </Link>
+                            </Button>
+                        </li>
+                    ))}
+                </ul>
+            )
+        }
     }
 
-    return <ul>{content}</ul>
+    return content
 }
 
 export default TransactionList
