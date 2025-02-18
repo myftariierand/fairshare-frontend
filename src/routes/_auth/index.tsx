@@ -7,11 +7,10 @@ import CreateGroupDrawer from '@/components/group/create-group-drawer'
 import GroupInvitesList from '@/components/group/group-invites-list'
 
 const TabSchema = z.enum(['groups', 'invites'])
-type Tab = z.infer<typeof TabSchema>
-
 const SearchSchema = z.object({
-    t: z.enum(['groups', 'invites']).default('groups')
+    t: TabSchema.default('groups')
 })
+type Tab = z.infer<typeof TabSchema>
 
 export const Route = createFileRoute('/_auth/')({
     validateSearch: SearchSchema,

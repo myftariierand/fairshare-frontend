@@ -14,11 +14,10 @@ import FriendRequestsList from '@/components/friend/friend-requests-list'
 import FriendsList from '@/components/friend/friends-list'
 
 const TabSchema = z.enum(['friends', 'requests'])
-type Tab = z.infer<typeof TabSchema>
-
 const SearchSchema = z.object({
-    t: z.enum(['friends', 'requests']).default('requests')
+    t: TabSchema.default('requests')
 })
+type Tab = z.infer<typeof TabSchema>
 
 export const Route = createFileRoute('/_auth/friends')({
     validateSearch: SearchSchema,

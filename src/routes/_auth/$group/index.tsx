@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
+import { z } from 'zod'
 
 import { Route as GroupLayout } from '@/routes/_auth/$group'
 
@@ -12,12 +12,20 @@ import MemberList from '@/components/group/member-list'
 import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
 import InviteToGroupDrawer from '@/components/group/invite-to-group-drawer'
 
+const TabSchema = z.enum(['transactions', 'members'])
+const SearchSchema = z.object({
+    t: TabSchema.default('transactions')
+})
+type Tab = z.infer<typeof TabSchema>
+
 export const Route = createFileRoute('/_auth/$group/')({
+    validateSearch: SearchSchema,
     component: RouteComponent
 })
 
 function RouteComponent() {
-    const [tab, setTab] = useState('transactions')
+    const search = Route.useSearch()
+    const navigate = Route.useNavigate()
     const data = GroupLayout.useLoaderData()
 
     return (
@@ -41,7 +49,12 @@ function RouteComponent() {
                         ))}
                     </ul>
                 </div>
-                <Tabs defaultValue={tab} onValueChange={setTab}>
+                <Tabs
+                    value={search.t}
+                    onValueChange={value =>
+                        navigate({ search: { t: value as Tab } })
+                    }
+                >
                     <div className='flex items-center'>
                         <TabsList>
                             <TabsTrigger value='transactions'>
@@ -49,10 +62,10 @@ function RouteComponent() {
                             </TabsTrigger>
                             <TabsTrigger value='members'>Members</TabsTrigger>
                         </TabsList>
-                        {tab === 'transactions' && (
+                        {search.t === 'transactions' && (
                             <CreateTransactionDrawer members={data.members} />
                         )}
-                        {tab === 'members' && <InviteToGroupDrawer />}
+                        {search.t === 'members' && <InviteToGroupDrawer />}
                     </div>
                     <TabsContent value='transactions'>
                         <TransactionList />
