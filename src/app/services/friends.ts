@@ -2,7 +2,7 @@ import { api } from '@/app/api'
 
 import type { Friend } from '@/types/friend'
 
-const groupApi = api.injectEndpoints({
+export const friendApi = api.injectEndpoints({
     endpoints: builder => ({
         getFriends: builder.query<Friend[], void>({
             query: () => ({
@@ -70,4 +70,4 @@ export const {
     useRejectFriendRequestMutation,
     useCancelFriendRequestMutation,
     useUnfriendUserMutation
-} = groupApi
+} = friendApi

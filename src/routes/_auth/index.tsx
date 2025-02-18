@@ -1,6 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
+import { useGetGroupInvitesQuery } from '@/app/services/group'
+
+import { GroupInviteStatus } from '@/types/common'
+
+import { Dot } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import GroupList from '@/components/group/group-list'
 import CreateGroupDrawer from '@/components/group/create-group-drawer'
@@ -21,6 +26,10 @@ function RouteComponent() {
     const search = Route.useSearch()
     const navigate = Route.useNavigate()
 
+    const { data } = useGetGroupInvitesQuery({
+        status: GroupInviteStatus.pending
+    })
+
     return (
         <>
             <header className='flex items-center py-3'>
@@ -38,10 +47,15 @@ function RouteComponent() {
                         Groups
                     </TabsTrigger>
                     <TabsTrigger value='invites' className='w-full'>
-                        Invites{' '}
-                        {/* {!!data?.length && (
-                            <Dot size={24} className='text-destructive' />
-                        )} */}
+                        <span className='flex items-center relative'>
+                            Invites
+                            {!!data?.length && (
+                                <Dot
+                                    size={32}
+                                    className='text-destructive absolute -left-6'
+                                />
+                            )}
+                        </span>
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent value='groups'>

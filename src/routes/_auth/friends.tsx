@@ -45,10 +45,15 @@ function RouteComponent() {
             >
                 <TabsList className='w-full'>
                     <TabsTrigger value='requests' className='w-full'>
-                        Requests{' '}
-                        {!!data?.length && (
-                            <Dot size={24} className='text-destructive' />
-                        )}
+                        <span className='flex items-center relative'>
+                            Requests{' '}
+                            {!!data?.length && (
+                                <Dot
+                                    size={32}
+                                    className='text-destructive absolute -left-6'
+                                />
+                            )}
+                        </span>
                     </TabsTrigger>
                     <TabsTrigger value='friends' className='w-full'>
                         Friends

@@ -1,6 +1,7 @@
 import { createFileRoute, redirect, Outlet } from '@tanstack/react-router'
 
 import Navigation from '@/components/layout/Navigation'
+import PrefetchHandler from '@/features/utils/PrefetchHandler'
 
 export const Route = createFileRoute('/_auth')({
     beforeLoad: ({ context }) => {
@@ -19,6 +20,7 @@ function RouteComponent() {
             <div className='w-full max-w-md px-3'>
                 <Outlet />
                 <Navigation />
+                <PrefetchHandler />
             </div>
         </div>
     )
