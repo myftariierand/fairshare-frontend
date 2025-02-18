@@ -58,8 +58,13 @@ const CreateGroupSheet = () => {
         }
     }
 
+    const handleOpenChange = (open: boolean) => {
+        setOpen(open)
+        form.reset({ name: '' })
+    }
+
     return (
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
                 <Button size={'sm'} variant={'outline'} className='ml-auto'>
                     <Users /> New Group
