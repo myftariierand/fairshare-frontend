@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray } from 'react-hook-form'
@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 
 import { useCreateTransactionMutation } from '@/app/services/transaction'
 
-import { getErrorMessage, formatAmount } from '@/lib/utils'
+import { getErrorMessage, formatAmount, sanitizeNumberInput } from '@/lib/utils'
 
 import type { Member } from '@/types/group'
 
@@ -76,7 +76,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
             splits: members.map(({ name, id }) => ({
                 name,
                 userId: id,
-                amount: '0'
+                amount: ''
             }))
         }
     })
@@ -98,7 +98,6 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                     amount: +amount
                 }))
             }
-
             await createTransaction(transformedData).unwrap()
             setOpen(false)
             form.reset()
@@ -109,12 +108,11 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
         }
     }
 
-    const amount = form.watch('amount')
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const amount = sanitizeNumberInput(e.target.value)
+        form.setValue('amount', amount)
 
-    useEffect(() => {
-        const splits = form.getValues('splits')
-
-        const updatedSplits = splits.map(split => ({
+        const updatedSplits = form.getValues('splits').map(split => ({
             ...split,
             amount:
                 !amount || amount === '0'
@@ -123,7 +121,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
         }))
 
         form.setValue('splits', updatedSplits)
-    }, [amount, form, members, splitEqually])
+    }
 
     return (
         <Drawer open={open} onOpenChange={setOpen}>
@@ -199,8 +197,10 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                         <FormLabel>Total Amount</FormLabel>
                                         <FormControl>
                                             <Input
+                                                inputMode='decimal'
                                                 placeholder={formatAmount(600)}
                                                 {...field}
+                                                onChange={e => handleChange(e)}
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -241,6 +241,18 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                                             <Input
                                                                 {...field}
                                                                 className='w-auto'
+                                                                placeholder={formatAmount(
+                                                                    300
+                                                                )}
+                                                                onChange={e =>
+                                                                    field.onChange(
+                                                                        sanitizeNumberInput(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        )
+                                                                    )
+                                                                }
                                                             />
                                                         </FormControl>
                                                     </FormItem>

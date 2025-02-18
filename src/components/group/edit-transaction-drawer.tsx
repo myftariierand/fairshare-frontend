@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray } from 'react-hook-form'
@@ -10,7 +10,7 @@ import {
     type SingleTransaction
 } from '@/app/services/transaction'
 
-import { getErrorMessage } from '@/lib/utils'
+import { getErrorMessage, sanitizeNumberInput } from '@/lib/utils'
 
 import { Route } from '@/routes/_auth/$group'
 
@@ -119,12 +119,11 @@ const EditTransactionDrawer = ({
         }
     }
 
-    const amount = form.watch('amount')
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const amount = sanitizeNumberInput(e.target.value)
+        form.setValue('amount', amount)
 
-    useEffect(() => {
-        const splits = form.getValues('splits')
-
-        const updatedSplits = splits.map(split => ({
+        const updatedSplits = form.getValues('splits').map(split => ({
             ...split,
             amount:
                 !amount || amount === '0'
@@ -133,7 +132,7 @@ const EditTransactionDrawer = ({
         }))
 
         form.setValue('splits', updatedSplits)
-    }, [amount, form, splitEqually, transaction])
+    }
 
     return (
         <Drawer open={open} onOpenChange={setOpen}>
@@ -207,7 +206,11 @@ const EditTransactionDrawer = ({
                                 <FormItem>
                                     <FormLabel>Total Amount</FormLabel>
                                     <FormControl>
-                                        <Input placeholder='$600' {...field} />
+                                        <Input
+                                            placeholder='$600'
+                                            {...field}
+                                            onChange={e => handleChange(e)}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -246,6 +249,14 @@ const EditTransactionDrawer = ({
                                                         <Input
                                                             {...field}
                                                             className='w-auto'
+                                                            onChange={e =>
+                                                                field.onChange(
+                                                                    sanitizeNumberInput(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                )
+                                                            }
                                                         />
                                                     </FormControl>
                                                 </FormItem>
