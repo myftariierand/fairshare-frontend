@@ -134,8 +134,22 @@ const EditTransactionDrawer = ({
         form.setValue('splits', updatedSplits)
     }
 
+    const handleOpenChange = (open: boolean) => {
+        setOpen(open)
+        form.reset({
+            description: transaction.description,
+            amount: transaction.amount.toString(),
+            paidBy: transaction.paidById,
+            splits: transaction.splits.map(({ amount, user }) => ({
+                name: user.name,
+                userId: user.id,
+                amount: amount.toString()
+            }))
+        })
+    }
+
     return (
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
                 <Button size={'icon'} variant={'secondary'}>
                     <Pencil />
