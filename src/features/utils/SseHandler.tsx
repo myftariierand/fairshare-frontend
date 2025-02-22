@@ -38,10 +38,23 @@ const SseHandler = () => {
                     )
                     break
                 case SseEventType.GROUP_INVITE_RECEIVED:
-                case SseEventType.GROUP_INVITE_REJECTED:
                     store.dispatch(api.util.invalidateTags(['GroupInvite']))
                     break
+                case SseEventType.GROUP_INVITE_REJECTED:
+                    store.dispatch(
+                        api.util.invalidateTags(['GroupInvite', 'Friend'])
+                    )
+                    break
                 case SseEventType.GROUP_INVITE_ACCEPTED:
+                    store.dispatch(
+                        api.util.invalidateTags([
+                            'Group',
+                            'GroupInvite',
+                            'Friend'
+                        ])
+                    )
+                    router.invalidate()
+                    break
                 case SseEventType.GROUP_JOINED:
                     store.dispatch(
                         api.util.invalidateTags(['Group', 'GroupInvite'])
