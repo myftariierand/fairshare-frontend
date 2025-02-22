@@ -1,17 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import {
-    useGetFriendRequestsQuery,
-    useUnfriendUserMutation
-} from '@/app/services/friends'
+import { useGetFriendRequestsQuery } from '@/app/services/friends'
 
-import { Dot, UserMinus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Dot } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import AddFriendDrawer from '@/components/friend/add-friend-drawer'
 import FriendRequestsList from '@/components/friend/friend-requests-list'
 import FriendsList from '@/components/friend/friends-list'
+import RemoveFriendDialog from '@/components/friend/remove-friend-dialog'
 
 const TabSchema = z.enum(['friends', 'requests'])
 const SearchSchema = z.object({
@@ -29,7 +26,6 @@ function RouteComponent() {
     const navigate = Route.useNavigate()
 
     const { data } = useGetFriendRequestsQuery()
-    const [unfriend, unfriendMutation] = useUnfriendUserMutation()
 
     return (
         <>
@@ -65,19 +61,7 @@ function RouteComponent() {
                 <TabsContent value='friends'>
                     <FriendsList
                         renderButton={data => (
-                            <Button
-                                size={'sm'}
-                                variant={'outline'}
-                                className='ml-auto'
-                                disabled={unfriendMutation.isLoading}
-                                onClick={() =>
-                                    unfriend({
-                                        id: data.requestId
-                                    })
-                                }
-                            >
-                                <UserMinus /> Unfriend
-                            </Button>
+                            <RemoveFriendDialog friend={data} />
                         )}
                     />
                 </TabsContent>
