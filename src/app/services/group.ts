@@ -49,6 +49,13 @@ export const groupApi = api.injectEndpoints({
                 { type: 'Group', id: 'LIST' }
             ]
         }),
+        deleteGroup: builder.mutation<Group, { id: string }>({
+            query: ({ id }) => ({
+                url: `/groups/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: [{ type: 'Group', id: 'LIST' }]
+        }),
         inviteToGroup: builder.mutation<
             Group,
             { groupId: string; receiverId: string }
@@ -87,6 +94,7 @@ export const {
     useGetGroupInvitesQuery,
     useCreateGroupMutation,
     useUpdateGroupMutation,
+    useDeleteGroupMutation,
     useInviteToGroupMutation,
     useAcceptGroupInviteMutation,
     useRejectGroupInviteMutation
