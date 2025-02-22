@@ -72,7 +72,7 @@ function RouteComponent() {
                                 disabled={unfriendMutation.isLoading}
                                 onClick={() =>
                                     unfriend({
-                                        id: data.id
+                                        id: data.requestId
                                     })
                                 }
                             >

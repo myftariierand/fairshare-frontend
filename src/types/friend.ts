@@ -6,6 +6,7 @@ export type Friend = {
     email: string
     createdAt: Date
     updatedAt: Date
+    requestId: string
     invitations: [
         {
             status: GroupInviteStatus
