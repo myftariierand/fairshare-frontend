@@ -29,6 +29,9 @@ const ThemeProvider = (props: ThemeProviderProps) => {
 
     useEffect(() => {
         const root = window.document.documentElement
+        const metaThemeColor = document.querySelector(
+            'meta[name="theme-color"]'
+        )
 
         root.classList.remove('light', 'dark')
 
@@ -38,11 +41,17 @@ const ThemeProvider = (props: ThemeProviderProps) => {
             ).matches
                 ? 'dark'
                 : 'light'
+            const color = systemTheme === 'dark' ? '#000a09' : '#ffffff'
 
+            metaThemeColor?.setAttribute('content', color)
             root.classList.add(systemTheme)
             return
         }
 
+        metaThemeColor?.setAttribute(
+            'content',
+            theme === 'dark' ? '#000a09' : '#ffffff'
+        )
         root.classList.add(theme)
     }, [theme])
 
