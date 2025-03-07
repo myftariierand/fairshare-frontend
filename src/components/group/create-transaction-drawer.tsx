@@ -45,8 +45,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 const TransactionSchema = z.object({
-    description: z.string(),
-    amount: z.string(),
+    description: z.string().min(4, 'Must be at least 4 characters long.'),
+    amount: z.string().min(1, 'Must bet at least 1 character long.'),
     paidBy: z.string().uuid(),
     splits: z
         .object({
@@ -163,7 +163,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                 name='description'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description</FormLabel>
+                                        <FormLabel>Description*</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder='Plane Tickets'
@@ -179,7 +179,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                 name='paidBy'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Paid By</FormLabel>
+                                        <FormLabel>Paid By*</FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
@@ -208,7 +208,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                 name='amount'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Total Amount</FormLabel>
+                                        <FormLabel>Total Amount*</FormLabel>
                                         <FormControl>
                                             <Input
                                                 inputMode='decimal'
