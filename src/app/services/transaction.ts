@@ -78,9 +78,7 @@ export const transactionApi = api.injectEndpoints({
                 url: `/transactions/${id}`,
                 method: 'DELETE'
             }),
-            invalidatesTags: (_result, _error, { id }) => [
-                { type: 'Transaction', id }
-            ]
+            invalidatesTags: () => [{ type: 'Transaction', id: 'LIST' }]
         })
     })
 })
