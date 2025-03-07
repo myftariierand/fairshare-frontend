@@ -28,6 +28,9 @@ const SseHandler = () => {
             const data = JSON.parse(event.data)
 
             switch (data.type) {
+                case SseEventType.FRIEND_REMOVED:
+                    store.dispatch(api.util.invalidateTags(['Friend']))
+                    break
                 case SseEventType.FRIEND_REQUEST_RECEIVED:
                 case SseEventType.FRIEND_REQUEST_REJECTED:
                     store.dispatch(api.util.invalidateTags(['FriendRequest']))
