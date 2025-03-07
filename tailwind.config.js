@@ -7,7 +7,7 @@ export default {
     theme: {
         extend: {
             padding: {
-                'safe-nav': 'env(safe-area-inset-bottom);'
+                'safe-nav': 'max(env(safe-area-inset-bottom, 0px), 8px)'
             },
             borderRadius: {
                 lg: 'var(--radius)',
