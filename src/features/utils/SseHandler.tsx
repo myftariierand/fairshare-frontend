@@ -37,7 +37,11 @@ const SseHandler = () => {
                     break
                 case SseEventType.FRIEND_REQUEST_ACCEPTED:
                     store.dispatch(
-                        api.util.invalidateTags(['Friend', 'FriendRequest'])
+                        api.util.invalidateTags([
+                            'User',
+                            'Friend',
+                            'FriendRequest'
+                        ])
                     )
                     break
                 case SseEventType.GROUP_INVITE_RECEIVED:
@@ -84,8 +88,10 @@ const SseHandler = () => {
                     break
             }
 
-            sound.play()
-            toast.info(data.message)
+            if (data.type !== SseEventType.FRIEND_REMOVED) {
+                sound.play()
+                toast.info(data.message)
+            }
         })
 
         return () => eventSource.close()
