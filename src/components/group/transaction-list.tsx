@@ -11,6 +11,7 @@ import { Inbox } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
 import { cn } from '@/lib/utils'
+import { TransactionType } from '@/types/common'
 
 const TransactionList = () => {
     const now = new Date()
@@ -42,61 +43,77 @@ const TransactionList = () => {
         } else {
             content = (
                 <ul>
-                    {data.map(transaction => (
-                        <li key={transaction.id}>
-                            <Button asChild variant={'ghost'} className='p-1'>
-                                <Link
-                                    from='/$group'
-                                    to='/$group/transactions/$transaction'
-                                    params={{ transaction: transaction.id }}
-                                    className='flex gap-4 items-center w-full h-auto'
+                    {data.map(transaction =>
+                        transaction.type === TransactionType.expense ? (
+                            <li key={transaction.id}>
+                                <Button
+                                    asChild
+                                    variant={'ghost'}
+                                    className='p-1'
                                 >
-                                    <Image className='size-12 rounded-lg shrink-0' />
-                                    <div className='flex-1'>
-                                        <span className='font-semibold'>
-                                            {transaction.description}
-                                        </span>
-                                        <div className='text-xs text-muted-foreground'>
-                                            Paid by{' '}
-                                            <span className='font-semibold text-foreground'>
-                                                {transaction.paidBy}
-                                            </span>{' '}
-                                            {formatDistance(
-                                                transaction.createdAt,
-                                                now,
-                                                {
-                                                    addSuffix: true
-                                                }
-                                            )}
+                                    <Link
+                                        from='/$group'
+                                        to='/$group/transactions/$transaction'
+                                        params={{ transaction: transaction.id }}
+                                        className='flex gap-4 items-center w-full h-auto'
+                                    >
+                                        <Image className='size-12 rounded-lg shrink-0' />
+                                        <div className='flex-1'>
+                                            <span className='font-semibold'>
+                                                {transaction.description}
+                                            </span>
+                                            <div className='text-xs text-muted-foreground'>
+                                                Paid by{' '}
+                                                <span className='font-semibold text-foreground'>
+                                                    {transaction.paidBy}
+                                                </span>{' '}
+                                                {formatDistance(
+                                                    transaction.createdAt,
+                                                    now,
+                                                    {
+                                                        addSuffix: true
+                                                    }
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className='flex flex-col items-end'>
-                                        <span className='text-xs text-muted-foreground'>
-                                            {transaction.balance < 0
-                                                ? 'You borrowed'
-                                                : transaction.balance === 0
-                                                  ? ''
-                                                  : 'You lent'}
-                                        </span>
-                                        <span
-                                            className={cn(
-                                                'font-semibold',
-                                                transaction.balance < 0
-                                                    ? 'text-red-800'
+                                        <div className='flex flex-col items-end'>
+                                            <span className='text-xs text-muted-foreground'>
+                                                {transaction.balance < 0
+                                                    ? 'You borrowed'
                                                     : transaction.balance === 0
                                                       ? ''
-                                                      : 'text-green-800'
-                                            )}
-                                        >
-                                            {formatAmount(
-                                                Math.abs(transaction.balance)
-                                            )}
-                                        </span>
-                                    </div>
-                                </Link>
-                            </Button>
-                        </li>
-                    ))}
+                                                      : 'You lent'}
+                                            </span>
+                                            <span
+                                                className={cn(
+                                                    'font-semibold',
+                                                    transaction.balance < 0
+                                                        ? 'text-red-800'
+                                                        : transaction.balance ===
+                                                            0
+                                                          ? ''
+                                                          : 'text-green-800'
+                                                )}
+                                            >
+                                                {formatAmount(
+                                                    Math.abs(
+                                                        transaction.balance
+                                                    )
+                                                )}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </Button>
+                            </li>
+                        ) : (
+                            <li
+                                key={transaction.id}
+                                className='text-sm p-2 text-center text-muted-foreground font-medium'
+                            >
+                                {transaction.description}
+                            </li>
+                        )
+                    )}
                 </ul>
             )
         }

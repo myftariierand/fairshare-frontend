@@ -9,10 +9,11 @@ import { Image } from '@/components/ui/image'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import TransactionList from '@/components/group/transaction-list'
 import MemberList from '@/components/group/member-list'
+import DebtsList from '@/components/group/debts-list'
 import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
 import InviteToGroupDrawer from '@/components/group/invite-to-group-drawer'
 
-const TabSchema = z.enum(['transactions', 'members'])
+const TabSchema = z.enum(['transactions', 'members', 'debts'])
 const SearchSchema = z.object({
     t: TabSchema.default('transactions')
 })
@@ -60,6 +61,7 @@ function RouteComponent() {
                             <TabsTrigger value='transactions'>
                                 Transactions
                             </TabsTrigger>
+                            <TabsTrigger value='debts'>Debts</TabsTrigger>
                             <TabsTrigger value='members'>Members</TabsTrigger>
                         </TabsList>
                         {search.t === 'transactions' && (
@@ -72,6 +74,9 @@ function RouteComponent() {
                     </TabsContent>
                     <TabsContent value='members'>
                         <MemberList members={data.members} />
+                    </TabsContent>
+                    <TabsContent value='debts'>
+                        <DebtsList />
                     </TabsContent>
                 </Tabs>
             </div>

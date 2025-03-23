@@ -1,5 +1,6 @@
 import { api } from '@/app/api'
 import { User } from '@/types/user'
+import { TransactionType } from '@/types/common'
 
 type CreateTransaction = {
     groupId: string
@@ -16,6 +17,7 @@ type Transaction = {
     paidBy: string
     amount: number
     balance: number
+    type: TransactionType
 }
 
 export type SingleTransaction = {
@@ -33,6 +35,13 @@ export type SingleTransaction = {
 } & Transaction
 
 type UpdateTransaction = { id: string } & CreateTransaction
+
+type SettleUp = {
+    groupId: string
+    amount: number
+    description: string
+    paidBy: string
+}
 
 export const transactionApi = api.injectEndpoints({
     endpoints: builder => ({
@@ -79,6 +88,17 @@ export const transactionApi = api.injectEndpoints({
                 method: 'DELETE'
             }),
             invalidatesTags: () => [{ type: 'Transaction', id: 'LIST' }]
+        }),
+        settleUp: builder.mutation<void, SettleUp>({
+            query: data => ({
+                url: '/transactions/settle',
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: (_result, _error, { groupId }) => [
+                { type: 'Transaction', id: 'LIST' },
+                { type: 'Group', id: groupId }
+            ]
         })
     })
 })
@@ -88,5 +108,6 @@ export const {
     useGetTransactionByIdQuery,
     useCreateTransactionMutation,
     useUpdateTransactionMutation,
-    useDeleteTransactionMutation
+    useDeleteTransactionMutation,
+    useSettleUpMutation
 } = transactionApi

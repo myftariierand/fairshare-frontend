@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { User } from '@/types/user'
-import { GroupInviteStatus } from '@/types/common'
+import { GroupInviteStatus, TransactionType } from '@/types/common'
 
 export type Group = {
     id: string
@@ -30,6 +30,7 @@ export type Transaction = {
     description: string
     createdAt: Date
     updatedAt: Date
+    type: TransactionType
 }
 
 export type SingleGroup = {
@@ -39,7 +40,7 @@ export type SingleGroup = {
     settlements: Settelment[]
 } & Group
 
-type Settelment = {
+export type Settelment = {
     from: {
         id: string
         name: string

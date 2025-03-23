@@ -9,3 +9,8 @@ export enum GroupInviteStatus {
     accepted = 'ACCEPTED',
     rejected = 'REJECTED'
 }
+
+export enum TransactionType {
+    expense = 'EXPENSE',
+    settlement = 'SETTLEMENT'
+}
