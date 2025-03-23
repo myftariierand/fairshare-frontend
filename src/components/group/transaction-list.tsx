@@ -6,10 +6,10 @@ import { Route } from '@/routes/_auth/$group'
 import { useGetTransactionsQuery } from '@/app/services/transaction'
 
 import { formatAmount } from '@/lib/utils'
+import { getIcon } from '@/lib/get-icon'
 
 import { Inbox } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Image } from '@/components/ui/image'
 import { cn } from '@/lib/utils'
 import { TransactionType } from '@/types/common'
 
@@ -57,7 +57,9 @@ const TransactionList = () => {
                                         params={{ transaction: transaction.id }}
                                         className='flex gap-4 items-center w-full h-auto'
                                     >
-                                        <Image className='size-12 rounded-lg shrink-0' />
+                                        <div className='[&_svg]:size-6 size-12 rounded-lg shrink-0 text-muted-foreground bg-secondary grid place-content-center'>
+                                            {getIcon(transaction.description)}
+                                        </div>
                                         <div className='flex-1'>
                                             <span className='font-semibold'>
                                                 {transaction.description}
