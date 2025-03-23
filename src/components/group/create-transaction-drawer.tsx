@@ -46,13 +46,16 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 
 const TransactionSchema = z.object({
     description: z.string().min(4, 'Must be at least 4 characters long.'),
-    amount: z.string().min(1, 'Must bet at least 1 character long.'),
+    amount: z.number().positive(),
     paidBy: z.string().uuid(),
     splits: z
         .object({
             name: z.string(),
             userId: z.string().uuid(),
-            amount: z.string()
+            amount: z
+                .number()
+                .positive()
+                .transform(val => Math.round(val * 100) / 100)
         })
         .array()
 })
@@ -71,12 +74,12 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
         resolver: zodResolver(TransactionSchema),
         defaultValues: {
             description: '',
-            amount: '',
+            amount: 0,
             paidBy: context.user.id,
             splits: members.map(({ name, id }) => ({
                 name,
                 userId: id,
-                amount: ''
+                amount: 0
             }))
         }
     })
@@ -89,15 +92,9 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
 
     const onSubmit = async (data: TransactionData) => {
         try {
-            const transformedData = {
-                ...data,
-                amount: +data.amount,
-                groupId: params.group,
-                splits: data.splits.map(({ amount, userId }) => ({
-                    userId,
-                    amount: +amount
-                }))
-            }
+            const transformedData = { groupId: params.group, ...data }
+            console.log(transformedData)
+
             await createTransaction(transformedData).unwrap()
             setOpen(false)
             form.reset()
@@ -114,25 +111,36 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
 
         const updatedSplits = form.getValues('splits').map(split => ({
             ...split,
-            amount:
-                !amount || amount === '0'
-                    ? '0'
-                    : (+amount / members.length).toString()
+            amount: +(amount / members.length).toFixed(2)
         }))
 
         form.setValue('splits', updatedSplits)
+    }
+
+    const handleSplitEqually = (checked: boolean) => {
+        setSplitEqually(checked)
+
+        if (checked) {
+            const amount = form.getValues('amount')
+            const updatedSplits = form.getValues('splits').map(split => ({
+                ...split,
+                amount: +(amount / members.length).toFixed(2)
+            }))
+
+            form.setValue('splits', updatedSplits)
+        }
     }
 
     const handleOpenChange = (open: boolean) => {
         setOpen(open)
         form.reset({
             description: '',
-            amount: '',
+            amount: 0,
             paidBy: context.user.id,
             splits: members.map(({ name, id }) => ({
                 name,
                 userId: id,
-                amount: ''
+                amount: 0
             }))
         })
     }
@@ -176,6 +184,25 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                             />
                             <FormField
                                 control={form.control}
+                                name='amount'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Total Amount*</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                inputMode='decimal'
+                                                placeholder={formatAmount(600)}
+                                                value={field.value || ''}
+                                                onChange={e => handleChange(e)}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name='paidBy'
                                 render={({ field }) => (
                                     <FormItem>
@@ -203,24 +230,6 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name='amount'
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Total Amount*</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                inputMode='decimal'
-                                                placeholder={formatAmount(600)}
-                                                {...field}
-                                                onChange={e => handleChange(e)}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
                             <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
                                 <div className='space-y-0.5'>
                                     <FormLabel className='text-base'>
@@ -235,7 +244,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                 <FormControl>
                                     <Switch
                                         checked={splitEqually}
-                                        onCheckedChange={setSplitEqually}
+                                        onCheckedChange={handleSplitEqually}
                                     />
                                 </FormControl>
                             </FormItem>

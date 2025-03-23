@@ -10,7 +10,7 @@ import {
     type SingleTransaction
 } from '@/app/services/transaction'
 
-import { getErrorMessage, sanitizeNumberInput } from '@/lib/utils'
+import { formatAmount, getErrorMessage, sanitizeNumberInput } from '@/lib/utils'
 
 import { Route } from '@/routes/_auth/$group'
 
@@ -46,13 +46,13 @@ import {
 
 const TransactionSchema = z.object({
     description: z.string(),
-    amount: z.string(),
+    amount: z.number().positive(),
     paidBy: z.string().uuid(),
     splits: z
         .object({
             name: z.string(),
             userId: z.string().uuid(),
-            amount: z.string()
+            amount: z.number().positive()
         })
         .array()
 })
@@ -78,12 +78,12 @@ const EditTransactionDrawer = ({
         resolver: zodResolver(TransactionSchema),
         defaultValues: {
             description: transaction.description,
-            amount: transaction.amount.toString(),
+            amount: transaction.amount,
             paidBy: transaction.paidById,
             splits: transaction.splits.map(({ amount, user }) => ({
                 name: user.name,
                 userId: user.id,
-                amount: amount.toString()
+                amount: amount
             }))
         }
     })
@@ -125,25 +125,36 @@ const EditTransactionDrawer = ({
 
         const updatedSplits = form.getValues('splits').map(split => ({
             ...split,
-            amount:
-                !amount || amount === '0'
-                    ? '0'
-                    : (+amount / transaction.splits.length).toString()
+            amount: +(amount / transaction.splits.length).toFixed(2)
         }))
 
         form.setValue('splits', updatedSplits)
+    }
+
+    const handleSplitEqually = (checked: boolean) => {
+        setSplitEqually(checked)
+
+        if (checked) {
+            const amount = form.getValues('amount')
+            const updatedSplits = form.getValues('splits').map(split => ({
+                ...split,
+                amount: +(amount / transaction.splits.length).toFixed(2)
+            }))
+
+            form.setValue('splits', updatedSplits)
+        }
     }
 
     const handleOpenChange = (open: boolean) => {
         setOpen(open)
         form.reset({
             description: transaction.description,
-            amount: transaction.amount.toString(),
+            amount: transaction.amount,
             paidBy: transaction.paidById,
             splits: transaction.splits.map(({ amount, user }) => ({
                 name: user.name,
                 userId: user.id,
-                amount: amount.toString()
+                amount: amount
             }))
         })
     }
@@ -157,9 +168,9 @@ const EditTransactionDrawer = ({
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader>
-                    <DrawerTitle>ADD A NEW TRANSACTION</DrawerTitle>
+                    <DrawerTitle>EDIT TRANSACTION</DrawerTitle>
                     <DrawerDescription>
-                        Create a transaction and share it with your group.
+                        Edit a transaction and share it with your group.
                     </DrawerDescription>
                 </DrawerHeader>
                 <Form {...form}>
@@ -178,6 +189,24 @@ const EditTransactionDrawer = ({
                                         <Input
                                             placeholder='Plane Tickets'
                                             {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='amount'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Total Amount</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            placeholder={formatAmount(25)}
+                                            value={field.value || ''}
+                                            onChange={e => handleChange(e)}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -213,23 +242,6 @@ const EditTransactionDrawer = ({
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name='amount'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Total Amount</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='$600'
-                                            {...field}
-                                            onChange={e => handleChange(e)}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
                         <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
                             <div className='space-y-0.5'>
                                 <FormLabel className='text-base'>
@@ -243,7 +255,7 @@ const EditTransactionDrawer = ({
                             <FormControl>
                                 <Switch
                                     checked={splitEqually}
-                                    onCheckedChange={setSplitEqually}
+                                    onCheckedChange={handleSplitEqually}
                                 />
                             </FormControl>
                         </FormItem>
