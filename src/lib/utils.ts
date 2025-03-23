@@ -33,14 +33,14 @@ export function formatAmount(number: number) {
  * and removing unnecessary characters.
  *
  * @param {string} value - The input string to be sanitized.
- * @returns {string} The sanitized numeric string with at most one decimal separator.
+ * @returns {number} The sanitized numeric string with at most one decimal separator.
  *
  * @example
- * sanitizeNumberInput("12,34.56") // Returns "12.3456"
- * sanitizeNumberInput("abc123") // Returns "123"
- * sanitizeNumberInput("00123.45") // Returns "123.45"
+ * sanitizeNumberInput("12,34.56") // Returns 12.3456
+ * sanitizeNumberInput("abc123") // Returns 123
+ * sanitizeNumberInput("00123.45") // Returns 123.45
  */
-export function sanitizeNumberInput(value: string): string {
+export function sanitizeNumberInput(value: string) {
     let newValue = value.replace(/[^0-9.,]/g, '') // Remove non-numeric characters except '.' and ','
 
     const parts = newValue.split(/[,.]/) // Split on '.' or ','
@@ -49,5 +49,5 @@ export function sanitizeNumberInput(value: string): string {
         newValue = parts[0] + '.' + parts.slice(1).join('') // Ensure only one decimal separator (.)
     }
 
-    return newValue.replace(/^0+(?=\d)/, '') // Remove leading zeros
+    return parseFloat(newValue.replace(/^0+(?=\d)/, '')) || 0 // Remove leading zeros
 }
