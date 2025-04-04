@@ -64,7 +64,7 @@ export const groupApi = api.injectEndpoints({
                 url: `/groups/${groupId}/invite/${receiverId}`,
                 method: 'POST'
             }),
-            invalidatesTags: [{ type: 'Friend', id: 'LIST' }]
+            invalidatesTags: [{ type: 'User', id: 'LIST' }]
         }),
         acceptGroupInvite: builder.mutation<
             GroupInvite,
