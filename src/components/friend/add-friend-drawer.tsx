@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDebounceValue } from 'usehooks-ts'
 
-import { useLazySearchFriendsQuery } from '@/app/services/user'
+import { useLazySearchUserQuery } from '@/app/services/user'
 import { useSendRequestMutation } from '@/app/services/friends'
 
 import { UserPlus, Loader, SendHorizonal, Inbox } from 'lucide-react'
@@ -23,7 +23,7 @@ const AddFriendDrawer = () => {
 
     const [sendRequest] = useSendRequestMutation()
     const [trigger, { data, isLoading, isFetching, isError, isSuccess }] =
-        useLazySearchFriendsQuery()
+        useLazySearchUserQuery()
 
     useEffect(() => {
         if (debouncedValue !== '') {
