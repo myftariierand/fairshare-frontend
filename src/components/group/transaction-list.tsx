@@ -5,13 +5,13 @@ import { Route } from '@/routes/_auth/$group'
 
 import { useGetTransactionsQuery } from '@/app/services/transaction'
 
-import { formatAmount } from '@/lib/utils'
-import { getIcon } from '@/lib/get-icon'
+import { cn, formatAmount } from '@/lib/utils'
+import { getIcon } from '@/lib/get-transaction-icon'
+
+import { TransactionType } from '@/types/common'
 
 import { Inbox } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { TransactionType } from '@/types/common'
 
 const TransactionList = () => {
     const now = new Date()

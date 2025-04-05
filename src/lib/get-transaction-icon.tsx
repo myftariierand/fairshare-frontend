@@ -1,6 +1,21 @@
 import Fuse from 'fuse.js'
 
-import { ReceiptText, ShoppingBasket, Hotel, Fuel, Bus } from 'lucide-react'
+import {
+    ReceiptText,
+    ShoppingBasket,
+    Hotel,
+    Fuel,
+    Bus,
+    House,
+    UtilityPole,
+    Utensils,
+    FerrisWheel,
+    HeartPulse,
+    ShoppingBag,
+    GraduationCap,
+    Wallet,
+    Landmark
+} from 'lucide-react'
 
 const iconMappings = [
     {
@@ -28,7 +43,7 @@ const iconMappings = [
         ]
     },
     {
-        name: 'Rent',
+        icon: <House />,
         keywords: [
             'lease',
             'housing',
@@ -48,7 +63,7 @@ const iconMappings = [
         ]
     },
     {
-        name: 'Utilities',
+        icon: <UtilityPole />,
         keywords: [
             'electricity',
             'water',
@@ -93,7 +108,7 @@ const iconMappings = [
         keywords: ['bus tickets']
     },
     {
-        name: 'Dining',
+        icon: <Utensils />,
         keywords: [
             'restaurant',
             'cafe',
@@ -114,7 +129,7 @@ const iconMappings = [
         ]
     },
     {
-        name: 'Entertainment',
+        icon: <FerrisWheel />,
         keywords: [
             'movies',
             'Netflix',
@@ -135,7 +150,7 @@ const iconMappings = [
         ]
     },
     {
-        name: 'Health',
+        icon: <HeartPulse />,
         keywords: [
             'doctor',
             'pharmacy',
@@ -157,7 +172,7 @@ const iconMappings = [
         ]
     },
     {
-        name: 'Shopping',
+        icon: <ShoppingBag />,
         keywords: [
             'clothes',
             'fashion',
@@ -203,7 +218,7 @@ const iconMappings = [
         ]
     },
     {
-        name: 'Education',
+        icon: <GraduationCap />,
         keywords: [
             'tuition',
             'school',
@@ -225,7 +240,7 @@ const iconMappings = [
         ]
     },
     {
-        name: 'Debt Payment',
+        icon: <Wallet />,
         keywords: [
             'loan',
             'credit card',
@@ -246,7 +261,7 @@ const iconMappings = [
         ]
     },
     {
-        name: 'Insurance',
+        icon: <Landmark />,
         keywords: [
             'premium',
             'coverage',
