@@ -69,6 +69,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
 
     const params = Route.useParams()
     const context = Route.useRouteContext()
+    const group = Route.useLoaderData()
 
     const form = useForm<TransactionData>({
         resolver: zodResolver(TransactionSchema),
@@ -192,7 +193,10 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                             <Input
                                                 {...field}
                                                 inputMode='decimal'
-                                                placeholder={formatAmount(600)}
+                                                placeholder={formatAmount(
+                                                    600,
+                                                    group.currency
+                                                )}
                                                 value={field.value || ''}
                                                 onChange={e => handleChange(e)}
                                             />
@@ -265,7 +269,8 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                                                 {...field}
                                                                 className='w-auto'
                                                                 placeholder={formatAmount(
-                                                                    300
+                                                                    300,
+                                                                    group.currency
                                                                 )}
                                                                 onChange={e =>
                                                                     field.onChange(

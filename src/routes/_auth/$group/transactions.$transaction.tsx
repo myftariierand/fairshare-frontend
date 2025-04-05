@@ -6,6 +6,8 @@ import { transactionApi } from '@/app/services/transaction'
 
 import { formatAmount } from '@/lib/utils'
 
+import { Route as GroupRoute } from '@/routes/_auth/$group'
+
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 
@@ -31,6 +33,7 @@ export const Route = createFileRoute('/_auth/$group/transactions/$transaction')(
 
 function RouteComponent() {
     const data = Route.useLoaderData()
+    const group = GroupRoute.useLoaderData()
     const { user } = Route.useRouteContext()
 
     return (
@@ -40,7 +43,7 @@ function RouteComponent() {
                 <div className='flex-1'>
                     <h2 className='text-xl font-medium'>{data.description}</h2>
                     <h3 className='text-3xl font-bold'>
-                        {formatAmount(data.amount)}
+                        {formatAmount(data.amount, group.currency)}
                     </h3>
                     <div className='text-muted-foreground'>
                         Added by{' '}
@@ -71,7 +74,7 @@ function RouteComponent() {
                     </span>{' '}
                     paid{' '}
                     <span className='text-foreground font-medium'>
-                        {formatAmount(data.amount)}
+                        {formatAmount(data.amount, group.currency)}
                     </span>
                 </div>
             </div>
@@ -92,7 +95,7 @@ function RouteComponent() {
                             </span>{' '}
                             {split.userId === user.id ? 'owe' : 'owes'}{' '}
                             <span className='text-foreground font-medium'>
-                                {formatAmount(split.amount)}
+                                {formatAmount(split.amount, group.currency)}
                             </span>
                         </div>
                     </li>

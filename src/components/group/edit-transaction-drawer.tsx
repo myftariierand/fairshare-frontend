@@ -73,6 +73,7 @@ const EditTransactionDrawer = ({
 
     const router = useRouter()
     const params = Route.useParams()
+    const group = Route.useLoaderData()
 
     const form = useForm<TransactionData>({
         resolver: zodResolver(TransactionSchema),
@@ -204,7 +205,10 @@ const EditTransactionDrawer = ({
                                     <FormControl>
                                         <Input
                                             {...field}
-                                            placeholder={formatAmount(25)}
+                                            placeholder={formatAmount(
+                                                25,
+                                                group.currency
+                                            )}
                                             value={field.value || ''}
                                             onChange={e => handleChange(e)}
                                         />

@@ -41,7 +41,7 @@ function RouteComponent() {
                                 <span className='text-muted-foreground'>
                                     owes
                                 </span>{' '}
-                                {formatAmount(amount)}{' '}
+                                {formatAmount(amount, data.currency)}{' '}
                                 <span className='text-muted-foreground'>
                                     to
                                 </span>{' '}

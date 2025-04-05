@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 const TransactionList = () => {
     const now = new Date()
     const params = Route.useParams()
+    const group = Route.useLoaderData()
 
     const { data, isLoading, isError, isSuccess } = useGetTransactionsQuery({
         groupId: params.group
@@ -100,7 +101,8 @@ const TransactionList = () => {
                                                 {formatAmount(
                                                     Math.abs(
                                                         transaction.balance
-                                                    )
+                                                    ),
+                                                    group.currency
                                                 )}
                                             </span>
                                         </div>

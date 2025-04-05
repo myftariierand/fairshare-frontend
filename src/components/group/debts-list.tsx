@@ -45,7 +45,7 @@ const DebtsList = () => {
                         {debt.from.name} &nbsp;
                         <span className='text-muted-foreground'>owes</span>{' '}
                         &nbsp;
-                        {formatAmount(debt.amount)}
+                        {formatAmount(debt.amount, group.currency)}
                         &nbsp;
                         <span className='text-muted-foreground'>to</span>{' '}
                         {debt.to.name}

@@ -21,10 +21,12 @@ export const getErrorMessage = (error: unknown) => {
     }
 }
 
-export function formatAmount(number: number) {
-    return new Intl.NumberFormat('de-DE', {
+export function formatAmount(number: number, currency: string) {
+    const userLocale = new Intl.NumberFormat().resolvedOptions().locale
+
+    return new Intl.NumberFormat(userLocale, {
         style: 'currency',
-        currency: 'EUR'
+        currency
     }).format(number)
 }
 
