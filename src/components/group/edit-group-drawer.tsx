@@ -32,11 +32,19 @@ import {
     DrawerTitle,
     DrawerTrigger
 } from '@/components/ui/drawer'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from '@/components/ui/select'
 
 const GroupSchema = z.object({
     name: z.string().min(4, {
         message: 'Name must be at least 4 characters.'
-    })
+    }),
+    currency: z.string().min(1)
 })
 type GroupData = z.infer<typeof GroupSchema>
 
@@ -44,12 +52,24 @@ type Props = {
     data: SingleGroup
 }
 
+const currencyOptions = [
+    { code: 'EUR', name: 'Euro' },
+    { code: 'ALL', name: 'Albanian Lek' },
+    { code: 'USD', name: 'US Dollar' },
+    { code: 'GBP', name: 'British Pound' },
+    { code: 'JPY', name: 'Japanese Yen' },
+    { code: 'CHF', name: 'Swiss Franc' },
+    { code: 'CNY', name: 'Chinese Yuan' },
+    { code: 'INR', name: 'Indian Rupee' }
+]
+
 const EditGroupSheet = ({ data }: Props) => {
     const [open, setOpen] = useState(false)
     const form = useForm<GroupData>({
         resolver: zodResolver(GroupSchema),
         defaultValues: {
-            name: data.name
+            name: data.name,
+            currency: data.currency
         }
     })
 
@@ -88,7 +108,7 @@ const EditGroupSheet = ({ data }: Props) => {
                     <form
                         id='group-form'
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className='space-y-8 px-4'
+                        className='space-y-4 px-4'
                     >
                         <FormField
                             control={form.control}
@@ -102,6 +122,37 @@ const EditGroupSheet = ({ data }: Props) => {
                                             {...field}
                                         />
                                     </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='currency'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Currency</FormLabel>
+                                    <Select
+                                        disabled
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder='Select currency' />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {currencyOptions.map(currency => (
+                                                <SelectItem
+                                                    key={currency.code}
+                                                    value={currency.code}
+                                                >
+                                                    {currency.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}

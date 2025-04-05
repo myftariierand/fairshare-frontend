@@ -6,6 +6,7 @@ import { GroupInviteStatus, TransactionType } from '@/types/common'
 export type Group = {
     id: string
     name: string
+    currency: string
     createdAt: string
     _count: {
         members: number
