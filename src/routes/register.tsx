@@ -101,7 +101,7 @@ function RouteComponent() {
                                         </Link>
                                     </div>
                                 </div>
-                                <div className='flex flex-col gap-6'>
+                                <div className='space-y-4'>
                                     <FormField
                                         control={form.control}
                                         name='name'
@@ -134,6 +134,25 @@ function RouteComponent() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Password</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type='password'
+                                                        autoComplete='new-password'
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name='confirmPassword'
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    Confirm Password
+                                                </FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         type='password'
