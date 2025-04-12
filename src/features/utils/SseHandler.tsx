@@ -79,6 +79,7 @@ const SseHandler = () => {
                 case SseEventType.TRANSACTION_ADDED:
                 case SseEventType.TRANSACTION_UPDATED:
                 case SseEventType.TRANSACTION_DELETED:
+                case SseEventType.TRANSACTION_SETTLED:
                     store.dispatch(
                         api.util.invalidateTags(['Transaction', 'Group'])
                     )
