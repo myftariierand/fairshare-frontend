@@ -11,13 +11,24 @@ import type { Settelment } from '@/types/group'
 
 import { Loader } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from '@/components/ui/alert-dialog'
 
 const DebtsList = () => {
     const router = useRouter()
     const group = GroupLayout.useLoaderData()
     const context = GroupLayout.useRouteContext()
 
-    const [settleUp, { isLoading }] = useSettleUpMutation()
+    const [settleUp, settleUpMutation] = useSettleUpMutation()
 
     const handleSettleUp = async (debt: Settelment) => {
         try {
@@ -42,26 +53,50 @@ const DebtsList = () => {
                     className='text-sm border-b p-2 flex items-center justify-between'
                 >
                     <div>
-                        {debt.from.name} &nbsp;
-                        <span className='text-muted-foreground'>owes</span>{' '}
+                        {debt.from.name}
+                        &nbsp;
+                        <span className='text-muted-foreground'>owes</span>
                         &nbsp;
                         {formatAmount(debt.amount, group.currency)}
                         &nbsp;
-                        <span className='text-muted-foreground'>to</span>{' '}
+                        <span className='text-muted-foreground'>to</span>
+                        &nbsp;
                         {debt.to.name}
                     </div>
                     {context.user.id === debt.to.id && (
-                        <Button
-                            size={'sm'}
-                            variant={'secondary'}
-                            onClick={() => handleSettleUp(debt)}
-                        >
-                            {isLoading ? (
-                                <Loader className='animate-spin' />
-                            ) : (
-                                'Settle Up'
-                            )}
-                        </Button>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button size={'sm'} variant={'secondary'}>
+                                    Settle Up
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                        Are you sure?
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This will settle the debt between you
+                                        and {debt.from.name}.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                        Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                        disabled={settleUpMutation.isLoading}
+                                        onClick={() => handleSettleUp(debt)}
+                                    >
+                                        {settleUpMutation.isLoading ? (
+                                            <Loader className='animate-spin' />
+                                        ) : (
+                                            'Settle Up'
+                                        )}
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     )}
                 </li>
             ))}
