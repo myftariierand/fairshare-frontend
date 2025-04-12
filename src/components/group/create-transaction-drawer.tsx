@@ -94,8 +94,6 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
     const onSubmit = async (data: TransactionData) => {
         try {
             const transformedData = { groupId: params.group, ...data }
-            console.log(transformedData)
-
             await createTransaction(transformedData).unwrap()
             setOpen(false)
             form.reset()
