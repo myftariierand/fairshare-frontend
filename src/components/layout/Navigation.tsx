@@ -25,10 +25,12 @@ const Navigation = () => {
         <nav className='fixed bottom-0 left-0 right-0 mx-auto grid w-full max-w-md grid-cols-5 items-center border-t pb-safe-nav pt-2'>
             <Link
                 to={'/'}
+                search={{ t: groupInvites?.length ? 'invites' : 'groups' }}
                 className='flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground'
                 activeProps={{
                     className: 'font-semibold !text-foreground'
                 }}
+                activeOptions={{ includeSearch: false }}
             >
                 <Users />
                 <span className='relative'>
@@ -43,10 +45,12 @@ const Navigation = () => {
             </Link>
             <Link
                 to={'/friends'}
+                search={{ t: friendRequests?.length ? 'requests' : 'friends' }}
                 className='flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground'
                 activeProps={{
                     className: 'font-semibold !text-foreground'
                 }}
+                activeOptions={{ includeSearch: false }}
             >
                 <User />
                 <span className='relative'>

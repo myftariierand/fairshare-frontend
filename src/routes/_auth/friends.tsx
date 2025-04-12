@@ -12,7 +12,7 @@ import RemoveFriendDialog from '@/components/friend/remove-friend-dialog'
 
 const TabSchema = z.enum(['friends', 'requests'])
 const SearchSchema = z.object({
-    t: TabSchema.default('requests')
+    t: TabSchema.default('friends')
 })
 type Tab = z.infer<typeof TabSchema>
 
