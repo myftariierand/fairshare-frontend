@@ -43,7 +43,7 @@ function RouteComponent() {
 
     return (
         <div className='p-10'>
-            {!open && <Scanner onScan={handleScan} />}
+            <Scanner onScan={handleScan} />
             <AlertDialog open={open}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
