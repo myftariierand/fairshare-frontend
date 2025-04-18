@@ -85,6 +85,12 @@ export const groupApi = api.injectEndpoints({
                 method: 'POST'
             }),
             invalidatesTags: [{ type: 'GroupInvite', id: 'LIST' }]
+        }),
+        joinGroup: builder.mutation<void, { groupId: string }>({
+            query: ({ groupId }) => ({
+                url: `/groups/${groupId}/join`,
+                method: 'POST'
+            })
         })
     })
 })
@@ -98,5 +104,6 @@ export const {
     useDeleteGroupMutation,
     useInviteToGroupMutation,
     useAcceptGroupInviteMutation,
-    useRejectGroupInviteMutation
+    useRejectGroupInviteMutation,
+    useJoinGroupMutation
 } = groupApi

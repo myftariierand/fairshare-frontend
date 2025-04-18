@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ScanImport } from './routes/scan'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
@@ -25,6 +26,12 @@ import { Route as AuthGroupSettingsImport } from './routes/_auth/$group/settings
 import { Route as AuthGroupTransactionsTransactionImport } from './routes/_auth/$group/transactions.$transaction'
 
 // Create/Update Routes
+
+const ScanRoute = ScanImport.update({
+  id: '/scan',
+  path: '/scan',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const RegisterRoute = RegisterImport.update({
   id: '/register',
@@ -121,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/scan': {
+      id: '/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof ScanImport
       parentRoute: typeof rootRoute
     }
     '/_auth/$group': {
@@ -231,6 +245,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/scan': typeof ScanRoute
   '/$group': typeof AuthGroupRouteWithChildren
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
@@ -245,6 +260,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/scan': typeof ScanRoute
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
   '/profile': typeof AuthProfileRoute
@@ -260,6 +276,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/scan': typeof ScanRoute
   '/_auth/$group': typeof AuthGroupRouteWithChildren
   '/_auth/activity': typeof AuthActivityRoute
   '/_auth/friends': typeof AuthFriendsRoute
@@ -277,6 +294,7 @@ export interface FileRouteTypes {
     | ''
     | '/login'
     | '/register'
+    | '/scan'
     | '/$group'
     | '/activity'
     | '/friends'
@@ -290,6 +308,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/register'
+    | '/scan'
     | '/activity'
     | '/friends'
     | '/profile'
@@ -303,6 +322,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/login'
     | '/register'
+    | '/scan'
     | '/_auth/$group'
     | '/_auth/activity'
     | '/_auth/friends'
@@ -319,12 +339,14 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ScanRoute: typeof ScanRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ScanRoute: ScanRoute,
 }
 
 export const routeTree = rootRoute
@@ -339,7 +361,8 @@ export const routeTree = rootRoute
       "children": [
         "/_auth",
         "/login",
-        "/register"
+        "/register",
+        "/scan"
       ]
     },
     "/_auth": {
@@ -358,6 +381,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/scan": {
+      "filePath": "scan.tsx"
     },
     "/_auth/$group": {
       "filePath": "_auth/$group.tsx",
