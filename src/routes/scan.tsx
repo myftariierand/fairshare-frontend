@@ -1,62 +1,67 @@
-import { useEffect, useState } from 'react'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { Html5Qrcode } from 'html5-qrcode'
-
-import { useJoinGroupMutation } from '@/app/services/group'
-
+// import { useEffect, useState } from 'react'
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle
-} from '@/components/ui/alert-dialog'
+    createFileRoute
+    // useRouter
+} from '@tanstack/react-router'
+
+// import { Html5Qrcode } from 'html5-qrcode'
+
+// import { useJoinGroupMutation } from '@/app/services/group'
+
+// import {
+//     AlertDialog,
+//     AlertDialogAction,
+//     AlertDialogCancel,
+//     AlertDialogContent,
+//     AlertDialogDescription,
+//     AlertDialogFooter,
+//     AlertDialogHeader,
+//     AlertDialogTitle
+// } from '@/components/ui/alert-dialog'
 
 export const Route = createFileRoute('/scan')({
     component: RouteComponent
 })
 
 function RouteComponent() {
-    const router = useRouter()
-    const navigate = Route.useNavigate()
-    const [open, setOpen] = useState(false)
-    const [groupId, setGropuId] = useState('')
+    // const router = useRouter()
+    // const navigate = Route.useNavigate()
+    // const [open, setOpen] = useState(false)
+    // const [groupId, setGropuId] = useState('')
 
-    const [joinGroup] = useJoinGroupMutation()
+    // const [joinGroup] = useJoinGroupMutation()
 
-    const handleConfirm = async () => {
-        await joinGroup({ groupId }).unwrap()
-        navigate({ to: `/${groupId}`, replace: true })
-    }
+    // const handleConfirm = async () => {
+    //     await joinGroup({ groupId }).unwrap()
+    //     navigate({ to: `/${groupId}`, replace: true })
+    // }
 
-    useEffect(() => {
-        const html5QrCode = new Html5Qrcode('reader')
+    // useEffect(() => {
+    //     const html5QrCode = new Html5Qrcode('reader')
 
-        html5QrCode.start(
-            { facingMode: 'environment' },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
-            },
-            (decodedText: string) => {
-                if (decodedText.includes('join-group')) {
-                    setGropuId(decodedText.replace('join-group:', ''))
-                    setOpen(true)
-                }
-            },
-            (error: unknown) => {
-                console.warn(error)
-            }
-        )
-    }, [])
+    //     html5QrCode.start(
+    //         { facingMode: 'environment' },
+    //         {
+    //             fps: 10,
+    //             qrbox: { width: 250, height: 250 }
+    //         },
+    //         (decodedText: string) => {
+    //             if (decodedText.includes('join-group')) {
+    //                 setGropuId(decodedText.replace('join-group:', ''))
+    //                 setOpen(true)
+    //             }
+    //         },
+    //         (error: unknown) => {
+    //             console.warn(error)
+    //         }
+    //     )
+    // }, [])
 
     return (
         <div className='p-10'>
             <div id='reader'></div>
-            <AlertDialog open={open}>
+            Scan Page
+            {/* <AlertDialog open={open}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -75,7 +80,7 @@ function RouteComponent() {
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
-            </AlertDialog>
+            </AlertDialog> */}
         </div>
     )
 }
