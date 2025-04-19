@@ -7,11 +7,11 @@ import { GroupInviteStatus } from '@/types/common'
 
 import { Route } from '@/routes/_auth'
 
-import { User, Activity, CirclePlus, Users, Dot } from 'lucide-react'
+import { User, Activity, Users, Dot } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import { QuickActionsButton } from '@/components/layout/quick-actions-button'
 
-const Navigation = () => {
+export const Navigation = () => {
     const { user } = Route.useRouteContext()
 
     const initials = user.name.charAt(0)
@@ -63,13 +63,7 @@ const Navigation = () => {
                     )}
                 </span>
             </Link>
-            <Button
-                size='icon'
-                variant={'secondary'}
-                className='justify-self-center'
-            >
-                <CirclePlus />
-            </Button>
+            <QuickActionsButton />
             <Link
                 to={'/activity'}
                 className='flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground'
@@ -96,5 +90,3 @@ const Navigation = () => {
         </nav>
     )
 }
-
-export default Navigation

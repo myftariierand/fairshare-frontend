@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
+
+import { useEffect, useState } from 'react'
 
 import { Html5Qrcode } from 'html5-qrcode'
 
@@ -16,7 +17,7 @@ import {
     AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 
-export const Route = createFileRoute('/scan')({
+export const Route = createFileRoute('/_auth/scan-qr-code')({
     component: RouteComponent
 })
 

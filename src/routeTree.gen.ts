@@ -11,11 +11,11 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ScanImport } from './routes/scan'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
+import { Route as AuthScanQrCodeImport } from './routes/_auth/scan-qr-code'
 import { Route as AuthProfileImport } from './routes/_auth/profile'
 import { Route as AuthFriendsImport } from './routes/_auth/friends'
 import { Route as AuthActivityImport } from './routes/_auth/activity'
@@ -26,12 +26,6 @@ import { Route as AuthGroupSettingsImport } from './routes/_auth/$group/settings
 import { Route as AuthGroupTransactionsTransactionImport } from './routes/_auth/$group/transactions.$transaction'
 
 // Create/Update Routes
-
-const ScanRoute = ScanImport.update({
-  id: '/scan',
-  path: '/scan',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const RegisterRoute = RegisterImport.update({
   id: '/register',
@@ -53,6 +47,12 @@ const AuthRoute = AuthImport.update({
 const AuthIndexRoute = AuthIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthScanQrCodeRoute = AuthScanQrCodeImport.update({
+  id: '/scan-qr-code',
+  path: '/scan-qr-code',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -130,13 +130,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
-    '/scan': {
-      id: '/scan'
-      path: '/scan'
-      fullPath: '/scan'
-      preLoaderRoute: typeof ScanImport
-      parentRoute: typeof rootRoute
-    }
     '/_auth/$group': {
       id: '/_auth/$group'
       path: '/$group'
@@ -163,6 +156,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthProfileImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/scan-qr-code': {
+      id: '/_auth/scan-qr-code'
+      path: '/scan-qr-code'
+      fullPath: '/scan-qr-code'
+      preLoaderRoute: typeof AuthScanQrCodeImport
       parentRoute: typeof AuthImport
     }
     '/_auth/': {
@@ -226,6 +226,7 @@ interface AuthRouteChildren {
   AuthActivityRoute: typeof AuthActivityRoute
   AuthFriendsRoute: typeof AuthFriendsRoute
   AuthProfileRoute: typeof AuthProfileRoute
+  AuthScanQrCodeRoute: typeof AuthScanQrCodeRoute
   AuthIndexRoute: typeof AuthIndexRoute
   AuthUserUserRoute: typeof AuthUserUserRoute
 }
@@ -235,6 +236,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthActivityRoute: AuthActivityRoute,
   AuthFriendsRoute: AuthFriendsRoute,
   AuthProfileRoute: AuthProfileRoute,
+  AuthScanQrCodeRoute: AuthScanQrCodeRoute,
   AuthIndexRoute: AuthIndexRoute,
   AuthUserUserRoute: AuthUserUserRoute,
 }
@@ -245,11 +247,11 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
-  '/scan': typeof ScanRoute
   '/$group': typeof AuthGroupRouteWithChildren
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
   '/profile': typeof AuthProfileRoute
+  '/scan-qr-code': typeof AuthScanQrCodeRoute
   '/': typeof AuthIndexRoute
   '/$group/settings': typeof AuthGroupSettingsRoute
   '/user/$user': typeof AuthUserUserRoute
@@ -260,10 +262,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
-  '/scan': typeof ScanRoute
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
   '/profile': typeof AuthProfileRoute
+  '/scan-qr-code': typeof AuthScanQrCodeRoute
   '/': typeof AuthIndexRoute
   '/$group/settings': typeof AuthGroupSettingsRoute
   '/user/$user': typeof AuthUserUserRoute
@@ -276,11 +278,11 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
-  '/scan': typeof ScanRoute
   '/_auth/$group': typeof AuthGroupRouteWithChildren
   '/_auth/activity': typeof AuthActivityRoute
   '/_auth/friends': typeof AuthFriendsRoute
   '/_auth/profile': typeof AuthProfileRoute
+  '/_auth/scan-qr-code': typeof AuthScanQrCodeRoute
   '/_auth/': typeof AuthIndexRoute
   '/_auth/$group/settings': typeof AuthGroupSettingsRoute
   '/_auth/user/$user': typeof AuthUserUserRoute
@@ -294,11 +296,11 @@ export interface FileRouteTypes {
     | ''
     | '/login'
     | '/register'
-    | '/scan'
     | '/$group'
     | '/activity'
     | '/friends'
     | '/profile'
+    | '/scan-qr-code'
     | '/'
     | '/$group/settings'
     | '/user/$user'
@@ -308,10 +310,10 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/register'
-    | '/scan'
     | '/activity'
     | '/friends'
     | '/profile'
+    | '/scan-qr-code'
     | '/'
     | '/$group/settings'
     | '/user/$user'
@@ -322,11 +324,11 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/login'
     | '/register'
-    | '/scan'
     | '/_auth/$group'
     | '/_auth/activity'
     | '/_auth/friends'
     | '/_auth/profile'
+    | '/_auth/scan-qr-code'
     | '/_auth/'
     | '/_auth/$group/settings'
     | '/_auth/user/$user'
@@ -339,14 +341,12 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
-  ScanRoute: typeof ScanRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
-  ScanRoute: ScanRoute,
 }
 
 export const routeTree = rootRoute
@@ -361,8 +361,7 @@ export const routeTree = rootRoute
       "children": [
         "/_auth",
         "/login",
-        "/register",
-        "/scan"
+        "/register"
       ]
     },
     "/_auth": {
@@ -372,6 +371,7 @@ export const routeTree = rootRoute
         "/_auth/activity",
         "/_auth/friends",
         "/_auth/profile",
+        "/_auth/scan-qr-code",
         "/_auth/",
         "/_auth/user/$user"
       ]
@@ -381,9 +381,6 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
-    },
-    "/scan": {
-      "filePath": "scan.tsx"
     },
     "/_auth/$group": {
       "filePath": "_auth/$group.tsx",
@@ -404,6 +401,10 @@ export const routeTree = rootRoute
     },
     "/_auth/profile": {
       "filePath": "_auth/profile.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/scan-qr-code": {
+      "filePath": "_auth/scan-qr-code.tsx",
       "parent": "/_auth"
     },
     "/_auth/": {

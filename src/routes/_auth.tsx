@@ -1,6 +1,6 @@
 import { createFileRoute, redirect, Outlet } from '@tanstack/react-router'
 
-import Navigation from '@/components/layout/Navigation'
+import { Navigation } from '@/components/layout/navigation'
 import PrefetchHandler from '@/features/utils/PrefetchHandler'
 
 export const Route = createFileRoute('/_auth')({
