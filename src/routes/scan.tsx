@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { Scanner, IDetectedBarcode } from '@yudiel/react-qr-scanner'
+import { Html5Qrcode } from 'html5-qrcode'
 
 import { useJoinGroupMutation } from '@/app/services/group'
 
@@ -25,15 +25,6 @@ function RouteComponent() {
     const [open, setOpen] = useState(false)
     const [groupId, setGropuId] = useState('')
 
-    const handleScan = (results: IDetectedBarcode[]) => {
-        const key = results[0].rawValue
-
-        if (key.includes('join-group')) {
-            setGropuId(results[0].rawValue.replace('join-group:', ''))
-            setOpen(true)
-        }
-    }
-
     const [joinGroup] = useJoinGroupMutation()
 
     const handleConfirm = async () => {
@@ -41,15 +32,36 @@ function RouteComponent() {
         navigate({ to: `/${groupId}`, replace: true })
     }
 
+    useEffect(() => {
+        const html5QrCode = new Html5Qrcode('reader')
+
+        html5QrCode.start(
+            { facingMode: 'environment' },
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            (decodedText: string) => {
+                if (decodedText.includes('join-group')) {
+                    setGropuId(decodedText.replace('join-group:', ''))
+                    setOpen(true)
+                }
+            },
+            (error: unknown) => {
+                console.warn(error)
+            }
+        )
+    }, [])
+
     return (
         <div className='p-10'>
-            <Scanner onScan={handleScan} />
+            <div id='reader'></div>
             <AlertDialog open={open}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone.
+                            This action cannot be undone. {groupId}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
