@@ -90,7 +90,8 @@ export const groupApi = api.injectEndpoints({
             query: ({ groupId }) => ({
                 url: `/groups/${groupId}/join`,
                 method: 'POST'
-            })
+            }),
+            invalidatesTags: [{ type: 'Group', id: 'LIST' }]
         })
     })
 })
