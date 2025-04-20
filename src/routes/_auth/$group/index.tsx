@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { QRCodeSVG } from 'qrcode.react'
 import { z } from 'zod'
 
 import { Route as GroupLayout } from '@/routes/_auth/$group'
@@ -29,15 +28,10 @@ function RouteComponent() {
     const navigate = Route.useNavigate()
     const data = GroupLayout.useLoaderData()
 
-    console.log(`join-group:${data.id}`)
-
     return (
         <>
             <div className='flex flex-col gap-4'>
                 <div className='flex gap-3 font-medium'>
-                    <div className='p-1 bg-white'>
-                        <QRCodeSVG size={100} value={`join-group:${data.id}`} />
-                    </div>
                     <ul className='text-sm'>
                         {data.settlements.map(({ from, to, amount }) => (
                             <li key={from.name + to.name}>
