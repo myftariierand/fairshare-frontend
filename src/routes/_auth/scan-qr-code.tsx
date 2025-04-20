@@ -1,11 +1,10 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-
 import { useEffect, useState } from 'react'
-
 import { Html5Qrcode } from 'html5-qrcode'
 
 import { useJoinGroupMutation } from '@/app/services/group'
 
+import { Loader } from 'lucide-react'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -25,9 +24,9 @@ function RouteComponent() {
     const router = useRouter()
     const navigate = Route.useNavigate()
     const [open, setOpen] = useState(false)
-    const [groupId, setGropuId] = useState('')
+    const [groupId, setGroupId] = useState('')
 
-    const [joinGroup] = useJoinGroupMutation()
+    const [joinGroup, { isLoading }] = useJoinGroupMutation()
 
     const handleConfirm = async () => {
         await joinGroup({ groupId }).unwrap()
@@ -45,7 +44,7 @@ function RouteComponent() {
             },
             (decodedText: string) => {
                 if (decodedText.includes('join-group')) {
-                    setGropuId(decodedText.replace('join-group:', ''))
+                    setGroupId(decodedText.replace('join-group:', ''))
                     setOpen(true)
                 }
             },
@@ -72,8 +71,15 @@ function RouteComponent() {
                         >
                             Go Back
                         </AlertDialogCancel>
-                        <AlertDialogAction onClick={handleConfirm}>
-                            Join Group
+                        <AlertDialogAction
+                            onClick={handleConfirm}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <Loader className='animate-spin' />
+                            ) : (
+                                'Join Group'
+                            )}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
