@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-import { QrCode, ChevronsUpDown } from 'lucide-react'
+import { ScanQrCode, ChevronsUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -24,7 +24,7 @@ export const QuickActionsButton = () => {
             <DropdownMenuContent>
                 <DropdownMenuItem asChild>
                     <Link to='/scan-qr-code'>
-                        <QrCode /> Scan QR code
+                        <ScanQrCode /> Scan QR code
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuContent>
