@@ -5,14 +5,14 @@ import type { Member } from '@/types/group'
 
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
-import { useGetProfileQuery } from '@/app/services/auth'
+import { Route } from '@/routes/_auth'
 
 type Props = {
     members: Member[]
 }
 
 const MemberList = (props: Props) => {
-    const { data } = useGetProfileQuery()
+    const { user } = Route.useRouteContext()
     const now = new Date()
 
     return (
@@ -29,7 +29,7 @@ const MemberList = (props: Props) => {
                             <div className='flex flex-col flex-grow'>
                                 <span className='font-semibold'>
                                     {member.name}
-                                    <span className="font-normal">{ member.id === data?.id && ' (You)' }</span>
+                                    <span className="font-normal">{ member.id === user.id && ' (You)' }</span>
                                 </span>
                                 <span className='text-xs text-muted-foreground'>
                                     Member since{' '}
