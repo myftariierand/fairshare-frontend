@@ -11,6 +11,7 @@ import MemberList from '@/components/group/member-list'
 import DebtsList from '@/components/group/debts-list'
 import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
 import InviteToGroupDrawer from '@/components/group/invite-to-group-drawer'
+import RemoveMemberDialog from '@/components/group/remove-member-dialog'
 
 const TabSchema = z.enum(['transactions', 'members', 'debts'])
 const SearchSchema = z.object({
@@ -71,7 +72,9 @@ function RouteComponent() {
                         <TransactionList />
                     </TabsContent>
                     <TabsContent value='members'>
-                        <MemberList members={data.members} />
+                        <MemberList members={data.members} renderButton={data => (
+                            <RemoveMemberDialog member={data} />
+                        )} />
                     </TabsContent>
                     <TabsContent value='debts'>
                         <DebtsList />

@@ -76,6 +76,16 @@ const SseHandler = () => {
                     store.dispatch(api.util.invalidateTags(['Group']))
                     navigate({ to: '/' })
                     break
+                case SseEventType.GROUP_MEMBER_REMOVED:
+                    store.dispatch(
+                        api.util.invalidateTags([
+                            'Group', 
+                            'GroupInvite', 
+                            'Friend'
+                        ])
+                    )
+                    router.invalidate()
+                    break
                 case SseEventType.TRANSACTION_ADDED:
                 case SseEventType.TRANSACTION_UPDATED:
                 case SseEventType.TRANSACTION_DELETED:
