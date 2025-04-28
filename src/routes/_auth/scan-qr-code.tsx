@@ -1,7 +1,6 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useState } from 'react'
-import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
-
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner'
 
 import { useJoinGroupMutation } from '@/app/services/group'
 
@@ -35,7 +34,7 @@ function RouteComponent() {
     }
 
     const onScan = (result: IDetectedBarcode[]) => {
-      const value = result[0].rawValue
+        const value = result[0].rawValue
 
         if (value.includes('join-group')) {
             setGroupId(value.replace('join-group:', ''))
