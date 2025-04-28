@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { Html5Qrcode } from 'html5-qrcode'
+import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner'
 
 import { useJoinGroupMutation } from '@/app/services/group'
 
@@ -33,30 +33,18 @@ function RouteComponent() {
         navigate({ to: `/${groupId}`, replace: true })
     }
 
-    useEffect(() => {
-        const html5QrCode = new Html5Qrcode('reader')
+    const onScan = (result: IDetectedBarcode[]) => {
+        const value = result[0].rawValue
 
-        html5QrCode.start(
-            { facingMode: 'environment' },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
-            },
-            (decodedText: string) => {
-                if (decodedText.includes('join-group')) {
-                    setGroupId(decodedText.replace('join-group:', ''))
-                    setOpen(true)
-                }
-            },
-            (error: unknown) => {
-                console.warn(error)
-            }
-        )
-    }, [])
+        if (value.includes('join-group')) {
+            setGroupId(value.replace('join-group:', ''))
+            setOpen(true)
+        }
+    }
 
     return (
         <div className='p-10'>
-            <div id='reader'></div>
+            <Scanner onScan={onScan} />
             <AlertDialog open={open}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
