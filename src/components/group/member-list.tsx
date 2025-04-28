@@ -1,19 +1,20 @@
 import { Link } from '@tanstack/react-router'
 import { formatDistance } from 'date-fns'
 
+import { Route } from '@/routes/_auth'
+
 import type { Member } from '@/types/group'
 
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
-import { Route } from '@/routes/_auth'
 
 type Props = {
     members: Member[]
 }
 
 const MemberList = (props: Props) => {
-    const { user } = Route.useRouteContext()
     const now = new Date()
+    const { user } = Route.useRouteContext()
 
     return (
         <ul>
@@ -28,8 +29,12 @@ const MemberList = (props: Props) => {
                             <Image className='size-12 rounded-lg' />
                             <div className='flex flex-col flex-grow'>
                                 <span className='font-semibold'>
-                                    {member.name}
-                                    <span className="font-normal">{ member.id === user.id && ' (You)' }</span>
+                                    {member.name}&nbsp;
+                                    {member.id === user.id && (
+                                        <span className='font-normal'>
+                                            (You)
+                                        </span>
+                                    )}
                                 </span>
                                 <span className='text-xs text-muted-foreground'>
                                     Member since{' '}
