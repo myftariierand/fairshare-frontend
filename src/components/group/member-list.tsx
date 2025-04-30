@@ -21,9 +21,11 @@ const MemberList = (props: Props) => {
     return (
         <ul>
             {props.members.map(member => (
-                <li key={member.id}>
+                <li key={member.id} className='relative'>
                     <Button asChild variant={'ghost'} className='p-1'>
-                        <div
+                        <Link
+                            to='/user/$user'
+                            params={{ user: member.id }}
                             className='flex gap-4 items-center w-full h-auto group'
                         >
                             <Image className='size-12 rounded-lg' />
@@ -36,11 +38,11 @@ const MemberList = (props: Props) => {
                                     {formatDistance(member.joinedAt, now)}
                                 </span>
                             </div>
-                            <div onClick={(e) => e.stopPropagation()}>
-                                {user.id === group.createdById && user.id !== member.id && props.renderButton(member)}
-                            </div>
-                        </div>
+                        </Link>
                     </Button>
+                    <div className="absolute top-1/2 right-2 -translate-y-1/2 z-10">
+                        {user.id === group.createdById && user.id !== member.id && props.renderButton(member)}
+                    </div>
                 </li>
             ))}
         </ul>
