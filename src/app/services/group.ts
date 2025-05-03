@@ -92,7 +92,18 @@ export const groupApi = api.injectEndpoints({
                 method: 'POST'
             }),
             invalidatesTags: [{ type: 'Group', id: 'LIST' }]
-        })
+        }),
+        removeMember: builder.mutation<Group, { groupId: string; memberId: string }>({
+            query: ({ groupId, memberId }) => ({
+                url: `/groups/${groupId}/remove/${memberId}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: (_result, _error, { groupId }) => [
+                { type: 'GroupInvite', id: 'LIST' },
+                { type: 'Group', id: groupId },
+                { type: 'FriendRequest', id: 'LIST' }
+            ]
+        }),
     })
 })
 
@@ -106,5 +117,6 @@ export const {
     useInviteToGroupMutation,
     useAcceptGroupInviteMutation,
     useRejectGroupInviteMutation,
-    useJoinGroupMutation
+    useJoinGroupMutation,
+    useRemoveMemberMutation
 } = groupApi

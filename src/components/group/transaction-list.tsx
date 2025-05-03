@@ -10,7 +10,7 @@ import { getIcon } from '@/lib/get-transaction-icon'
 
 import { TransactionType } from '@/types/common'
 
-import { Inbox } from 'lucide-react'
+import { Dot, Inbox } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const TransactionList = () => {
@@ -69,7 +69,8 @@ const TransactionList = () => {
                                                 Paid by{' '}
                                                 <span className='font-semibold text-foreground'>
                                                     {transaction.paidBy}
-                                                </span>{' '}
+                                                </span>
+                                                <Dot className='inline-block' />
                                                 {formatDistance(
                                                     transaction.createdAt,
                                                     now,
@@ -87,24 +88,26 @@ const TransactionList = () => {
                                                       ? ''
                                                       : 'You lent'}
                                             </span>
-                                            <span
-                                                className={cn(
-                                                    'font-semibold',
-                                                    transaction.balance < 0
-                                                        ? 'text-red-800'
-                                                        : transaction.balance ===
-                                                            0
-                                                          ? ''
-                                                          : 'text-green-800'
-                                                )}
-                                            >
-                                                {formatAmount(
-                                                    Math.abs(
-                                                        transaction.balance
-                                                    ),
-                                                    group.currency
-                                                )}
-                                            </span>
+                                            {transaction.balance !== 0 && (
+                                                <span
+                                                    className={cn(
+                                                        'font-semibold',
+                                                        transaction.balance < 0
+                                                            ? 'text-red-800'
+                                                            : transaction.balance ===
+                                                                0
+                                                              ? ''
+                                                              : 'text-green-800'
+                                                    )}
+                                                >
+                                                    {formatAmount(
+                                                        Math.abs(
+                                                            transaction.balance
+                                                        ),
+                                                        group.currency
+                                                    )}
+                                                </span>
+                                            )}
                                         </div>
                                     </Link>
                                 </Button>

@@ -7,7 +7,8 @@ export type Group = {
     id: string
     name: string
     currency: string
-    createdAt: string
+    createdAt: string,
+    createdById: string,
     _count: {
         members: number
     }
