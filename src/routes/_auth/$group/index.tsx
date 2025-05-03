@@ -7,13 +7,10 @@ import { formatAmount } from '@/lib/utils'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import TransactionList from '@/components/group/transaction-list'
-import MemberList from '@/components/group/member-list'
 import DebtsList from '@/components/group/debts-list'
 import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
-import InviteToGroupDrawer from '@/components/group/invite-to-group-drawer'
-import RemoveMemberDialog from '@/components/group/remove-member-dialog'
 
-const TabSchema = z.enum(['transactions', 'members', 'debts'])
+const TabSchema = z.enum(['transactions', 'debts'])
 const SearchSchema = z.object({
     t: TabSchema.default('transactions')
 })
@@ -61,20 +58,13 @@ function RouteComponent() {
                                 Transactions
                             </TabsTrigger>
                             <TabsTrigger value='debts'>Debts</TabsTrigger>
-                            <TabsTrigger value='members'>Members</TabsTrigger>
                         </TabsList>
                         {search.t === 'transactions' && (
                             <CreateTransactionDrawer members={data.members} />
                         )}
-                        {search.t === 'members' && <InviteToGroupDrawer />}
                     </div>
                     <TabsContent value='transactions'>
                         <TransactionList />
-                    </TabsContent>
-                    <TabsContent value='members'>
-                        <MemberList members={data.members} renderButton={data => (
-                            <RemoveMemberDialog member={data} />
-                        )} />
                     </TabsContent>
                     <TabsContent value='debts'>
                         <DebtsList />

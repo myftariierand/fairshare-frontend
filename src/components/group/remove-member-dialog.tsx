@@ -27,10 +27,13 @@ type Props = {
 const RemoveMemberDialog = (props: Props) => {
     const [removeMember, removeMemberMutation] = useRemoveMemberMutation()
     const group = Route.useLoaderData()
-    
+
     const handleRemoveMember = async () => {
         try {
-            await removeMember({ groupId: group.id, memberId: props.member.id }).unwrap()
+            await removeMember({
+                groupId: group.id,
+                memberId: props.member.id
+            }).unwrap()
         } catch (error) {
             toast.error(getErrorMessage(error))
         }
@@ -44,9 +47,6 @@ const RemoveMemberDialog = (props: Props) => {
                     variant={'outline'}
                     className='ml-auto z-10'
                     disabled={removeMemberMutation.isLoading}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                  }}
                 >
                     <UserMinus /> Remove
                 </Button>
