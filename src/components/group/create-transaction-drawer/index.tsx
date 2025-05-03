@@ -1,21 +1,20 @@
 import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { type VariantProps } from 'class-variance-authority'
 
 import { useCreateTransactionMutation } from '@/app/services/transaction'
 
 import { getErrorMessage, formatAmount, sanitizeNumberInput } from '@/lib/utils'
 
-import type { Member } from '@/types/group'
-
 import { Route } from '@/routes/_auth/$group'
 
-import { ListPlus, Loader } from 'lucide-react'
+import { Loader, Plus } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import {
     Select,
@@ -43,6 +42,7 @@ import {
     DrawerTrigger
 } from '@/components/ui/drawer'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import SplitsCard from '@/components/group/create-transaction-drawer/splits-card'
 
 const TransactionSchema = z.object({
     description: z.string().min(4, 'Must be at least 4 characters long.'),
@@ -59,9 +59,14 @@ const TransactionSchema = z.object({
         })
         .array()
 })
-type TransactionData = z.infer<typeof TransactionSchema>
+export type TransactionData = z.infer<typeof TransactionSchema>
 
-const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
+type Props = {
+    triggerLabel?: string
+    triggerVariants?: VariantProps<typeof buttonVariants>
+}
+
+const CreateTransactionDrawer = (props: Props) => {
     const [open, setOpen] = useState(false)
     const [splitEqually, setSplitEqually] = useState(true)
 
@@ -77,16 +82,12 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
             description: '',
             amount: 0,
             paidBy: context.user.id,
-            splits: members.map(({ name, id }) => ({
+            splits: group.members.map(({ name, id }) => ({
                 name,
                 userId: id,
                 amount: 0
             }))
         }
-    })
-    const { fields } = useFieldArray({
-        name: 'splits',
-        control: form.control
     })
 
     const [createTransaction, { isLoading }] = useCreateTransactionMutation()
@@ -110,20 +111,26 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
 
         const updatedSplits = form.getValues('splits').map(split => ({
             ...split,
-            amount: +(amount / members.length).toFixed(2)
+            amount: +(amount / group.members.length).toFixed(2)
         }))
 
         form.setValue('splits', updatedSplits)
     }
 
     const handleSplitEqually = (checked: boolean) => {
+        const amount = form.getValues('amount')
+
+        if (!(amount > 0)) {
+            toast.info('Enter a cost for your expense first')
+            return
+        }
+
         setSplitEqually(checked)
 
         if (checked) {
-            const amount = form.getValues('amount')
             const updatedSplits = form.getValues('splits').map(split => ({
                 ...split,
-                amount: +(amount / members.length).toFixed(2)
+                amount: +(amount / group.members.length).toFixed(2)
             }))
 
             form.setValue('splits', updatedSplits)
@@ -132,11 +139,12 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
 
     const handleOpenChange = (open: boolean) => {
         setOpen(open)
+        setSplitEqually(true)
         form.reset({
             description: '',
             amount: 0,
             paidBy: context.user.id,
-            splits: members.map(({ name, id }) => ({
+            splits: group.members.map(({ name, id }) => ({
                 name,
                 userId: id,
                 amount: 0
@@ -147,8 +155,8 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
-                <Button size={'icon'} variant={'secondary'} className='ml-auto'>
-                    <ListPlus />
+                <Button {...props.triggerVariants}>
+                    <Plus /> {props.triggerLabel}
                 </Button>
             </DrawerTrigger>
             <DrawerContent>
@@ -219,7 +227,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {members.map(member => (
+                                                {group.members.map(member => (
                                                     <SelectItem
                                                         key={member.id}
                                                         value={member.id}
@@ -250,44 +258,7 @@ const CreateTransactionDrawer = ({ members }: { members: Member[] }) => {
                                     />
                                 </FormControl>
                             </FormItem>
-                            {!splitEqually && (
-                                <ul className='space-y-2'>
-                                    {fields.map((split, index) => (
-                                        <li key={split.id}>
-                                            <FormField
-                                                control={form.control}
-                                                name={`splits.${index}.amount`}
-                                                render={({ field }) => (
-                                                    <FormItem className='flex flex-row items-center justify-between space-y-0'>
-                                                        <FormLabel className='text-base'>
-                                                            {split.name}
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                className='w-auto'
-                                                                placeholder={formatAmount(
-                                                                    300,
-                                                                    group.currency
-                                                                )}
-                                                                onChange={e =>
-                                                                    field.onChange(
-                                                                        sanitizeNumberInput(
-                                                                            e
-                                                                                .target
-                                                                                .value
-                                                                        )
-                                                                    )
-                                                                }
-                                                            />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
+                            {!splitEqually && <SplitsCard />}
                         </form>
                     </Form>
                     <DrawerFooter>
