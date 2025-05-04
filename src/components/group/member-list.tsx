@@ -16,12 +16,13 @@ const MemberList = () => {
     return (
         <ul>
             {group.members.map(member => (
-                <li key={member.id} className="relative">
+                <li key={member.id} className='relative'>
                     <Button asChild variant={'ghost'} className='p-1'>
-                        <Link 
+                        <Link
                             to='/user/$user'
-                            params={{ user: member.id }} 
-                            className='flex gap-4 items-center w-full h-auto group'>
+                            params={{ user: member.id }}
+                            className='flex gap-4 items-center w-full h-auto group'
+                        >
                             <Image className='size-12 rounded-lg' />
                             <div className='flex flex-col flex-grow'>
                                 <span className='font-semibold'>
