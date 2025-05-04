@@ -7,7 +7,7 @@ import { Route as GroupLayout } from '@/routes/_auth/$group'
 
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
-import RemoveMemberDialog from './remove-member-dialog'
+import RemoveMemberDialog from '@/components/group/remove-member-dialog'
 
 const MemberList = () => {
     const { user } = Route.useRouteContext()
