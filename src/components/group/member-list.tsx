@@ -16,7 +16,7 @@ const MemberList = () => {
     return (
         <ul>
             {group.members.map(member => (
-                <li key={member.id}>
+                <li key={member.id} className="relative">
                     <Button asChild variant={'ghost'} className='p-1'>
                         <Link 
                             to='/user/$user'
