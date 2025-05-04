@@ -5,18 +5,11 @@ import { format } from 'date-fns'
 import { Route } from '@/routes/_auth'
 import { Route as GroupLayout } from '@/routes/_auth/$group'
 
-import type { Member } from '@/types/group'
-
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
 import RemoveMemberDialog from './remove-member-dialog'
 
-type Props = {
-    members: Member[],
-    renderButton: (member: Member) => React.ReactNode
-}
-
-const MemberList = (props: Props) => {
+const MemberList = () => {
     const { user } = Route.useRouteContext()
     const group = GroupLayout.useLoaderData()
 
@@ -44,16 +37,13 @@ const MemberList = (props: Props) => {
                                     {format(member.joinedAt, 'MMM yyyy')}
                                 </span>
                             </div>
-                            {user.id === group.createdById &&
-                                user.id !== member.id && (
-                                    <RemoveMemberDialog member={member} />
-                                )}
                         </Link>
                     </Button>
                     <div className='absolute top-1/2 right-2 -translate-y-1/2 z-10'>
                         {user.id === group.createdById &&
-                            user.id !== member.id &&
-                            props.renderButton(member)}
+                            user.id !== member.id && (
+                                <RemoveMemberDialog member={member} />
+                            )}
                     </div>
                 </li>
             ))}

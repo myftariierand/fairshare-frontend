@@ -53,14 +53,19 @@ function RouteComponent() {
                     }
                 >
                     <div className='flex items-center'>
-                        <TabsList>
+                        <TabsList className='mr-auto'>
                             <TabsTrigger value='transactions'>
                                 Transactions
                             </TabsTrigger>
                             <TabsTrigger value='debts'>Debts</TabsTrigger>
                         </TabsList>
                         {search.t === 'transactions' && (
-                            <CreateTransactionDrawer members={data.members} />
+                            <CreateTransactionDrawer
+                                triggerVariants={{
+                                    size: 'icon',
+                                    variant: 'secondary'
+                                }}
+                            />
                         )}
                     </div>
                     <TabsContent value='transactions'>
