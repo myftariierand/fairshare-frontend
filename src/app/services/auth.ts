@@ -52,6 +52,16 @@ export const authApi = api.injectEndpoints({
                 url: '/auth/profile',
                 method: 'GET'
             })
+        }),
+        changePassword: builder.mutation<
+            void,
+            { password: string; newPassword: string }
+        >({
+            query: credentials => ({
+                url: '/auth/change-password',
+                method: 'POST',
+                body: credentials
+            })
         })
     })
 })
@@ -61,5 +71,6 @@ export const {
     useLogoutMutation,
     useRegisterMutation,
     useGetProfileQuery,
-    useLazyGetProfileQuery
+    useLazyGetProfileQuery,
+    useChangePasswordMutation
 } = authApi

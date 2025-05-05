@@ -4,6 +4,7 @@ import { useLogoutMutation, useGetProfileQuery } from '@/app/services/auth'
 
 import { Button } from '@/components/ui/button'
 import ToggleTheme from '@/features/theme/toggle-theme'
+import { ChangePassword } from '@/components/profile/change-password'
 
 export const Route = createFileRoute('/_auth/profile')({
     component: RouteComponent
@@ -20,6 +21,9 @@ function RouteComponent() {
                 <h1 className='text-2xl'>{data?.email}</h1>
             </div>
             <ToggleTheme />
+
+            <ChangePassword />
+
             <Button
                 variant={'secondary'}
                 disabled={logoutMutation.isLoading}
