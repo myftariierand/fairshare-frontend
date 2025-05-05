@@ -10,6 +10,7 @@ import { Route } from '@/routes/_auth'
 import { User, Activity, Users, Dot } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { QuickActionsButton } from '@/components/layout/quick-actions-button'
+import { PingIndicator } from '@/components/ui/ping-indicator'
 
 export const Navigation = () => {
     const { user } = Route.useRouteContext()
@@ -36,10 +37,7 @@ export const Navigation = () => {
                 <span className='relative'>
                     Groups
                     {!!groupInvites?.length && (
-                        <Dot
-                            size={32}
-                            className='text-destructive absolute -top-4 -right-5'
-                        />
+                        <PingIndicator className='absolute -top-1 -right-1' />
                     )}
                 </span>
             </Link>
