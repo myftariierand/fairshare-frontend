@@ -85,7 +85,7 @@ const CreateGroupSheet = () => {
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
-                <Button size={'sm'} variant={'outline'} className='ml-auto'>
+                <Button size={'sm'} variant={'outline'}>
                     <Users /> New Group
                 </Button>
             </DrawerTrigger>
