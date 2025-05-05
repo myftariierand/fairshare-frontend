@@ -12,7 +12,15 @@ import { GroupInviteStatus } from '@/types/common'
 
 import { Check, EllipsisVertical, X, Inbox, Loader } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
+import { Pulse } from '@/components/ui/pulse'
+import {
+    Drawer,
+    DrawerContent,
+    DrawerDescription,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger
+} from '@/components/ui/drawer'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,7 +28,7 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
-const GroupInvitesList = () => {
+const GroupInvitesDrawer = () => {
     const [acceptInvite, acceptInviteMutation] = useAcceptGroupInviteMutation()
     const [rejectInvite, rejectInviteMutation] = useRejectGroupInviteMutation()
     const { data, isLoading, isError, isSuccess } = useGetGroupInvitesQuery({
@@ -127,7 +135,29 @@ const GroupInvitesList = () => {
         }
     }
 
-    return content
+    return (
+        <Drawer>
+            <DrawerTrigger asChild>
+                <Button
+                    size={'icon'}
+                    variant={'outline'}
+                    className='size-8 relative overflow-hidden'
+                >
+                    <Inbox />
+                    {!!data?.length && <Pulse />}
+                </Button>
+            </DrawerTrigger>
+            <DrawerContent className='h-full max-h-[90vh] px-3'>
+                <DrawerHeader>
+                    <DrawerTitle>GROUP INVITES</DrawerTitle>
+                    <DrawerDescription>
+                        Check out your group invites and join your friends.
+                    </DrawerDescription>
+                </DrawerHeader>
+                {content}
+            </DrawerContent>
+        </Drawer>
+    )
 }
 
-export default GroupInvitesList
+export default GroupInvitesDrawer
