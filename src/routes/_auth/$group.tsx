@@ -2,14 +2,15 @@ import {
     createFileRoute,
     Outlet,
     Link,
-    useLocation
+    useLocation,
+    useRouter
 } from '@tanstack/react-router'
 import { QRCodeSVG } from 'qrcode.react'
 
 import { store } from '@/app/store'
 import { groupApi } from '@/app/services/group'
 
-import { Settings, QrCode } from 'lucide-react'
+import { Settings, QrCode, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
@@ -37,10 +38,19 @@ export const Route = createFileRoute('/_auth/$group')({
 function RouteComponent() {
     const data = Route.useLoaderData()
     const location = useLocation()
+    const router = useRouter()
 
     return (
         <div>
             <header className='flex items-center py-3 space-x-2'>
+                <Button
+                    size={'icon'}
+                    variant={'default'}
+                    className='rounded-full size-7'
+                    onClick={() => router.history.back()}
+                >
+                    <ArrowLeft />
+                </Button>
                 <h1 className='font-bold text-xl flex-1'>{data.name}</h1>
                 <Dialog>
                     <DialogTrigger asChild>
