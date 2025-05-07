@@ -1,13 +1,10 @@
 import { useGetFriendsQuery } from '@/app/services/friends'
 
-import type { Friend } from '@/types/friend'
-
 import { Inbox, Loader } from 'lucide-react'
 import { Image } from '@/components/ui/image'
+import RemoveFriendDialog from '@/components/friend/remove-friend-dialog'
 
-type Props = { renderButton: (request: Friend) => React.ReactNode }
-
-const FriendsList = (props: Props) => {
+const FriendsList = () => {
     const { data, isLoading, isError, isSuccess } = useGetFriendsQuery()
 
     let content
@@ -46,7 +43,7 @@ const FriendsList = (props: Props) => {
                                     {friend.email}
                                 </span>
                             </div>
-                            {props.renderButton(friend)}
+                            <RemoveFriendDialog friend={friend} />
                         </li>
                     ))}
                 </ul>

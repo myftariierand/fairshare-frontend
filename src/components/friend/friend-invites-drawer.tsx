@@ -17,10 +17,19 @@ import {
     Loader,
     X
 } from 'lucide-react'
-import { Image } from '@/components/ui/image'
 import { Button } from '@/components/ui/button'
+import { Pulse } from '@/components/ui/pulse'
+import {
+    Drawer,
+    DrawerContent,
+    DrawerDescription,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger
+} from '@/components/ui/drawer'
+import { Image } from '@/components/ui/image'
 
-const FriendRequestsList = () => {
+const FriendInvitesDrawer = () => {
     const {
         user: { id }
     } = Route.useRouteContext()
@@ -129,7 +138,29 @@ const FriendRequestsList = () => {
         }
     }
 
-    return <>{content}</>
+    return (
+        <Drawer autoFocus>
+            <DrawerTrigger asChild>
+                <Button
+                    size={'icon'}
+                    variant={'outline'}
+                    className='size-8 relative overflow-hidden'
+                >
+                    <Inbox />
+                    {!!data?.length && <Pulse />}
+                </Button>
+            </DrawerTrigger>
+            <DrawerContent className='h-full max-h-[90vh] px-3'>
+                <DrawerHeader>
+                    <DrawerTitle>FRIEND REQUESTS</DrawerTitle>
+                    <DrawerDescription>
+                        Check out your friend requests.
+                    </DrawerDescription>
+                </DrawerHeader>
+                {content}
+            </DrawerContent>
+        </Drawer>
+    )
 }
 
-export default FriendRequestsList
+export default FriendInvitesDrawer

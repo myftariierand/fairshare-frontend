@@ -90,7 +90,7 @@ const AddFriendDrawer = () => {
     return (
         <Drawer>
             <DrawerTrigger asChild>
-                <Button size={'sm'} variant={'outline'} className='ml-auto'>
+                <Button size={'sm'} variant={'outline'}>
                     <UserPlus /> Add Friend
                 </Button>
             </DrawerTrigger>
