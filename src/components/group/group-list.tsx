@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, MatchRoute } from '@tanstack/react-router'
 import { formatDistance } from 'date-fns'
 
 import { useGetGroupsQuery } from '@/app/services/group'
@@ -6,6 +6,7 @@ import { useGetGroupsQuery } from '@/app/services/group'
 import { Loader, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
+import { Spinner } from '@/components/ui/spinner'
 
 const GroupList = () => {
     const { data, isLoading, isError, isSuccess } = useGetGroupsQuery()
@@ -54,6 +55,18 @@ const GroupList = () => {
                                             {group._count.members} member(s)
                                         </span>
                                     </div>
+                                    <MatchRoute
+                                        to='/$group'
+                                        params={{ group: group.id }}
+                                        pending
+                                    >
+                                        {match => (
+                                            <Spinner
+                                                show={!!match}
+                                                wait='delay-50'
+                                            />
+                                        )}
+                                    </MatchRoute>
                                     <span className='text-xs text-muted-foreground'>
                                         {formatDistance(group.createdAt, now, {
                                             addSuffix: true
