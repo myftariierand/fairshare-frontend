@@ -49,7 +49,7 @@ function RouteComponent() {
                 <Tabs
                     value={search.t}
                     onValueChange={value =>
-                        navigate({ search: { t: value as Tab } })
+                        navigate({ search: { t: value as Tab }, replace: true })
                     }
                 >
                     <div className='flex items-center'>
