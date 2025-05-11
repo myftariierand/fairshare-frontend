@@ -2,10 +2,12 @@ import { Loader2 } from 'lucide-react'
 
 export const Spinner = ({
     show,
-    wait
+    wait,
+    size
 }: {
     show?: boolean
     wait?: `delay-${number}`
+    size?: string | number
 }) => {
     return (
         <div
@@ -15,7 +17,7 @@ export const Spinner = ({
                     : 'duration-500 opacity-0 delay-0'
             }`}
         >
-            <Loader2 />
+            <Loader2 size={size} />
         </div>
     )
 }

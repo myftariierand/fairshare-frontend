@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dialog'
 
 import EditGroupSheet from '@/components/group/edit-group-drawer'
+import ShareLinkDialog from '@/components/group/share-link-dialog'
 
 export const Route = createFileRoute('/_auth/$group')({
     loader: async ({ params }) => {
@@ -52,9 +53,10 @@ function RouteComponent() {
                     <ArrowLeft />
                 </Button>
                 <h1 className='font-bold text-xl flex-1'>{data.name}</h1>
+                <ShareLinkDialog groupId={data.id} />
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button size={'icon'} variant={'outline'}>
+                        <Button size={'icon'} variant={'ghost'}>
                             <QrCode />
                         </Button>
                     </DialogTrigger>
@@ -79,7 +81,7 @@ function RouteComponent() {
                 {location.pathname.includes('settings') ? (
                     <EditGroupSheet data={data} />
                 ) : (
-                    <Button asChild size={'icon'} variant={'outline'}>
+                    <Button asChild size={'icon'} variant={'ghost'}>
                         <Link to='/$group/settings' params={{ group: data.id }}>
                             <Settings />
                         </Link>
