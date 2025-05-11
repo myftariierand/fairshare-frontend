@@ -38,7 +38,6 @@ const DebtsList = () => {
                 description: `${debt.to.name} and ${debt.from.name} have settled up!`,
                 paidBy: debt.from.id
             }).unwrap()
-            toast.success('Transaction added successfully')
             router.invalidate()
         } catch (error) {
             toast.error(getErrorMessage(error))
