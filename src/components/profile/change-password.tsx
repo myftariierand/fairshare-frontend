@@ -15,33 +15,35 @@ import { useChangePasswordMutation } from '@/app/services/auth'
 import { Button } from '@/components/ui/button'
 import { getErrorMessage } from '@/lib/utils'
 
-const ProfileSchema = z.object({
-    currentPassword: z.string().min(1, {
-        message: 'Current password is required.'
-    }),
-    newPassword: z.string().min(1, {
-        message: 'New password is required.'
-    }),
-    confirmPassword: z.string().min(1, {
-        message: 'Password confirmation is required.'
+const ProfileSchema = z
+    .object({
+        currentPassword: z.string().min(1, {
+            message: 'Current password is required.'
+        }),
+        newPassword: z.string().min(1, {
+            message: 'New password is required.'
+        }),
+        confirmPassword: z.string().min(1, {
+            message: 'Password confirmation is required.'
+        })
     })
-}).superRefine((args, ctx) => {
-  if(args.currentPassword === args.newPassword) {
-      ctx.addIssue({
-          code: 'custom',
-          message: 'New password cannot be the same as current password.',
-          path: ['newPassword']
-      })
-  }
+    .superRefine((args, ctx) => {
+        if (args.currentPassword === args.newPassword) {
+            ctx.addIssue({
+                code: 'custom',
+                message: 'New password cannot be the same as current password.',
+                path: ['newPassword']
+            })
+        }
 
-  if (args.newPassword !== args.confirmPassword) {
-      ctx.addIssue({
-          code: 'custom',
-          message: 'The passwords did not match.',
-          path: ['confirmPassword']
-      })
-  }
-})
+        if (args.newPassword !== args.confirmPassword) {
+            ctx.addIssue({
+                code: 'custom',
+                message: 'The passwords did not match.',
+                path: ['confirmPassword']
+            })
+        }
+    })
 type ProfileData = z.infer<typeof ProfileSchema>
 
 export const ChangePassword = () => {
@@ -81,9 +83,7 @@ export const ChangePassword = () => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-                <h2 className='text-lg font-medium mb-4'>Change Password</h2>
-
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
                 <FormField
                     control={form.control}
                     name='currentPassword'
