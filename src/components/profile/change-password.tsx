@@ -15,7 +15,7 @@ import { useChangePasswordMutation } from '@/app/services/auth'
 import { Button } from '@/components/ui/button'
 import { getErrorMessage } from '@/lib/utils'
 
-const ProfileSchema = z
+const PasswordChangeSchema = z
     .object({
         currentPassword: z.string().min(1, {
             message: 'Current password is required.'
@@ -44,13 +44,13 @@ const ProfileSchema = z
             })
         }
     })
-type ProfileData = z.infer<typeof ProfileSchema>
+type ProfileData = z.infer<typeof PasswordChangeSchema>
 
 export const ChangePassword = () => {
     const [changePassword, changePasswordMutation] = useChangePasswordMutation()
 
     const form = useForm<ProfileData>({
-        resolver: zodResolver(ProfileSchema),
+        resolver: zodResolver(PasswordChangeSchema),
         defaultValues: {
             currentPassword: '',
             newPassword: '',
@@ -60,13 +60,6 @@ export const ChangePassword = () => {
 
     const onSubmit = async (data: ProfileData) => {
         try {
-            if (data.newPassword === data.currentPassword) {
-                toast.error(
-                    'New password cannot be the same as current password'
-                )
-                return
-            }
-
             await changePassword({
                 password: data.currentPassword,
                 newPassword: data.newPassword,
