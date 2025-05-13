@@ -69,7 +69,8 @@ export const ChangePassword = () => {
 
             await changePassword({
                 password: data.currentPassword,
-                newPassword: data.newPassword
+                newPassword: data.newPassword,
+                confirmPassword: data.confirmPassword
             }).unwrap()
 
             toast.success('Password changed successfully')

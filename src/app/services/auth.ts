@@ -55,7 +55,7 @@ export const authApi = api.injectEndpoints({
         }),
         changePassword: builder.mutation<
             void,
-            { password: string; newPassword: string }
+            { password: string; newPassword: string; confirmPassword: string }
         >({
             query: credentials => ({
                 url: '/auth/change-password',
