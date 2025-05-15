@@ -17,7 +17,7 @@ import { getErrorMessage } from '@/lib/utils'
 
 const PasswordChangeSchema = z
     .object({
-        currentPassword: z.string().min(1, {
+        password: z.string().min(1, {
             message: 'Current password is required.'
         }),
         newPassword: z.string().min(1, {
@@ -28,7 +28,7 @@ const PasswordChangeSchema = z
         })
     })
     .superRefine((args, ctx) => {
-        if (args.currentPassword === args.newPassword) {
+        if (args.password === args.newPassword) {
             ctx.addIssue({
                 code: 'custom',
                 message: 'New password cannot be the same as current password.',
@@ -52,7 +52,7 @@ export const ChangePassword = () => {
     const form = useForm<ProfileData>({
         resolver: zodResolver(PasswordChangeSchema),
         defaultValues: {
-            currentPassword: '',
+            password: '',
             newPassword: '',
             confirmPassword: ''
         }
@@ -60,11 +60,14 @@ export const ChangePassword = () => {
 
     const onSubmit = async (data: ProfileData) => {
         try {
-            await changePassword({
-                password: data.currentPassword,
-                newPassword: data.newPassword,
-                confirmPassword: data.confirmPassword
-            }).unwrap()
+            if (data.newPassword === data.password) {
+                toast.error(
+                    'New password cannot be the same as current password'
+                )
+                return
+            }
+
+            await changePassword(data).unwrap()
 
             toast.success('Password changed successfully')
 
@@ -80,7 +83,7 @@ export const ChangePassword = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
                 <FormField
                     control={form.control}
-                    name='currentPassword'
+                    name='password'
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Current Password</FormLabel>
