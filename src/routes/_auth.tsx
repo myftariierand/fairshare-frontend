@@ -16,12 +16,12 @@ export const Route = createFileRoute('/_auth')({
 
 function RouteComponent() {
     return (
-        <div className='min-h-svh flex flex-col items-center bg-background'>
-            <div className='w-full max-w-md px-3'>
+        <div className='w-full h-svh max-w-md flex flex-col mx-auto'>
+            <div className='overflow-auto flex-1 px-3'>
                 <Outlet />
-                <Navigation />
-                <PrefetchHandler />
             </div>
+            <Navigation />
+            <PrefetchHandler />
         </div>
     )
 }
