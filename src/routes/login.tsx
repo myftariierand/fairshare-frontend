@@ -21,6 +21,7 @@ import { Handshake, Loader } from 'lucide-react'
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -123,6 +124,11 @@ function RouteComponent() {
                                                         {...field}
                                                     />
                                                 </FormControl>
+                                                <FormDescription>
+                                                    <Link to='/forgot-password'>
+                                                        Forgot Password?
+                                                    </Link>
+                                                </FormDescription>
                                                 <FormMessage />
                                             </FormItem>
                                         )}

@@ -11,8 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
+import { Route as ForgotPasswordImport } from './routes/forgot-password'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthScanQrCodeImport } from './routes/_auth/scan-qr-code'
@@ -28,6 +30,12 @@ import { Route as AuthGroupTransactionsTransactionImport } from './routes/_auth/
 
 // Create/Update Routes
 
+const ResetPasswordRoute = ResetPasswordImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const RegisterRoute = RegisterImport.update({
   id: '/register',
   path: '/register',
@@ -37,6 +45,12 @@ const RegisterRoute = RegisterImport.update({
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ForgotPasswordRoute = ForgotPasswordImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -123,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -135,6 +156,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordImport
       parentRoute: typeof rootRoute
     }
     '/_auth/$group': {
@@ -261,8 +289,10 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/$group': typeof AuthGroupRouteWithChildren
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
@@ -277,8 +307,10 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
   '/join-group': typeof AuthJoinGroupRoute
@@ -294,8 +326,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/_auth/$group': typeof AuthGroupRouteWithChildren
   '/_auth/activity': typeof AuthActivityRoute
   '/_auth/friends': typeof AuthFriendsRoute
@@ -313,8 +347,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
+    | '/forgot-password'
     | '/login'
     | '/register'
+    | '/reset-password'
     | '/$group'
     | '/activity'
     | '/friends'
@@ -328,8 +364,10 @@ export interface FileRouteTypes {
     | '/$group/transactions/$transaction'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/forgot-password'
     | '/login'
     | '/register'
+    | '/reset-password'
     | '/activity'
     | '/friends'
     | '/join-group'
@@ -343,8 +381,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_auth'
+    | '/forgot-password'
     | '/login'
     | '/register'
+    | '/reset-password'
     | '/_auth/$group'
     | '/_auth/activity'
     | '/_auth/friends'
@@ -361,14 +401,18 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 
 export const routeTree = rootRoute
@@ -382,8 +426,10 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_auth",
+        "/forgot-password",
         "/login",
-        "/register"
+        "/register",
+        "/reset-password"
       ]
     },
     "/_auth": {
@@ -399,11 +445,17 @@ export const routeTree = rootRoute
         "/_auth/user/$user"
       ]
     },
+    "/forgot-password": {
+      "filePath": "forgot-password.tsx"
+    },
     "/login": {
       "filePath": "login.tsx"
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/reset-password": {
+      "filePath": "reset-password.tsx"
     },
     "/_auth/$group": {
       "filePath": "_auth/$group.tsx",
