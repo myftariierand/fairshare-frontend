@@ -17,6 +17,9 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { store } from '@/app/store'
+import { authApi } from '@/app/services/auth'
+
 const PasswordChangeSchema = z
     .object({
         password: z.string().min(1, {
@@ -44,7 +47,27 @@ export const Route = createFileRoute('/reset-password')({
     component: RouteComponent,
     validateSearch: z.object({
         token: z.string().optional()
-    })
+    }),
+    loader: async ({ location }) => {
+        const params = new URLSearchParams(location.search)
+        const token = params.get('token') ?? ''
+
+        if (!token) {
+            return { tokenValid: false }
+        }
+
+        try {
+            await store
+                .dispatch(
+                    authApi.endpoints.verifyResetToken.initiate({ token })
+                )
+                .unwrap()
+
+            return { tokenValid: true }
+        } catch (err) {
+            return { tokenValid: false }
+        }
+    }
 })
 
 function RouteComponent() {
@@ -53,6 +76,8 @@ function RouteComponent() {
 
     const search = Route.useSearch()
     const token = search.token ?? ''
+
+    const { tokenValid } = Route.useLoaderData()
 
     const form = useForm<ProfileData>({
         resolver: zodResolver(PasswordChangeSchema),
@@ -99,55 +124,72 @@ function RouteComponent() {
                                         FairShare
                                     </h1>
                                 </div>
-                                <div className='flex flex-col gap-6'>
-                                    <FormField
-                                        control={form.control}
-                                        name='password'
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>
-                                                    New Password
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        type='password'
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name='confirmPassword'
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>
-                                                    Confirm Password
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        type='password'
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <Button
-                                        type='submit'
-                                        className='w-full'
-                                        disabled={isLoading}
-                                    >
-                                        {isLoading ? (
-                                            <Loader className='animate-spin' />
-                                        ) : (
-                                            'Reset Password'
-                                        )}
-                                    </Button>
-                                </div>
+                                {tokenValid ? (
+                                    <div className='flex flex-col gap-6'>
+                                        <FormField
+                                            control={form.control}
+                                            name='password'
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>
+                                                        New Password
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            type='password'
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name='confirmPassword'
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>
+                                                        Confirm Password
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            type='password'
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <Button
+                                            type='submit'
+                                            className='w-full'
+                                            disabled={isLoading}
+                                        >
+                                            {isLoading ? (
+                                                <Loader className='animate-spin' />
+                                            ) : (
+                                                'Reset Password'
+                                            )}
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className='flex flex-col gap-6'>
+                                        <p className='text-red-500 text-center'>
+                                            The token is invalid or has expired.
+                                        </p>
+                                        <Button
+                                            type='button'
+                                            className='w-full'
+                                            onClick={() => {
+                                                navigate({ to: '/' })
+                                            }}
+                                        >
+                                            Go to Login
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         </form>
                     </Form>

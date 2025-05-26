@@ -79,6 +79,12 @@ export const authApi = api.injectEndpoints({
                 method: 'POST',
                 body: credentials
             })
+        }),
+        verifyResetToken: builder.query<void, { token: string }>({
+            query: ({ token }) => ({
+                url: `/auth/verify-reset-token?token=${encodeURIComponent(token)}`,
+                method: 'GET'
+            })
         })
     })
 })
@@ -91,5 +97,6 @@ export const {
     useLazyGetProfileQuery,
     useChangePasswordMutation,
     useResetPasswordMutation,
-    useSendResetPasswordEmailMutation
+    useSendResetPasswordEmailMutation,
+    useVerifyResetTokenQuery
 } = authApi

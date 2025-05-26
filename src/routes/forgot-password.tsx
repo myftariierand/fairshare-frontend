@@ -112,7 +112,7 @@ function RouteComponent() {
                         <div className='flex flex-col items-center gap-2'>
                             <p className='text-center text-sm text-muted-foreground'>
                                 If the email exists, we've sent you a reset
-                                link. Please check your inbox.
+                                link. <br /> Please check your inbox.
                             </p>
                         </div>
                     )}
