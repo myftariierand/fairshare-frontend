@@ -61,8 +61,8 @@ const Totals = () => {
                             <Pie
                                 data={chartData}
                                 dataKey='amount'
-                                innerRadius={90}
-                                outerRadius={110}
+                                innerRadius={80}
+                                outerRadius={100}
                                 activeIndex={0}
                                 activeShape={({
                                     outerRadius = 0,
@@ -98,7 +98,7 @@ const Totals = () => {
                                                     <tspan
                                                         x={viewBox.cx}
                                                         y={viewBox.cy}
-                                                        className='fill-foreground text-3xl font-bold'
+                                                        className='fill-foreground text-xl font-bold'
                                                     >
                                                         {formatAmount(
                                                             total,
@@ -113,7 +113,7 @@ const Totals = () => {
                                                         }
                                                         className='fill-muted-foreground'
                                                     >
-                                                        Total
+                                                        Total Spendings
                                                     </tspan>
                                                 </text>
                                             )
