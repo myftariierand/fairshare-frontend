@@ -1,3 +1,12 @@
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
+
+import { useChangePasswordMutation } from '@/app/services/auth'
+
+import { getErrorMessage } from '@/lib/utils'
+
 import {
     Form,
     FormControl,
@@ -6,14 +15,9 @@ import {
     FormLabel,
     FormMessage
 } from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
-import { z } from 'zod'
-import { useChangePasswordMutation } from '@/app/services/auth'
 import { Button } from '@/components/ui/button'
-import { getErrorMessage } from '@/lib/utils'
+import { Spinner } from '@/components/ui/spinner'
 
 const PasswordChangeSchema = z
     .object({
@@ -44,9 +48,10 @@ const PasswordChangeSchema = z
             })
         }
     })
+
 type ProfileData = z.infer<typeof PasswordChangeSchema>
 
-export const ChangePassword = () => {
+const ChangePasswordForm = () => {
     const [changePassword, changePasswordMutation] = useChangePasswordMutation()
 
     const form = useForm<ProfileData>({
@@ -132,10 +137,21 @@ export const ChangePassword = () => {
                         </FormItem>
                     )}
                 />
-                <Button disabled={changePasswordMutation.isLoading}>
-                    Update Password
+                <Button
+                    disabled={
+                        changePasswordMutation.isLoading ||
+                        !form.formState.isDirty
+                    }
+                >
+                    {changePasswordMutation.isLoading ? (
+                        <Spinner />
+                    ) : (
+                        'Update Password'
+                    )}
                 </Button>
             </form>
         </Form>
     )
 }
+
+export default ChangePasswordForm

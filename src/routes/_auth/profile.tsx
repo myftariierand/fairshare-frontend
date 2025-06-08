@@ -8,15 +8,13 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import ToggleTheme from '@/features/theme/toggle-theme'
-import { ChangePassword } from '@/components/profile/change-password'
+import UpdateProfileForm from '@/components/profile/update-profile-form'
+import ChangePasswordForm from '@/components/profile/change-password-form'
 
 export const Route = createFileRoute('/_auth/profile')({
     component: RouteComponent
@@ -28,10 +26,16 @@ function RouteComponent() {
 
     return (
         <div className='flex flex-col h-full flex-1 my-3 justify-between space-y-3'>
-            <header className='flex items-center justify-between'>
+            <header className='flex items-center gap-4'>
+                <Avatar>
+                    <AvatarImage />
+                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                </Avatar>
                 <div className='font-semibold'>
                     <h2 className='text-lg'>{user.name}</h2>
-                    <h1 className='text-2xl'>{user.email}</h1>
+                    <h1 className='text-base text-muted-foreground'>
+                        {user.email}
+                    </h1>
                 </div>
             </header>
             <Card>
@@ -43,25 +47,18 @@ function RouteComponent() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-2'>
-                    <div className='space-y-1'>
-                        <Label htmlFor='name'>Name</Label>
-                        <Input id='name' defaultValue='Pedro Duarte' />
-                    </div>
+                    <UpdateProfileForm />
                 </CardContent>
-                <CardFooter>
-                    <Button>Save changes</Button>
-                </CardFooter>
             </Card>
             <Card>
                 <CardHeader>
                     <CardTitle>Password</CardTitle>
                     <CardDescription>
-                        Change your password here. After saving, you'll be
-                        logged out.
+                        Change your password here.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-2'>
-                    <ChangePassword />
+                    <ChangePasswordForm />
                 </CardContent>
             </Card>
             <Card>

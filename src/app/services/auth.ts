@@ -51,7 +51,8 @@ export const authApi = api.injectEndpoints({
             query: () => ({
                 url: '/auth/profile',
                 method: 'GET'
-            })
+            }),
+            providesTags: ['Profile']
         }),
         changePassword: builder.mutation<
             void,
@@ -62,6 +63,14 @@ export const authApi = api.injectEndpoints({
                 method: 'POST',
                 body: credentials
             })
+        }),
+        updateProfile: builder.mutation<User, { name: string }>({
+            query: body => ({
+                url: '/auth/update-profile',
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['Profile']
         })
     })
 })
@@ -72,5 +81,6 @@ export const {
     useRegisterMutation,
     useGetProfileQuery,
     useLazyGetProfileQuery,
-    useChangePasswordMutation
+    useChangePasswordMutation,
+    useUpdateProfileMutation
 } = authApi

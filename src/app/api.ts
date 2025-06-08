@@ -62,7 +62,8 @@ export const api = createApi({
         'Friend',
         'FriendRequest',
         'User',
-        'Transaction'
+        'Transaction',
+        'Profile'
     ],
     endpoints: () => ({})
 })
