@@ -7,8 +7,8 @@ export type Group = {
     id: string
     name: string
     currency: string
-    createdAt: string,
-    createdById: string,
+    createdAt: string
+    createdById: string
     _count: {
         members: number
     }
@@ -33,6 +33,7 @@ export type Transaction = {
     createdAt: Date
     updatedAt: Date
     type: TransactionType
+    splits: { userId: string }[]
 }
 
 export type SingleGroup = {
