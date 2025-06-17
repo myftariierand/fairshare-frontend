@@ -12,7 +12,8 @@ export const activityApi = api.injectEndpoints({
                 url: '/activity-logs',
                 method: 'GET',
                 params
-            })
+            }),
+            providesTags: () => [{ type: 'Activity', id: 'LIST' }]
         })
     })
 })
