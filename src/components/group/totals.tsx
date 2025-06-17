@@ -37,6 +37,7 @@ const Totals = () => {
         0
     )
     const userShare = userTotal / group.members.length
+    const userSharePercentage = total ? (userShare / total) * 100 : 0
 
     const chartData = [
         { amount: userShare, fill: 'hsl(var(--muted-foreground))' },
@@ -153,7 +154,7 @@ const Totals = () => {
                 </CardHeader>
                 <CardFooter className='flex-col items-start gap-1.5 text-sm'>
                     <div className='text-muted-foreground'>
-                        {((userShare / total) * 100).toFixed(0)}% of total group
+                        {userSharePercentage.toFixed(0)}% of total group
                         spending
                     </div>
                     <div className='text-muted-foreground flex items-center gap-1'>
