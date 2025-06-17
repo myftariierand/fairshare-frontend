@@ -65,10 +65,14 @@ const TransactionList = () => {
                                             <span className='font-semibold'>
                                                 {transaction.description}
                                             </span>
-                                            <div className='text-xs text-muted-foreground'>
+                                            <div className='text-xs text-muted-foreground text-wrap'>
                                                 Paid by{' '}
                                                 <span className='font-semibold text-foreground'>
-                                                    {transaction.paidBy}
+                                                    {
+                                                        transaction.paidBy.split(
+                                                            ' '
+                                                        )[0]
+                                                    }
                                                 </span>
                                                 <Dot className='inline-block' />
                                                 {formatDistance(
