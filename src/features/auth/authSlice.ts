@@ -4,15 +4,8 @@ type AuthState = {
     token: string | null
 }
 
-const getInitialToken = () => {
-    if (typeof window !== 'undefined') {
-        return localStorage.getItem('token')
-    }
-    return null
-}
-
 const initialState: AuthState = {
-    token: getInitialToken()
+    token: null
 }
 
 const authSlice = createSlice({
@@ -25,15 +18,9 @@ const authSlice = createSlice({
         ) => {
             const { accessToken } = action.payload
             state.token = accessToken
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('token', accessToken)
-            }
         },
         logout: state => {
             state.token = null
-            if (typeof window !== 'undefined') {
-                localStorage.removeItem('token')
-            }
         }
     }
 })
