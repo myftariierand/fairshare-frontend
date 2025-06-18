@@ -86,6 +86,7 @@ export const authApi = api.injectEndpoints({
                 url: `/auth/verify-reset-token?token=${encodeURIComponent(token)}`,
                 method: 'GET'
             })
+        }),
         updateProfile: builder.mutation<User, { name: string }>({
             query: body => ({
                 url: '/auth/update-profile',
@@ -106,6 +107,6 @@ export const {
     useChangePasswordMutation,
     useResetPasswordMutation,
     useSendResetPasswordEmailMutation,
-    useVerifyResetTokenQuery
+    useVerifyResetTokenQuery,
     useUpdateProfileMutation
 } = authApi
