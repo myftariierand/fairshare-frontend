@@ -138,19 +138,19 @@ function RouteComponent() {
                                         )}
                                     </Button>
                                     <Button
-                                        type='button'
+                                        asChild
                                         className='w-full'
                                         disabled={isLoading}
-                                        onClick={() => {
-                                            window.location.href =
-                                                'http://localhost:3000/auth/google'
-                                        }}
                                     >
-                                        {isLoading ? (
-                                            <Loader className='animate-spin' />
-                                        ) : (
-                                            'Login with Google'
-                                        )}
+                                        <a
+                                            href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                                        >
+                                            {isLoading ? (
+                                                <Loader className='animate-spin' />
+                                            ) : (
+                                                'Login with Google'
+                                            )}
+                                        </a>
                                     </Button>
                                 </div>
                             </div>

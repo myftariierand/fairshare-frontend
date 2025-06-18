@@ -13,7 +13,6 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
-import { Route as CallbackImport } from './routes/callback'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthScanQrCodeImport } from './routes/_auth/scan-qr-code'
@@ -38,12 +37,6 @@ const RegisterRoute = RegisterImport.update({
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const CallbackRoute = CallbackImport.update({
-  id: '/callback',
-  path: '/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -128,13 +121,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthImport
-      parentRoute: typeof rootRoute
-    }
-    '/callback': {
-      id: '/callback'
-      path: '/callback'
-      fullPath: '/callback'
-      preLoaderRoute: typeof CallbackImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -275,7 +261,6 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
-  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/$group': typeof AuthGroupRouteWithChildren
@@ -292,7 +277,6 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
-  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/activity': typeof AuthActivityRoute
@@ -310,7 +294,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth': typeof AuthRouteWithChildren
-  '/callback': typeof CallbackRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/_auth/$group': typeof AuthGroupRouteWithChildren
@@ -330,7 +313,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
-    | '/callback'
     | '/login'
     | '/register'
     | '/$group'
@@ -346,7 +328,6 @@ export interface FileRouteTypes {
     | '/$group/transactions/$transaction'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/callback'
     | '/login'
     | '/register'
     | '/activity'
@@ -362,7 +343,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_auth'
-    | '/callback'
     | '/login'
     | '/register'
     | '/_auth/$group'
@@ -381,14 +361,12 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
-  CallbackRoute: typeof CallbackRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
-  CallbackRoute: CallbackRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
 }
@@ -404,7 +382,6 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_auth",
-        "/callback",
         "/login",
         "/register"
       ]
@@ -421,9 +398,6 @@ export const routeTree = rootRoute
         "/_auth/",
         "/_auth/user/$user"
       ]
-    },
-    "/callback": {
-      "filePath": "callback.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
