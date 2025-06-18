@@ -27,6 +27,8 @@ const SseHandler = () => {
         eventSource.addEventListener('event', event => {
             const data = JSON.parse(event.data)
 
+            store.dispatch(api.util.invalidateTags(['Activity']))
+
             switch (data.type) {
                 case SseEventType.FRIEND_REMOVED:
                     store.dispatch(api.util.invalidateTags(['Friend']))
@@ -79,8 +81,8 @@ const SseHandler = () => {
                 case SseEventType.GROUP_MEMBER_REMOVED:
                     store.dispatch(
                         api.util.invalidateTags([
-                            'Group', 
-                            'GroupInvite', 
+                            'Group',
+                            'GroupInvite',
                             'Friend'
                         ])
                     )

@@ -9,10 +9,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import TransactionList from '@/components/group/transaction-list'
 import DebtsList from '@/components/group/debts-list'
 import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
+import Totals from '@/components/group/totals'
 
-const TabSchema = z.enum(['transactions', 'debts'])
+const TabSchema = z.enum(['expenses', 'debts', 'totals'])
 const SearchSchema = z.object({
-    t: TabSchema.default('transactions')
+    t: TabSchema.default('expenses')
 })
 type Tab = z.infer<typeof TabSchema>
 
@@ -54,12 +55,11 @@ function RouteComponent() {
                 >
                     <div className='flex items-center'>
                         <TabsList className='mr-auto'>
-                            <TabsTrigger value='transactions'>
-                                Transactions
-                            </TabsTrigger>
+                            <TabsTrigger value='expenses'>Expenses</TabsTrigger>
                             <TabsTrigger value='debts'>Debts</TabsTrigger>
+                            <TabsTrigger value='totals'>Totals</TabsTrigger>
                         </TabsList>
-                        {search.t === 'transactions' && (
+                        {search.t === 'expenses' && (
                             <CreateTransactionDrawer
                                 triggerVariants={{
                                     size: 'icon',
@@ -68,11 +68,14 @@ function RouteComponent() {
                             />
                         )}
                     </div>
-                    <TabsContent value='transactions'>
+                    <TabsContent value='expenses'>
                         <TransactionList />
                     </TabsContent>
                     <TabsContent value='debts'>
                         <DebtsList />
+                    </TabsContent>
+                    <TabsContent value='totals'>
+                        <Totals />
                     </TabsContent>
                 </Tabs>
             </div>
