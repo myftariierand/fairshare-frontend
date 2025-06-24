@@ -7,11 +7,29 @@ import { Route as GroupLayout } from '@/routes/_auth/$group'
 
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
-import RemoveMemberDialog from '@/components/group/remove-member-dialog'
+
+import { useRemoveMemberMutation } from '@/app/services/group'
+import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/utils'
+import { ConfirmDialog } from '../ui/confirm-dialog'
+import { Member } from '@/types/group'
 
 const MemberList = () => {
     const { user } = Route.useRouteContext()
     const group = GroupLayout.useLoaderData()
+
+    const [removeMember, removeMemberMutation] = useRemoveMemberMutation()
+
+    const handleRemoveMember = async (memberId: Member['id']) => {
+        try {
+            await removeMember({
+                groupId: group.id,
+                memberId: memberId
+            }).unwrap()
+        } catch (error) {
+            toast.error(getErrorMessage(error))
+        }
+    }
 
     return (
         <ul>
@@ -43,7 +61,12 @@ const MemberList = () => {
                     <div className='absolute top-1/2 right-2 -translate-y-1/2 z-10'>
                         {user.id === group.createdById &&
                             user.id !== member.id && (
-                                <RemoveMemberDialog member={member} />
+                                <ConfirmDialog
+                                    loading={removeMemberMutation.isLoading}
+                                    onConfirm={() =>
+                                        handleRemoveMember(member.id)
+                                    }
+                                />
                             )}
                     </div>
                 </li>
