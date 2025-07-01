@@ -10,7 +10,6 @@ import { toast } from 'sonner'
 
 import { useDispatch } from 'react-redux'
 import { useLoginMutation, useLazyGetProfileQuery } from '@/app/services/auth'
-
 import { setCredentials } from '@/features/auth/authSlice'
 
 import { getErrorMessage } from '@/lib/utils'
@@ -143,6 +142,21 @@ function RouteComponent() {
                                         ) : (
                                             'Login'
                                         )}
+                                    </Button>
+                                    <Button
+                                        asChild
+                                        className='w-full'
+                                        disabled={isLoading}
+                                    >
+                                        <a
+                                            href={`${import.meta.env.VITE_API_URL}/auth/google`}
+                                        >
+                                            {isLoading ? (
+                                                <Loader className='animate-spin' />
+                                            ) : (
+                                                'Login with Google'
+                                            )}
+                                        </a>
                                     </Button>
                                 </div>
                             </div>

@@ -5,7 +5,7 @@ type AuthState = {
 }
 
 const initialState: AuthState = {
-    token: null,
+    token: null
 }
 
 const authSlice = createSlice({
@@ -14,15 +14,15 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (
             state,
-            action: PayloadAction<{ accessToken: string }>,
+            action: PayloadAction<{ accessToken: string }>
         ) => {
             const { accessToken } = action.payload
             state.token = accessToken
         },
-        logout: (state) => {
+        logout: state => {
             state.token = null
-        },
-    },
+        }
+    }
 })
 
 export const { setCredentials, logout } = authSlice.actions

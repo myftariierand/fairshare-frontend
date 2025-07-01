@@ -13,7 +13,6 @@ import {
     useRegisterMutation,
     useLazyGetProfileQuery
 } from '@/app/services/auth'
-
 import { setCredentials } from '@/features/auth/authSlice'
 
 import { getErrorMessage } from '@/lib/utils'
