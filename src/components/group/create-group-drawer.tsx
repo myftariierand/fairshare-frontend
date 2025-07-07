@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -35,6 +34,7 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select'
+import { useGroupDrawerContext } from './create-group-drawer-context'
 
 const GroupSchema = z.object({
     name: z.string().min(4, {
@@ -56,7 +56,8 @@ const currencyOptions = [
 ]
 
 const CreateGroupSheet = () => {
-    const [open, setOpen] = useState(false)
+    const { open, setOpen } = useGroupDrawerContext()
+
     const form = useForm<GroupData>({
         resolver: zodResolver(GroupSchema),
         defaultValues: {

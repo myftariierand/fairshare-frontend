@@ -17,8 +17,11 @@ import {
     DrawerTitle,
     DrawerTrigger
 } from '@/components/ui/drawer'
+import { useFriendDrawerContext } from './add-friend-drawer-context'
 
 const AddFriendDrawer = () => {
+    const { open, setOpen } = useFriendDrawerContext()
+
     const [debouncedValue, setValue] = useDebounceValue('', 500)
 
     const [sendRequest] = useSendRequestMutation()
@@ -88,7 +91,7 @@ const AddFriendDrawer = () => {
     }
 
     return (
-        <Drawer>
+        <Drawer open={open} onOpenChange={() => setOpen(!open)}>
             <DrawerTrigger asChild>
                 <Button size={'sm'} variant={'outline'}>
                     <UserPlus /> Add Friend
