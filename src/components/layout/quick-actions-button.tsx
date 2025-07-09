@@ -8,17 +8,15 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { useGroupDrawerContext } from '../group/create-group-drawer-context'
 import { useMemo, useState } from 'react'
-import { useFriendDrawerContext } from '../friend/add-friend-drawer-context'
+import { useDrawerSlice } from '@/features/quick-actions/drawerSlice'
 
 interface DrawerOpenCallback {
-    (open: boolean): void
+    (): void
 }
 
 export const QuickActionsButton = () => {
-    const { setOpen: setGroupDrawerOpen } = useGroupDrawerContext()
-    const { setOpen: setFriendDrawerOpen } = useFriendDrawerContext()
+    const [, toggleDrawer] = useDrawerSlice()
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const router = useRouter()
 
@@ -26,7 +24,7 @@ export const QuickActionsButton = () => {
         return () => {
             setDropdownOpen(false)
             // Small delay to ensure dropdown fully closes before opening drawer
-            setTimeout(() => callback(true), 0)
+            setTimeout(() => callback(), 0)
         }
     }
 
@@ -37,7 +35,9 @@ export const QuickActionsButton = () => {
                     {
                         icon: <Users />,
                         label: 'Create Group',
-                        onClick: handleDrawerOpen(setGroupDrawerOpen)
+                        onClick: handleDrawerOpen(() =>
+                            toggleDrawer('isCreateGroupDrawerOpen')
+                        )
                     }
                 ]
             case '/friends':
@@ -45,17 +45,15 @@ export const QuickActionsButton = () => {
                     {
                         icon: <UserPlus />,
                         label: 'Add Friend',
-                        onClick: handleDrawerOpen(setFriendDrawerOpen)
+                        onClick: handleDrawerOpen(() =>
+                            toggleDrawer('isAddFriendDrawerOpen')
+                        )
                     }
                 ]
             default:
                 return []
         }
-    }, [
-        router.state.location.pathname,
-        setGroupDrawerOpen,
-        setFriendDrawerOpen
-    ])
+    }, [router.state.location.pathname, toggleDrawer])
 
     return (
         <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>

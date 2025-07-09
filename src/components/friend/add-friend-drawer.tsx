@@ -17,10 +17,10 @@ import {
     DrawerTitle,
     DrawerTrigger
 } from '@/components/ui/drawer'
-import { useFriendDrawerContext } from './add-friend-drawer-context'
+import { useDrawerSlice } from '@/features/quick-actions/drawerSlice'
 
 const AddFriendDrawer = () => {
-    const { open, setOpen } = useFriendDrawerContext()
+    const [drawerState, toggle] = useDrawerSlice()
 
     const [debouncedValue, setValue] = useDebounceValue('', 500)
 
@@ -33,6 +33,10 @@ const AddFriendDrawer = () => {
             trigger({ query: debouncedValue })
         }
     }, [debouncedValue, trigger])
+
+    const handleOpenChange = (open: boolean) => {
+        toggle('isAddFriendDrawerOpen', open)
+    }
 
     let content
 
@@ -91,7 +95,10 @@ const AddFriendDrawer = () => {
     }
 
     return (
-        <Drawer open={open} onOpenChange={() => setOpen(!open)}>
+        <Drawer
+            open={drawerState.isAddFriendDrawerOpen}
+            onOpenChange={handleOpenChange}
+        >
             <DrawerTrigger asChild>
                 <Button size={'sm'} variant={'outline'}>
                     <UserPlus /> Add Friend
