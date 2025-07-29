@@ -4,6 +4,8 @@ import { Route as GroupLayout } from '@/routes/_auth/$group'
 
 import { formatAmount } from '@/lib/utils'
 
+import { TransactionType } from '@/types/common'
+
 import { Label, PieChart, Pie, Sector } from 'recharts'
 import { PieSectorDataItem } from 'recharts/types/polar/Pie'
 
@@ -24,12 +26,17 @@ const Totals = () => {
     const group = GroupLayout.useLoaderData()
     const { user } = GroupLayout.useRouteContext()
 
-    const total = group.transactions.reduce((acc, curr) => acc + curr.amount, 0)
+    const total = group.transactions
+        .filter(transaction => transaction.type === TransactionType.expense)
+        .reduce((acc, curr) => acc + curr.amount, 0)
 
     const userTransactions = group.transactions.filter(transaction => {
         const userIds = transaction.splits.map(split => split.userId)
 
-        return userIds.includes(user.id)
+        return (
+            userIds.includes(user.id) &&
+            transaction.type === TransactionType.expense
+        )
     })
 
     const userTotal = userTransactions.reduce(
