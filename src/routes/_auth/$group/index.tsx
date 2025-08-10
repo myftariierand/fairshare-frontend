@@ -1,10 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { Route as GroupLayout } from '@/routes/_auth/$group'
-
-import { formatAmount } from '@/lib/utils'
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import TransactionList from '@/components/group/transaction-list'
 import DebtsList from '@/components/group/debts-list'
@@ -25,28 +21,10 @@ export const Route = createFileRoute('/_auth/$group/')({
 function RouteComponent() {
     const search = Route.useSearch()
     const navigate = Route.useNavigate()
-    const data = GroupLayout.useLoaderData()
 
     return (
         <>
-            <div className='flex flex-col gap-4'>
-                <div className='flex gap-3 font-medium'>
-                    <ul className='text-sm'>
-                        {data.settlements.map(({ from, to, amount }) => (
-                            <li key={from.name + to.name}>
-                                {from.name}{' '}
-                                <span className='text-muted-foreground'>
-                                    owes
-                                </span>{' '}
-                                {formatAmount(amount, data.currency)}{' '}
-                                <span className='text-muted-foreground'>
-                                    to
-                                </span>{' '}
-                                {to.name}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+            <div className='flex flex-col p-4'>
                 <Tabs
                     value={search.t}
                     onValueChange={value =>

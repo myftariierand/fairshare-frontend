@@ -46,7 +46,10 @@ const GroupList = () => {
                                     params={{ group: group.id }}
                                     className='flex gap-4 items-center w-full h-auto'
                                 >
-                                    <Image className='size-12 rounded-lg shrink-0' />
+                                    <Image
+                                        className='size-12 rounded-lg shrink-0'
+                                        src={group.cover}
+                                    />
                                     <div className='flex flex-col flex-grow'>
                                         <span className='font-semibold text-wrap'>
                                             {group.name}

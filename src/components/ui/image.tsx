@@ -13,11 +13,8 @@ const Image = React.forwardRef<HTMLImageElement, ImgProps>(
         return src ? (
             <img
                 ref={ref}
-                src={src}
-                className={cn(
-                    'rounded-full bg-foreground/5 object-cover p-2',
-                    className
-                )}
+                src={`${import.meta.env.VITE_IMG_URL}/${src}`}
+                className={cn('object-cover', className)}
                 {...rest}
             />
         ) : (

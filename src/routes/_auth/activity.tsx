@@ -283,7 +283,7 @@ function RouteComponent() {
     }
 
     return (
-        <div>
+        <div className='mx-2'>
             <div className='sticky top-0 bg-background h-14 flex items-center'>
                 <h1 className='font-bold text-xl'>Activity Logs</h1>
             </div>

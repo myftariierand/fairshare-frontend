@@ -40,7 +40,8 @@ const GroupSchema = z.object({
     name: z.string().min(4, {
         message: 'Name must be at least 4 characters.'
     }),
-    currency: z.string().min(1)
+    currency: z.string().min(1),
+    cover: z.instanceof(File).optional()
 })
 type GroupData = z.infer<typeof GroupSchema>
 
@@ -81,6 +82,8 @@ const CreateGroupSheet = () => {
         setOpen(open)
         form.reset({ name: '' })
     }
+
+    console.log(form.watch('cover'))
 
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
@@ -144,6 +147,27 @@ const CreateGroupSheet = () => {
                                             ))}
                                         </SelectContent>
                                     </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='cover'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Cover</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type='file'
+                                            onChange={e => {
+                                                if (e.target.files?.length)
+                                                    field.onChange(
+                                                        e.target.files[0]
+                                                    )
+                                            }}
+                                        />
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
