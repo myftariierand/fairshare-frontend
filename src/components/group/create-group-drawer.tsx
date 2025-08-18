@@ -83,8 +83,6 @@ const CreateGroupSheet = () => {
         form.reset({ name: '' })
     }
 
-    console.log(form.watch('cover'))
-
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
