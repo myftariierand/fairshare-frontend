@@ -35,7 +35,7 @@ const DebtsList = () => {
             await settleUp({
                 groupId: group.id,
                 amount: debt.amount,
-                description: `${debt.to.name} and ${debt.from.name} have settled up!`,
+                description: `${debt.to.name.split(' ')[0]} and ${debt.from.name.split(' ')[0]} have settled up!`,
                 paidBy: debt.from.id
             }).unwrap()
             router.invalidate()
@@ -58,7 +58,7 @@ const DebtsList = () => {
                         className='text-sm border-b p-2 flex items-center justify-between'
                     >
                         <div>
-                            {debt.from.name}
+                            {debt.from.name.split(' ')[0]}
                             &nbsp;
                             <span className='text-muted-foreground'>owes</span>
                             &nbsp;
@@ -66,7 +66,7 @@ const DebtsList = () => {
                             &nbsp;
                             <span className='text-muted-foreground'>to</span>
                             &nbsp;
-                            {debt.to.name}
+                            {debt.to.name.split(' ')[0]}
                         </div>
                         {context.user.id === debt.to.id && (
                             <AlertDialog>
