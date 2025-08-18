@@ -61,8 +61,8 @@ const TransactionList = () => {
                                         <div className='[&_svg]:size-6 size-12 rounded-lg shrink-0 text-muted-foreground bg-secondary grid place-content-center'>
                                             {getIcon(transaction.description)}
                                         </div>
-                                        <div className='flex-1'>
-                                            <span className='font-semibold'>
+                                        <div className='flex-1 overflow-hidden text-ellipsis'>
+                                            <span className='font-semibold overflow-hidden text-ellipsis whitespace-nowrap'>
                                                 {transaction.description}
                                             </span>
                                             <div className='text-xs text-muted-foreground text-wrap'>
@@ -89,7 +89,7 @@ const TransactionList = () => {
                                                 {transaction.balance < 0
                                                     ? 'You borrowed'
                                                     : transaction.balance === 0
-                                                      ? ''
+                                                      ? 'Not Involved'
                                                       : 'You lent'}
                                             </span>
                                             {transaction.balance !== 0 && (
@@ -97,11 +97,11 @@ const TransactionList = () => {
                                                     className={cn(
                                                         'font-semibold',
                                                         transaction.balance < 0
-                                                            ? 'text-red-800'
+                                                            ? 'text-destructive'
                                                             : transaction.balance ===
                                                                 0
                                                               ? ''
-                                                              : 'text-green-800'
+                                                              : 'text-success'
                                                     )}
                                                 >
                                                     {formatAmount(
