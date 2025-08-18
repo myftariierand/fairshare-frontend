@@ -26,6 +26,7 @@ export function formatAmount(number: number, currency: string) {
 
     return new Intl.NumberFormat(userLocale, {
         style: 'currency',
+        minimumFractionDigits: 2,
         currency
     }).format(number)
 }
