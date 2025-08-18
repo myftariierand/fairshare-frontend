@@ -48,7 +48,7 @@ function RouteComponent() {
     return (
         <>
             <div
-                className='relative h-64 w-full flex items-center justify-center bg-cover before:content-[""] before:absolute before:inset-0 before:bg-black/60 before:backdrop-blur-xl'
+                className='relative pt-8 pb-4 min-h-64 w-full flex items-center justify-center bg-cover before:content-[""] before:absolute before:inset-0 before:bg-black/60 before:backdrop-blur-xl'
                 style={{
                     backgroundImage: `url(${import.meta.env.VITE_IMG_URL}/${group.cover})`
                 }}
@@ -114,7 +114,7 @@ function RouteComponent() {
                     <span className='flex items-center text-sm'>
                         {group.members.length} people <Dot />
                         {format(group.createdAt, 'dd MMMM yyyy')}
-                    </span>
+                    </span>{' '}
                     {!!group.settlements.length && (
                         <>
                             <Separator className='my-2 bg-white/25 max-w-10 mx-auto' />
