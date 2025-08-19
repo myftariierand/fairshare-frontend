@@ -47,7 +47,7 @@ function RouteComponent() {
                     <div className='text-muted-foreground'>
                         Added by{' '}
                         <span className='text-foreground font-medium'>
-                            {data.createdBy.name}
+                            {data.createdBy.name.split(' ')[0]}
                         </span>{' '}
                         on{' '}
                         <span className='text-foreground font-medium whitespace-nowrap'>
@@ -68,7 +68,7 @@ function RouteComponent() {
                 </Avatar>
                 <div className='text-muted-foreground'>
                     <span className='text-foreground font-medium'>
-                        {data.paidBy.name}
+                        {data.paidBy.name.split(' ')[0]}
                     </span>{' '}
                     paid{' '}
                     <span className='text-foreground font-medium'>
@@ -89,7 +89,7 @@ function RouteComponent() {
                             <span className='text-foreground font-medium'>
                                 {split.userId === user.id
                                     ? 'You'
-                                    : split.user.name}
+                                    : split.user.name.split(' ')[0]}
                             </span>{' '}
                             {split.userId === user.id ? 'owe' : 'owes'}{' '}
                             <span className='text-foreground font-medium'>
