@@ -28,7 +28,7 @@ const Totals = () => {
 
     const total = group.transactions
         .filter(transaction => transaction.type === TransactionType.expense)
-        .reduce((acc, curr) => acc + curr.amount, 0)
+        .reduce((acc, curr) => acc + +curr.amount, 0)
 
     const userTransactions = group.transactions.filter(transaction => {
         const userIds = transaction.splits.map(split => split.userId)
@@ -40,7 +40,7 @@ const Totals = () => {
     })
 
     const userTotal = userTransactions.reduce(
-        (acc, curr) => acc + curr.amount,
+        (acc, curr) => acc + +curr.amount,
         0
     )
     const userShare = userTotal / group.members.length
