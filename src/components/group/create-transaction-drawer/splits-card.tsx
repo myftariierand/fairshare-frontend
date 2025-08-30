@@ -2,7 +2,13 @@ import { useState } from 'react'
 import { useFormContext, useFieldArray } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { cn, formatAmount, sanitizeNumberInput } from '@/lib/utils'
+import {
+    cn,
+    formatAmount,
+    fromMinorUnit,
+    sanitizeNumberInput,
+    toMinorUnit
+} from '@/lib/utils'
 
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import type { TransactionData } from '@/components/group/create-transaction-drawer'
@@ -42,11 +48,17 @@ const SplitsCard = () => {
     const handleTabChange = (value: string) => {
         setSplitType(value)
 
-        const evenAmount = +(amount / group.members.length).toFixed(2)
-        const updatedSplits = group.members.map(member => ({
+        const unitAmount = toMinorUnit(amount, group.currency)
+        const base = Math.floor(unitAmount / group.members.length)
+        const remainder = unitAmount % group.members.length
+
+        const updatedSplits = group.members.map((member, i) => ({
             name: member.name,
             userId: member.id,
-            amount: evenAmount
+            amount: +fromMinorUnit(
+                base + (i < remainder ? 1 : 0),
+                group.currency
+            )
         }))
 
         replace(updatedSplits)

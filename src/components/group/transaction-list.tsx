@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { formatDistance } from 'date-fns'
+import { differenceInDays, format, formatDistance } from 'date-fns'
 
 import { Route } from '@/routes/_auth/$group'
 
@@ -75,13 +75,21 @@ const TransactionList = () => {
                                                     }
                                                 </span>
                                                 <Dot className='inline-block' />
-                                                {formatDistance(
-                                                    transaction.createdAt,
+                                                {differenceInDays(
                                                     now,
-                                                    {
-                                                        addSuffix: true
-                                                    }
-                                                )}
+                                                    transaction.createdAt
+                                                ) < 1
+                                                    ? formatDistance(
+                                                          transaction.createdAt,
+                                                          now,
+                                                          {
+                                                              addSuffix: true
+                                                          }
+                                                      )
+                                                    : format(
+                                                          transaction.createdAt,
+                                                          'dd MM yyyy'
+                                                      )}
                                             </div>
                                         </div>
                                         <div className='flex flex-col items-end'>

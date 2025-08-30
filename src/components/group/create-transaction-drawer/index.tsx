@@ -8,7 +8,13 @@ import { type VariantProps } from 'class-variance-authority'
 
 import { useCreateTransactionMutation } from '@/app/services/transaction'
 
-import { getErrorMessage, formatAmount, sanitizeNumberInput } from '@/lib/utils'
+import {
+    getErrorMessage,
+    formatAmount,
+    sanitizeNumberInput,
+    toMinorUnit,
+    fromMinorUnit
+} from '@/lib/utils'
 
 import { Route } from '@/routes/_auth/$group'
 
@@ -45,7 +51,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import SplitsCard from '@/components/group/create-transaction-drawer/splits-card'
 
 const TransactionSchema = z.object({
-    description: z.string().min(4, 'Must be at least 4 characters long.'),
+    description: z.string().min(3, 'Must be at least 3 characters long.'),
     amount: z.number().positive(),
     paidBy: z.string().uuid(),
     splits: z
@@ -109,9 +115,16 @@ const CreateTransactionDrawer = (props: Props) => {
         const amount = sanitizeNumberInput(e.target.value)
         form.setValue('amount', amount)
 
-        const updatedSplits = form.getValues('splits').map(split => ({
+        const unitAmount = toMinorUnit(amount, group.currency)
+        const base = Math.floor(unitAmount / group.members.length)
+        const remainder = unitAmount % group.members.length
+
+        const updatedSplits = form.getValues('splits').map((split, i) => ({
             ...split,
-            amount: +(amount / group.members.length).toFixed(2)
+            amount: +fromMinorUnit(
+                base + (i < remainder ? 1 : 0),
+                group.currency
+            )
         }))
 
         form.setValue('splits', updatedSplits)
@@ -128,10 +141,19 @@ const CreateTransactionDrawer = (props: Props) => {
         setSplitEqually(checked)
 
         if (checked) {
-            const updatedSplits = form.getValues('splits').map(split => ({
-                ...split,
-                amount: +(amount / group.members.length).toFixed(2)
-            }))
+            const unitAmount = toMinorUnit(amount, group.currency)
+            const base = Math.floor(unitAmount / group.members.length)
+            const remainder = unitAmount % group.members.length
+
+            const updatedSplits = form.getValues('splits').map((split, i) => {
+                return {
+                    ...split,
+                    amount: +fromMinorUnit(
+                        base + (i < remainder ? 1 : 0),
+                        group.currency
+                    )
+                }
+            })
 
             form.setValue('splits', updatedSplits)
         }
