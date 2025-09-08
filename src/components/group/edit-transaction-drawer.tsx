@@ -10,7 +10,13 @@ import {
     type SingleTransaction
 } from '@/app/services/transaction'
 
-import { formatAmount, getErrorMessage, sanitizeNumberInput } from '@/lib/utils'
+import {
+    getErrorMessage,
+    formatAmount,
+    sanitizeNumberInput,
+    toMinorUnit,
+    fromMinorUnit
+} from '@/lib/utils'
 
 import { Route } from '@/routes/_auth/$group'
 
@@ -124,9 +130,16 @@ const EditTransactionDrawer = ({
         const amount = sanitizeNumberInput(e.target.value)
         form.setValue('amount', amount)
 
-        const updatedSplits = form.getValues('splits').map(split => ({
+        const unitAmount = toMinorUnit(amount, group.currency)
+        const base = Math.floor(unitAmount / group.members.length)
+        const remainder = unitAmount % group.members.length
+
+        const updatedSplits = form.getValues('splits').map((split, i) => ({
             ...split,
-            amount: +(amount / transaction.splits.length).toFixed(2)
+            amount: +fromMinorUnit(
+                base + (i < remainder ? 1 : 0),
+                group.currency
+            )
         }))
 
         form.setValue('splits', updatedSplits)
@@ -137,10 +150,19 @@ const EditTransactionDrawer = ({
 
         if (checked) {
             const amount = form.getValues('amount')
-            const updatedSplits = form.getValues('splits').map(split => ({
-                ...split,
-                amount: +(amount / transaction.splits.length).toFixed(2)
-            }))
+            const unitAmount = toMinorUnit(amount, group.currency)
+            const base = Math.floor(unitAmount / group.members.length)
+            const remainder = unitAmount % group.members.length
+
+            const updatedSplits = form.getValues('splits').map((split, i) => {
+                return {
+                    ...split,
+                    amount: +fromMinorUnit(
+                        base + (i < remainder ? 1 : 0),
+                        group.currency
+                    )
+                }
+            })
 
             form.setValue('splits', updatedSplits)
         }

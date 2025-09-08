@@ -17,10 +17,10 @@ function RouteComponent() {
     const { user } = Route.useRouteContext()
 
     return (
-        <div>
+        <div className='p-4'>
             {group.createdById !== user.id && <LeaveGroupDialog />}
             {group.createdById === user.id && <DeleteGroupDialog />}
-            <Separator className='my-3' />
+            <Separator className='my-4' />
             <div className='flex items-center justify-between mb-2'>
                 <h4 className='font-medium'>Members</h4>
                 <InviteToGroupDrawer />

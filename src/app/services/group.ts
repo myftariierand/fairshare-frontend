@@ -30,20 +30,38 @@ export const groupApi = api.injectEndpoints({
             }),
             providesTags: [{ type: 'GroupInvite', id: 'LIST' }]
         }),
-        createGroup: builder.mutation<Group, { name: string }>({
-            query: data => ({
-                url: '/groups',
-                method: 'POST',
-                body: data
-            }),
+        createGroup: builder.mutation<
+            Group,
+            { name: string; currency: string; cover?: File }
+        >({
+            query: ({ name, currency, cover }) => {
+                const formData = new FormData()
+
+                formData.append('name', name)
+                formData.append('currency', currency)
+                if (cover) formData.append('cover', cover)
+
+                return {
+                    url: '/groups',
+                    method: 'POST',
+                    body: formData
+                }
+            },
             invalidatesTags: () => [{ type: 'Group', id: 'LIST' }]
         }),
-        updateGroup: builder.mutation<Group, { id: string; name: string }>({
-            query: ({ id, ...data }) => ({
-                url: `/groups/${id}`,
-                method: 'PATCH',
-                body: data
-            }),
+        updateGroup: builder.mutation<
+            Group,
+            { id: string; name: string; currency: string; cover?: File }
+        >({
+            query: ({ id, name, currency, cover }) => {
+                const formData = new FormData()
+                formData.append('name', name)
+                formData.append('currency', currency)
+
+                if (cover) formData.append('cover', cover)
+
+                return { url: `/groups/${id}`, method: 'PATCH', body: formData }
+            },
             invalidatesTags: (_result, _error, { id }) => [
                 { type: 'Group', id },
                 { type: 'Group', id: 'LIST' }

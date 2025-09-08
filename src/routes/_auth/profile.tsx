@@ -25,7 +25,7 @@ function RouteComponent() {
     const [logout, logoutMutation] = useLogoutMutation()
 
     return (
-        <div className='flex flex-col h-full flex-1 my-3 space-y-3'>
+        <div className='flex flex-col h-full flex-1 my-3 space-y-3 mx-2'>
             <header className='flex items-center gap-4'>
                 <Avatar>
                     <AvatarImage />
