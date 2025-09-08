@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -35,6 +34,7 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select'
+import { useDrawerSlice } from '@/features/quick-actions/drawerSlice'
 
 const GroupSchema = z.object({
     name: z.string().min(4, {
@@ -57,7 +57,8 @@ const currencyOptions = [
 ]
 
 const CreateGroupSheet = () => {
-    const [open, setOpen] = useState(false)
+    const [drawerState, toggle] = useDrawerSlice()
+
     const form = useForm<GroupData>({
         resolver: zodResolver(GroupSchema),
         defaultValues: {
@@ -70,7 +71,7 @@ const CreateGroupSheet = () => {
     const onSubmit = async (data: GroupData) => {
         try {
             await createGroup(data).unwrap()
-            setOpen(false)
+            toggle('isCreateGroupDrawerOpen', false)
             form.reset()
             toast.success('Group created successfully')
         } catch (error) {
@@ -79,12 +80,15 @@ const CreateGroupSheet = () => {
     }
 
     const handleOpenChange = (open: boolean) => {
-        setOpen(open)
+        toggle('isCreateGroupDrawerOpen', open)
         form.reset({ name: '' })
     }
 
     return (
-        <Drawer open={open} onOpenChange={handleOpenChange}>
+        <Drawer
+            open={drawerState.isCreateGroupDrawerOpen}
+            onOpenChange={handleOpenChange}
+        >
             <DrawerTrigger asChild>
                 <Button size={'sm'} variant={'outline'}>
                     <Users /> New Group
