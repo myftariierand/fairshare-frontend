@@ -181,19 +181,19 @@ const CreateTransactionDrawer = (props: Props) => {
                     <Plus /> {props.triggerLabel}
                 </Button>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent className='h-full max-h-[90vh]'>
                 <DrawerHeader>
                     <DrawerTitle>ADD A NEW TRANSACTION</DrawerTitle>
                     <DrawerDescription>
                         Create a transaction and share it with your group.
                     </DrawerDescription>
                 </DrawerHeader>
-                <ScrollArea className='overflow-y-auto'>
+                <ScrollArea>
                     <Form {...form}>
                         <form
                             id='transaction-form'
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className='space-y-4 px-4'
+                            className='space-y-4 px-4 flex-grow'
                         >
                             <FormField
                                 control={form.control}
@@ -283,20 +283,20 @@ const CreateTransactionDrawer = (props: Props) => {
                             {!splitEqually && <SplitsCard />}
                         </form>
                     </Form>
-                    <DrawerFooter>
-                        <Button
-                            form='transaction-form'
-                            type='submit'
-                            className='w-full'
-                        >
-                            {isLoading ? (
-                                <Loader className='animate-spin' />
-                            ) : (
-                                'Create'
-                            )}
-                        </Button>
-                    </DrawerFooter>
                 </ScrollArea>
+                <DrawerFooter className='p-[max(env(safe-area-inset-bottom,_0px),_16px)]'>
+                    <Button
+                        form='transaction-form'
+                        type='submit'
+                        className='w-full'
+                    >
+                        {isLoading ? (
+                            <Loader className='animate-spin' />
+                        ) : (
+                            'Create'
+                        )}
+                    </Button>
+                </DrawerFooter>
             </DrawerContent>
         </Drawer>
     )

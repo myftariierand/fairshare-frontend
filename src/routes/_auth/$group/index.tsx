@@ -24,7 +24,7 @@ function RouteComponent() {
 
     return (
         <>
-            <div className='flex flex-col p-4'>
+            <div className='flex flex-col p-2'>
                 <Tabs
                     value={search.t}
                     onValueChange={value =>

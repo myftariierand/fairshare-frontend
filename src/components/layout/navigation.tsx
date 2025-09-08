@@ -23,7 +23,7 @@ export const Navigation = () => {
     })
 
     return (
-        <nav className='grid w-full mt-3 max-w-md grid-cols-5 items-center border-t pb-safe-nav pt-2 sticky bottom-0 bg-background'>
+        <nav className='grid w-full max-w-md grid-cols-5 items-center border-t pb-safe-nav h-16 fixed bottom-0 bg-background'>
             <Link
                 to={'/'}
                 search={{ t: groupInvites?.length ? 'invites' : 'groups' }}
