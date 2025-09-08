@@ -11,7 +11,6 @@ import { getIcon } from '@/lib/get-transaction-icon'
 import { TransactionType } from '@/types/common'
 
 import { Dot, Inbox } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 
 const TransactionList = () => {
     const now = new Date()
@@ -47,82 +46,76 @@ const TransactionList = () => {
                     {data.map(transaction =>
                         transaction.type === TransactionType.expense ? (
                             <li key={transaction.id}>
-                                <Button
-                                    asChild
-                                    variant={'ghost'}
-                                    className='p-1'
+                                <Link
+                                    from='/$group'
+                                    to='/$group/transactions/$transaction'
+                                    params={{ transaction: transaction.id }}
+                                    className='flex gap-3 items-center w-full h-auto mt-2'
                                 >
-                                    <Link
-                                        from='/$group'
-                                        to='/$group/transactions/$transaction'
-                                        params={{ transaction: transaction.id }}
-                                        className='flex gap-4 items-center w-full h-auto'
-                                    >
-                                        <div className='[&_svg]:size-6 size-12 rounded-lg shrink-0 text-muted-foreground bg-secondary grid place-content-center'>
-                                            {getIcon(transaction.description)}
-                                        </div>
-                                        <div className='flex-1 overflow-hidden text-ellipsis'>
-                                            <span className='font-semibold overflow-hidden text-ellipsis whitespace-nowrap'>
-                                                {transaction.description}
+                                    <div className='[&_svg]:size-6 size-12 rounded-lg shrink-0 text-muted-foreground bg-secondary grid place-content-center'>
+                                        {getIcon(transaction.description)}
+                                    </div>
+                                    <div className='flex-1 overflow-hidden text-ellipsis'>
+                                        <span className='font-semibold overflow-hidden text-ellipsis whitespace-nowrap'>
+                                            {transaction.description}
+                                        </span>
+                                        <div className='text-xs text-muted-foreground text-wrap whitespace-nowrap'>
+                                            Paid by{' '}
+                                            <span className='font-semibold text-foreground'>
+                                                {
+                                                    transaction.paidBy.split(
+                                                        ' '
+                                                    )[0]
+                                                }
                                             </span>
-                                            <div className='text-xs text-muted-foreground text-wrap'>
-                                                Paid by{' '}
-                                                <span className='font-semibold text-foreground'>
-                                                    {
-                                                        transaction.paidBy.split(
-                                                            ' '
-                                                        )[0]
-                                                    }
-                                                </span>
-                                                <Dot className='inline-block' />
-                                                {differenceInDays(
-                                                    now,
-                                                    transaction.createdAt
-                                                ) < 1
-                                                    ? formatDistance(
-                                                          transaction.createdAt,
-                                                          now,
-                                                          {
-                                                              addSuffix: true
-                                                          }
-                                                      )
-                                                    : format(
-                                                          transaction.createdAt,
-                                                          'dd MM yyyy'
-                                                      )}
-                                            </div>
+                                            <Dot className='inline-block' />
+                                            {differenceInDays(
+                                                now,
+                                                transaction.createdAt
+                                            ) < 1
+                                                ? formatDistance(
+                                                      transaction.createdAt,
+                                                      now,
+                                                      {
+                                                          addSuffix: true
+                                                      }
+                                                  )
+                                                : format(
+                                                      transaction.createdAt,
+                                                      'dd MMM yyyy'
+                                                  )}
                                         </div>
-                                        <div className='flex flex-col items-end'>
-                                            <span className='text-xs text-muted-foreground'>
-                                                {transaction.balance < 0
-                                                    ? 'You borrowed'
-                                                    : transaction.balance === 0
-                                                      ? 'Not Involved'
-                                                      : 'You lent'}
+                                    </div>
+                                    <div className='flex flex-col items-end'>
+                                        <span className='text-xs text-muted-foreground'>
+                                            {transaction.balance < 0
+                                                ? 'You borrowed'
+                                                : transaction.balance === 0
+                                                  ? 'Not Involved'
+                                                  : 'You lent'}
+                                        </span>
+                                        {transaction.balance !== 0 && (
+                                            <span
+                                                className={cn(
+                                                    'font-semibold',
+                                                    transaction.balance < 0
+                                                        ? 'text-destructive'
+                                                        : transaction.balance ===
+                                                            0
+                                                          ? ''
+                                                          : 'text-success'
+                                                )}
+                                            >
+                                                {formatAmount(
+                                                    Math.abs(
+                                                        transaction.balance
+                                                    ),
+                                                    group.currency
+                                                )}
                                             </span>
-                                            {transaction.balance !== 0 && (
-                                                <span
-                                                    className={cn(
-                                                        'font-semibold',
-                                                        transaction.balance < 0
-                                                            ? 'text-destructive'
-                                                            : transaction.balance ===
-                                                                0
-                                                              ? ''
-                                                              : 'text-success'
-                                                    )}
-                                                >
-                                                    {formatAmount(
-                                                        Math.abs(
-                                                            transaction.balance
-                                                        ),
-                                                        group.currency
-                                                    )}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </Link>
-                                </Button>
+                                        )}
+                                    </div>
+                                </Link>
                             </li>
                         ) : (
                             <li

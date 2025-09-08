@@ -16,8 +16,8 @@ export const Route = createFileRoute('/_auth')({
 
 function RouteComponent() {
     return (
-        <div className='w-full h-svh max-w-md flex flex-col mx-auto'>
-            <div className='overflow-auto flex-1'>
+        <div className='max-w-md mx-auto'>
+            <div className='pb-safe-nav h-[calc(100svh_-_64px)] overflow-auto'>
                 <Outlet />
             </div>
             <Navigation />

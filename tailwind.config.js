@@ -6,6 +6,9 @@ export default {
     content: ['./index.html', './src/**/*.{ts,tsx,js,jsx}'],
     theme: {
         extend: {
+            margin: {
+                'safe-nav': 'max(env(safe-area-inset-bottom, 0px), 8px)'
+            },
             padding: {
                 'safe-nav': 'max(env(safe-area-inset-bottom, 0px), 8px)'
             },
