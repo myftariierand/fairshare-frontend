@@ -7,7 +7,7 @@ export default {
     theme: {
         extend: {
             margin: {
-                'safe-nav': 'max(env(safe-area-inset-bottom, 0px), 8px)'
+                'safe-nav': 'env(safe-area-inset-bottom)'
             },
             padding: {
                 'safe-nav': 'max(env(safe-area-inset-bottom, 0px), 8px)'
