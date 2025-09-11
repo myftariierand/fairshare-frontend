@@ -41,7 +41,7 @@ const ThemeProvider = (props: ThemeProviderProps) => {
             ).matches
                 ? 'dark'
                 : 'light'
-            const color = systemTheme === 'dark' ? '#000a09' : '#ffffff'
+            const color = systemTheme === 'dark' ? '#1e1b18' : '#ffffff'
 
             metaThemeColor?.setAttribute('content', color)
             root.classList.add(systemTheme)
@@ -50,7 +50,7 @@ const ThemeProvider = (props: ThemeProviderProps) => {
 
         metaThemeColor?.setAttribute(
             'content',
-            theme === 'dark' ? '#000a09' : '#ffffff'
+            theme === 'dark' ? '#1e1b18' : '#ffffff'
         )
         root.classList.add(theme)
     }, [theme])

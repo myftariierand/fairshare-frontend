@@ -22,7 +22,7 @@ export default defineConfig({
                 name: 'FairShare',
                 short_name: 'FairShare',
                 description: 'FairShare',
-                theme_color: '#ffffff'
+                theme_color: '#1e1b18'
             },
 
             workbox: {
