@@ -73,7 +73,10 @@ const EditTransactionDrawer = ({
     const [splitEqually, setSplitEqually] = useState(
         transaction.splits.every(
             split =>
-                split.amount === transaction.amount / transaction.splits.length
+                Math.abs(
+                    split.amount -
+                        transaction.amount / transaction.splits.length
+                ) <= 0.01
         )
     )
 
