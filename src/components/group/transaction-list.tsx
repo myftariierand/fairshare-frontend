@@ -97,7 +97,7 @@ const TransactionList = () => {
                                         {transaction.balance !== 0 && (
                                             <span
                                                 className={cn(
-                                                    'font-semibold',
+                                                    'font-semibold text-sm',
                                                     transaction.balance < 0
                                                         ? 'text-destructive'
                                                         : transaction.balance ===
