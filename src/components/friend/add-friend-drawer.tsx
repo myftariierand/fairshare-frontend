@@ -68,7 +68,7 @@ const AddFriendDrawer = () => {
                     {data.map(user => (
                         <li key={user.id} className='flex items-center gap-3'>
                             <Image className='size-12 rounded-lg' />
-                            <div className='flex flex-col flex-grow'>
+                            <div className='flex flex-col grow'>
                                 <span className='font-semibold flex gap-1 items-center'>
                                     {user.name}{' '}
                                 </span>
