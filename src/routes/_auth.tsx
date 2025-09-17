@@ -2,6 +2,7 @@ import { createFileRoute, redirect, Outlet } from '@tanstack/react-router'
 
 import { Navigation } from '@/components/layout/navigation'
 import PrefetchHandler from '@/features/utils/PrefetchHandler'
+import { ScrollContainerProvider } from '@/components/layout/scroll-container-context'
 
 export const Route = createFileRoute('/_auth')({
     beforeLoad: ({ context }) => {
@@ -17,9 +18,9 @@ export const Route = createFileRoute('/_auth')({
 function RouteComponent() {
     return (
         <div className='max-w-md mx-auto'>
-            <div className='pb-safe-nav h-[calc(100svh-64px)] overflow-auto'>
+            <ScrollContainerProvider>
                 <Outlet />
-            </div>
+            </ScrollContainerProvider>
             <Navigation />
             <PrefetchHandler />
         </div>
