@@ -122,8 +122,8 @@ function RouteComponent() {
                 style={{
                     backgroundImage: `url(${import.meta.env.VITE_IMG_URL}/${group.cover})`,
                     // If not scrollable keep full opacity
-                    opacity: isScrollable ? (opacity as any) : 1,
-                    scale: backgroundImageScale as any
+                    opacity: isScrollable ? opacity : 1,
+                    scale: backgroundImageScale
                 }}
             ></motion.div>
 
