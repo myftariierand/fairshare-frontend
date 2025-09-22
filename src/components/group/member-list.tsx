@@ -24,7 +24,7 @@ const MemberList = () => {
                             className='flex gap-4 items-center w-full h-auto group'
                         >
                             <Image className='size-12 rounded-lg' />
-                            <div className='flex flex-col flex-grow'>
+                            <div className='flex flex-col grow'>
                                 <span className='font-semibold'>
                                     {member.name}&nbsp;
                                     {member.id === user.id && (

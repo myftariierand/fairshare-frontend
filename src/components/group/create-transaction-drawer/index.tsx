@@ -193,7 +193,7 @@ const CreateTransactionDrawer = (props: Props) => {
                         <form
                             id='transaction-form'
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className='space-y-4 px-4 flex-grow'
+                            className='space-y-4 px-4 grow'
                         >
                             <FormField
                                 control={form.control}
@@ -284,7 +284,7 @@ const CreateTransactionDrawer = (props: Props) => {
                         </form>
                     </Form>
                 </ScrollArea>
-                <DrawerFooter className='p-[max(env(safe-area-inset-bottom,_0px),_16px)]'>
+                <DrawerFooter className='p-[max(env(safe-area-inset-bottom,0px),16px)]'>
                     <Button
                         form='transaction-form'
                         type='submit'

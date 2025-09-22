@@ -50,7 +50,7 @@ const GroupList = () => {
                                         className='size-12 rounded-lg shrink-0'
                                         src={group.cover}
                                     />
-                                    <div className='flex flex-col flex-grow'>
+                                    <div className='flex flex-col grow'>
                                         <span className='font-semibold text-wrap'>
                                             {group.name}
                                         </span>

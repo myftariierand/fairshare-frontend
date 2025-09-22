@@ -29,7 +29,7 @@ export const Navigation = () => {
                 search={{ t: groupInvites?.length ? 'invites' : 'groups' }}
                 className='flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground'
                 activeProps={{
-                    className: 'font-semibold !text-foreground'
+                    className: 'font-semibold text-foreground!'
                 }}
                 activeOptions={{ includeSearch: false }}
             >
@@ -46,7 +46,7 @@ export const Navigation = () => {
                 search={{ t: friendRequests?.length ? 'requests' : 'friends' }}
                 className='flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground'
                 activeProps={{
-                    className: 'font-semibold !text-foreground'
+                    className: 'font-semibold text-foreground!'
                 }}
                 activeOptions={{ includeSearch: false }}
             >
@@ -66,7 +66,7 @@ export const Navigation = () => {
                 to={'/activity'}
                 className='flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground'
                 activeProps={{
-                    className: 'font-semibold !text-foreground'
+                    className: 'font-semibold text-foreground!'
                 }}
             >
                 <Activity />
@@ -76,7 +76,7 @@ export const Navigation = () => {
                 to={'/profile'}
                 className='flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground'
                 activeProps={{
-                    className: 'font-semibold !text-foreground'
+                    className: 'font-semibold text-foreground!'
                 }}
             >
                 <Avatar className='h-6 w-6'>
