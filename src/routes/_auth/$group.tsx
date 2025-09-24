@@ -50,11 +50,7 @@ function RouteComponent() {
 
     const ref = useScrollContainer()
     const { scrollYProgress } = useScroll({ container: ref })
-    // Detect if the scroll container is actually scrollable. When there is no
-    // scrollbar (scrollHeight === clientHeight) Framer's scrollYProgress will
-    // effectively report 1 (end) because the distance is zero, triggering the
-    // "scrolled" styles immediately. We guard against that by freezing all
-    // progress-driven animations at 0 when not scrollable.
+
     const [isScrollable, setIsScrollable] = useState(false)
 
     useLayoutEffect(() => {
@@ -82,34 +78,6 @@ function RouteComponent() {
 
     const opacity = useTransform(guardedProgress, [0, 0.4], [1, 0])
     const backgroundImageScale = useTransform(guardedProgress, [0, 1], [1, 0.7])
-
-    // --- Fixed header sizing (avoid scrollbar overlap) ---
-    const [fixedHeaderStyle, setFixedHeaderStyle] = useState<{
-        width: number | null
-        left: number | null
-    }>({ width: null, left: null })
-
-    useLayoutEffect(() => {
-        const el = ref.current
-        if (!el) return
-        const calc = () => {
-            const rect = el.getBoundingClientRect()
-            // We use the content box width minus scrollbar (clientWidth) to avoid under scrollbar overlay
-            const scrollBarCompensatedWidth = el.clientWidth
-            setFixedHeaderStyle({
-                width: scrollBarCompensatedWidth,
-                left: rect.left
-            })
-        }
-        calc()
-        window.addEventListener('resize', calc)
-        const ro = new ResizeObserver(calc)
-        ro.observe(el)
-        return () => {
-            window.removeEventListener('resize', calc)
-            ro.disconnect()
-        }
-    }, [ref])
     const scrollHeaderOpacity = useTransform(guardedProgress, [0, 0.7], [0, 1])
     const scrollHeaderContentOpacity = useTransform(guardedProgress, v =>
         v >= 0.6 ? 1 : 0
@@ -127,15 +95,9 @@ function RouteComponent() {
                 }}
             ></motion.div>
 
-            <motion.div
-                className='fixed top-0 z-30 pointer-events-none'
-                style={{
-                    width: fixedHeaderStyle.width ?? undefined,
-                    left: fixedHeaderStyle.left ?? undefined
-                }}
-            >
+            <div className='fixed w-md top-0 z-20'>
                 <motion.div
-                    className='p-4 flex items-center dark:bg-black bg-background shadow-xl rounded-b-lg pointer-events-auto'
+                    className='p-4 flex w-full items-center mx-auto max-w-md dark:bg-black bg-background shadow-xl'
                     style={{
                         opacity: isScrollable ? scrollHeaderOpacity : 0
                     }}
@@ -171,7 +133,7 @@ function RouteComponent() {
                         </div>
                     </motion.div>
                 </motion.div>
-            </motion.div>
+            </div>
 
             <motion.div className='relative pt-8 pb-4 min-h-64 w-full flex items-center justify-center'>
                 <div className='absolute top-2 right-2 left-2 flex items-center gap-2'>
