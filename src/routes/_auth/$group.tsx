@@ -86,16 +86,16 @@ function RouteComponent() {
     return (
         <>
             <motion.div
-                className='min-h-64 w-full absolute top-0 left-0 bg-cover before:content-[""] before:absolute before:inset-0 before:bg-white/60 dark:before:bg-black/60 before:backdrop-blur-xl -z-10'
+                className='min-h-64 w-full absolute top-0 left-0 bg-cover before:content-[""] before:absolute before:inset-0 before:bg-white/60 dark:before:bg-black/60 -z-10'
                 style={{
-                    backgroundImage: `url(${import.meta.env.VITE_IMG_URL}/${group.cover})`,
+                    backgroundImage: `url(${import.meta.env.VITE_BLUR_IMG_URL}/${group.cover})`,
                     // If not scrollable keep full opacity
                     opacity: isScrollable ? opacity : 1,
                     scale: backgroundImageScale
                 }}
             ></motion.div>
 
-            <div className='fixed w-md top-0 z-20'>
+            <div className='fixed w-md top-0'>
                 <motion.div
                     className='p-4 flex w-full items-center mx-auto max-w-md dark:bg-black bg-background shadow-xl'
                     style={{
@@ -183,7 +183,7 @@ function RouteComponent() {
                         </Button>
                     )}
                 </div>
-                <div className='flex flex-col items-center '>
+                <div className='flex flex-col items-center -z-10'>
                     {group.cover ? (
                         <motion.img
                             src={`${import.meta.env.VITE_IMG_URL}/${group.cover}`}
