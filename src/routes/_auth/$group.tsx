@@ -56,14 +56,26 @@ function RouteComponent() {
     useLayoutEffect(() => {
         const el = ref.current
         if (!el) return
+
         const check = () => {
             // Add a tiny epsilon to avoid precision issues
             setIsScrollable(el.scrollHeight - el.clientHeight > 1)
         }
+
         check()
-        const ro = new ResizeObserver(check)
-        ro.observe(el)
-        return () => ro.disconnect()
+
+        // Observe size changes of the container
+        const resizeObserver = new ResizeObserver(check)
+        resizeObserver.observe(el)
+
+        // Observe changes in the children of the container
+        const mutationObserver = new MutationObserver(check)
+        mutationObserver.observe(el, { childList: true, subtree: true })
+
+        return () => {
+            resizeObserver.disconnect()
+            mutationObserver.disconnect()
+        }
     }, [ref])
 
     // We proxy the real progress through a motion value we control so we can
@@ -79,6 +91,9 @@ function RouteComponent() {
     const opacity = useTransform(guardedProgress, [0, 0.4], [1, 0])
     const backgroundImageScale = useTransform(guardedProgress, [0, 1], [1, 0.7])
     const scrollHeaderOpacity = useTransform(guardedProgress, [0, 0.7], [0, 1])
+    const scrollHeaderZIndex = useTransform(guardedProgress, v =>
+        v >= 0.4 ? 10 : -1
+    )
     const scrollHeaderContentOpacity = useTransform(guardedProgress, v =>
         v >= 0.6 ? 1 : 0
     )
@@ -95,7 +110,10 @@ function RouteComponent() {
                 }}
             ></motion.div>
 
-            <div className='fixed w-md top-0'>
+            <motion.div
+                className='fixed w-md top-0'
+                style={{ zIndex: scrollHeaderZIndex }}
+            >
                 <motion.div
                     className='p-4 flex w-full items-center mx-auto max-w-md dark:bg-black bg-background shadow-xl'
                     style={{
@@ -133,7 +151,7 @@ function RouteComponent() {
                         </div>
                     </motion.div>
                 </motion.div>
-            </div>
+            </motion.div>
 
             <motion.div className='relative pt-8 pb-4 min-h-64 w-full flex items-center justify-center'>
                 <div className='absolute top-2 right-2 left-2 flex items-center gap-2'>
