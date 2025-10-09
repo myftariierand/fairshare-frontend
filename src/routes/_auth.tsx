@@ -17,7 +17,7 @@ export const Route = createFileRoute('/_auth')({
 
 function RouteComponent() {
     return (
-        <div className='max-w-md mx-auto'>
+        <div className='max-w-md mx-auto h-dvh flex flex-col'>
             <ScrollContainerProvider>
                 <Outlet />
             </ScrollContainerProvider>

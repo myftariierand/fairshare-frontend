@@ -70,7 +70,7 @@ function RouteComponent() {
     // clamp it to 0 whenever the container isn't scrollable.
     const guardedProgress = useMotionValue(0)
     useLayoutEffect(() => {
-        const unsub = scrollYProgress.on('change', v => {
+        const unsub = scrollYProgress.on('change', (v: number) => {
             guardedProgress.set(isScrollable ? v : 0)
         })
         return () => unsub()
