@@ -50,31 +50,39 @@ function RouteComponent() {
 
     const ref = useScrollContainer()
     const { scrollYProgress } = useScroll({ container: ref })
-    // Detect if the scroll container is actually scrollable. When there is no
-    // scrollbar (scrollHeight === clientHeight) Framer's scrollYProgress will
-    // effectively report 1 (end) because the distance is zero, triggering the
-    // "scrolled" styles immediately. We guard against that by freezing all
-    // progress-driven animations at 0 when not scrollable.
+
     const [isScrollable, setIsScrollable] = useState(false)
 
     useLayoutEffect(() => {
         const el = ref.current
         if (!el) return
+
         const check = () => {
             // Add a tiny epsilon to avoid precision issues
             setIsScrollable(el.scrollHeight - el.clientHeight > 1)
         }
+
         check()
-        const ro = new ResizeObserver(check)
-        ro.observe(el)
-        return () => ro.disconnect()
+
+        // Observe size changes of the container
+        const resizeObserver = new ResizeObserver(check)
+        resizeObserver.observe(el)
+
+        // Observe changes in the children of the container
+        const mutationObserver = new MutationObserver(check)
+        mutationObserver.observe(el, { childList: true, subtree: true })
+
+        return () => {
+            resizeObserver.disconnect()
+            mutationObserver.disconnect()
+        }
     }, [ref])
 
     // We proxy the real progress through a motion value we control so we can
     // clamp it to 0 whenever the container isn't scrollable.
     const guardedProgress = useMotionValue(0)
     useLayoutEffect(() => {
-        const unsub = scrollYProgress.on('change', v => {
+        const unsub = scrollYProgress.on('change', (v: number) => {
             guardedProgress.set(isScrollable ? v : 0)
         })
         return () => unsub()
@@ -82,35 +90,10 @@ function RouteComponent() {
 
     const opacity = useTransform(guardedProgress, [0, 0.4], [1, 0])
     const backgroundImageScale = useTransform(guardedProgress, [0, 1], [1, 0.7])
-
-    // --- Fixed header sizing (avoid scrollbar overlap) ---
-    const [fixedHeaderStyle, setFixedHeaderStyle] = useState<{
-        width: number | null
-        left: number | null
-    }>({ width: null, left: null })
-
-    useLayoutEffect(() => {
-        const el = ref.current
-        if (!el) return
-        const calc = () => {
-            const rect = el.getBoundingClientRect()
-            // We use the content box width minus scrollbar (clientWidth) to avoid under scrollbar overlay
-            const scrollBarCompensatedWidth = el.clientWidth
-            setFixedHeaderStyle({
-                width: scrollBarCompensatedWidth,
-                left: rect.left
-            })
-        }
-        calc()
-        window.addEventListener('resize', calc)
-        const ro = new ResizeObserver(calc)
-        ro.observe(el)
-        return () => {
-            window.removeEventListener('resize', calc)
-            ro.disconnect()
-        }
-    }, [ref])
     const scrollHeaderOpacity = useTransform(guardedProgress, [0, 0.7], [0, 1])
+    const scrollHeaderZIndex = useTransform(guardedProgress, v =>
+        v >= 0.4 ? 10 : -1
+    )
     const scrollHeaderContentOpacity = useTransform(guardedProgress, v =>
         v >= 0.6 ? 1 : 0
     )
@@ -118,9 +101,9 @@ function RouteComponent() {
     return (
         <>
             <motion.div
-                className='min-h-64 w-full absolute top-0 left-0 bg-cover before:content-[""] before:absolute before:inset-0 before:bg-white/60 dark:before:bg-black/60 before:backdrop-blur-xl -z-10'
+                className='min-h-64 w-full absolute top-0 left-0 bg-cover before:content-[""] before:absolute before:inset-0 before:bg-white/60 dark:before:bg-black/60 -z-10'
                 style={{
-                    backgroundImage: `url(${import.meta.env.VITE_IMG_URL}/${group.cover})`,
+                    backgroundImage: `url(${import.meta.env.VITE_BLUR_IMG_URL}/${group.cover})`,
                     // If not scrollable keep full opacity
                     opacity: isScrollable ? opacity : 1,
                     scale: backgroundImageScale
@@ -128,14 +111,11 @@ function RouteComponent() {
             ></motion.div>
 
             <motion.div
-                className='fixed top-0 z-30 pointer-events-none'
-                style={{
-                    width: fixedHeaderStyle.width ?? undefined,
-                    left: fixedHeaderStyle.left ?? undefined
-                }}
+                className='fixed w-md top-0'
+                style={{ zIndex: scrollHeaderZIndex }}
             >
                 <motion.div
-                    className='p-4 flex items-center dark:bg-black bg-background shadow-xl rounded-b-lg pointer-events-auto'
+                    className='p-4 flex w-full items-center mx-auto max-w-md dark:bg-black bg-background shadow-xl'
                     style={{
                         opacity: isScrollable ? scrollHeaderOpacity : 0
                     }}
@@ -221,7 +201,7 @@ function RouteComponent() {
                         </Button>
                     )}
                 </div>
-                <div className='flex flex-col items-center '>
+                <div className='flex flex-col items-center -z-10'>
                     {group.cover ? (
                         <motion.img
                             src={`${import.meta.env.VITE_IMG_URL}/${group.cover}`}
