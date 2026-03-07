@@ -115,9 +115,11 @@ const CreateTransactionDrawer = (props: Props) => {
         const amount = sanitizeNumberInput(e.target.value)
         form.setValue('amount', amount)
 
+        const selectedGroupedMembers = form.getValues('splits').length
+
         const unitAmount = toMinorUnit(amount, group.currency)
-        const base = Math.floor(unitAmount / group.members.length)
-        const remainder = unitAmount % group.members.length
+        const base = Math.floor(unitAmount / selectedGroupedMembers)
+        const remainder = unitAmount % selectedGroupedMembers
 
         const updatedSplits = form.getValues('splits').map((split, i) => ({
             ...split,

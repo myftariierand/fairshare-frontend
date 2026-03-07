@@ -65,7 +65,7 @@ const SplitsCard = () => {
     }
 
     const handleCheckboxChange = (checked: CheckedState, member: Member) => {
-        let updatedSplits: TransactionData['splits']
+        let updatedSplits: TransactionData['splits'] = []
 
         if (!checked) {
             if (splits.length === 1) {
@@ -85,11 +85,16 @@ const SplitsCard = () => {
             ]
         }
 
-        const evenAmount = +(amount / updatedSplits.length).toFixed(2)
+        const unitAmount = toMinorUnit(amount, group.currency)
+        const base = Math.floor(unitAmount / updatedSplits.length)
+        const remainder = unitAmount % updatedSplits.length
 
-        updatedSplits = updatedSplits.map(split => ({
+        updatedSplits = updatedSplits.map((split, i) => ({
             ...split,
-            amount: evenAmount
+            amount: +fromMinorUnit(
+                base + (i < remainder ? 1 : 0),
+                group.currency
+            )
         }))
 
         replace(updatedSplits)
