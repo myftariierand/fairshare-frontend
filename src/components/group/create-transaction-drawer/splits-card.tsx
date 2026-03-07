@@ -48,14 +48,14 @@ const SplitsCard = () => {
     const handleTabChange = (value: string) => {
         setSplitType(value)
 
-        const unitAmount = toMinorUnit(amount, group.currency)
+        const unitAmount = toMinorUnit(+amount, group.currency)
         const base = Math.floor(unitAmount / group.members.length)
         const remainder = unitAmount % group.members.length
 
         const updatedSplits = group.members.map((member, i) => ({
             name: member.name,
             userId: member.id,
-            amount: +fromMinorUnit(
+            amount: fromMinorUnit(
                 base + (i < remainder ? 1 : 0),
                 group.currency
             )
@@ -80,18 +80,18 @@ const SplitsCard = () => {
                 {
                     userId: member.id,
                     name: member.name,
-                    amount: 0
+                    amount: ''
                 }
             ]
         }
 
-        const unitAmount = toMinorUnit(amount, group.currency)
+        const unitAmount = toMinorUnit(+amount, group.currency)
         const base = Math.floor(unitAmount / updatedSplits.length)
         const remainder = unitAmount % updatedSplits.length
 
         updatedSplits = updatedSplits.map((split, i) => ({
             ...split,
-            amount: +fromMinorUnit(
+            amount: fromMinorUnit(
                 base + (i < remainder ? 1 : 0),
                 group.currency
             )
@@ -103,9 +103,9 @@ const SplitsCard = () => {
     const membersIds = splits.map(split => split.userId)
     const splitsAmount = form
         .watch('splits')
-        .reduce((acc, curr) => acc + curr.amount, 0)
-    const remainingAmount = amount - splitsAmount
-    const amountError = splitsAmount > amount
+        .reduce((acc, curr) => acc + +curr.amount, 0)
+    const remainingAmount = +amount - splitsAmount
+    const amountError = splitsAmount > +amount
 
     return (
         <Tabs value={splitType} onValueChange={handleTabChange}>
@@ -122,7 +122,7 @@ const SplitsCard = () => {
                     <CardHeader>
                         <CardTitle>
                             {formatAmount(
-                                amount / splits.length,
+                                +amount / splits.length,
                                 group.currency
                             )}
                             &nbsp;/&nbsp;person
@@ -167,7 +167,7 @@ const SplitsCard = () => {
                         >
                             {formatAmount(splitsAmount, group.currency)}
                             &nbsp;of&nbsp;
-                            {formatAmount(amount, group.currency)}
+                            {formatAmount(+amount, group.currency)}
                         </CardTitle>
                         <CardDescription
                             className={cn(amountError && 'text-destructive')}
@@ -194,6 +194,7 @@ const SplitsCard = () => {
                                                 <FormControl>
                                                     <Input
                                                         {...field}
+                                                        inputMode='decimal'
                                                         className='w-1/4 text-end'
                                                         placeholder={formatAmount(
                                                             300,

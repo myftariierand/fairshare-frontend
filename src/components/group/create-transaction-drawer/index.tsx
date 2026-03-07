@@ -13,7 +13,8 @@ import {
     formatAmount,
     sanitizeNumberInput,
     toMinorUnit,
-    fromMinorUnit
+    fromMinorUnit,
+    parseNumberInput
 } from '@/lib/utils'
 
 import { Route } from '@/routes/_auth/$group'
@@ -51,17 +52,18 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import SplitsCard from '@/components/group/create-transaction-drawer/splits-card'
 
 const TransactionSchema = z.object({
-    description: z.string().min(3, 'Must be at least 3 characters long.'),
-    amount: z.number().positive(),
+    description: z.string().min(4, 'Must be at least 4 characters long.'),
+    amount: z.string().refine(val => parseNumberInput(val) > 0, {
+        message: 'Amount must be a positive number'
+    }),
     paidBy: z.string().uuid(),
     splits: z
         .object({
             name: z.string(),
             userId: z.string().uuid(),
-            amount: z
-                .number()
-                .positive()
-                .transform(val => Math.round(val * 100) / 100)
+            amount: z.string().refine(val => parseNumberInput(val) > 0, {
+                message: 'Amount must be a positive number'
+            })
         })
         .array()
 })
@@ -86,12 +88,12 @@ const CreateTransactionDrawer = (props: Props) => {
         resolver: zodResolver(TransactionSchema),
         defaultValues: {
             description: '',
-            amount: 0,
+            amount: '',
             paidBy: context.user.id,
             splits: group.members.map(({ name, id }) => ({
                 name,
                 userId: id,
-                amount: 0
+                amount: ''
             }))
         }
     })
@@ -100,7 +102,15 @@ const CreateTransactionDrawer = (props: Props) => {
 
     const onSubmit = async (data: TransactionData) => {
         try {
-            const transformedData = { groupId: params.group, ...data }
+            const transformedData = {
+                ...data,
+                groupId: params.group,
+                amount: parseNumberInput(data.amount),
+                splits: data.splits.map(split => ({
+                    ...split,
+                    amount: +split.amount
+                }))
+            }
             await createTransaction(transformedData).unwrap()
             setOpen(false)
             form.reset()
@@ -111,19 +121,21 @@ const CreateTransactionDrawer = (props: Props) => {
         }
     }
 
+    console.log(form.formState.errors)
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const amount = sanitizeNumberInput(e.target.value)
         form.setValue('amount', amount)
 
         const selectedGroupedMembers = form.getValues('splits').length
 
-        const unitAmount = toMinorUnit(amount, group.currency)
+        const unitAmount = toMinorUnit(+amount, group.currency)
         const base = Math.floor(unitAmount / selectedGroupedMembers)
         const remainder = unitAmount % selectedGroupedMembers
 
         const updatedSplits = form.getValues('splits').map((split, i) => ({
             ...split,
-            amount: +fromMinorUnit(
+            amount: fromMinorUnit(
                 base + (i < remainder ? 1 : 0),
                 group.currency
             )
@@ -135,7 +147,7 @@ const CreateTransactionDrawer = (props: Props) => {
     const handleSplitEqually = (checked: boolean) => {
         const amount = form.getValues('amount')
 
-        if (!(amount > 0)) {
+        if (!(+amount > 0)) {
             toast.info('Enter a cost for your expense first')
             return
         }
@@ -143,14 +155,14 @@ const CreateTransactionDrawer = (props: Props) => {
         setSplitEqually(checked)
 
         if (checked) {
-            const unitAmount = toMinorUnit(amount, group.currency)
+            const unitAmount = toMinorUnit(+amount, group.currency)
             const base = Math.floor(unitAmount / group.members.length)
             const remainder = unitAmount % group.members.length
 
             const updatedSplits = form.getValues('splits').map((split, i) => {
                 return {
                     ...split,
-                    amount: +fromMinorUnit(
+                    amount: fromMinorUnit(
                         base + (i < remainder ? 1 : 0),
                         group.currency
                     )
@@ -166,12 +178,12 @@ const CreateTransactionDrawer = (props: Props) => {
         setSplitEqually(true)
         form.reset({
             description: '',
-            amount: 0,
+            amount: '',
             paidBy: context.user.id,
             splits: group.members.map(({ name, id }) => ({
                 name,
                 userId: id,
-                amount: 0
+                amount: ''
             }))
         })
     }

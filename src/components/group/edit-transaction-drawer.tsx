@@ -15,7 +15,8 @@ import {
     formatAmount,
     sanitizeNumberInput,
     toMinorUnit,
-    fromMinorUnit
+    fromMinorUnit,
+    parseNumberInput
 } from '@/lib/utils'
 
 import { Route } from '@/routes/_auth/$group'
@@ -52,7 +53,9 @@ import {
 
 const TransactionSchema = z.object({
     description: z.string(),
-    amount: z.number().positive(),
+    amount: z.string().refine(val => parseNumberInput(val) > 0, {
+        message: 'Amount must be a positive number'
+    }),
     paidBy: z.string().uuid(),
     splits: z
         .object({
@@ -88,7 +91,7 @@ const EditTransactionDrawer = ({
         resolver: zodResolver(TransactionSchema),
         defaultValues: {
             description: transaction.description,
-            amount: transaction.amount,
+            amount: transaction.amount.toString(),
             paidBy: transaction.paidById,
             splits: transaction.splits.map(({ amount, user }) => ({
                 name: user.name,
@@ -133,7 +136,7 @@ const EditTransactionDrawer = ({
         const amount = sanitizeNumberInput(e.target.value)
         form.setValue('amount', amount)
 
-        const unitAmount = toMinorUnit(amount, group.currency)
+        const unitAmount = toMinorUnit(+amount, group.currency)
         const base = Math.floor(unitAmount / group.members.length)
         const remainder = unitAmount % group.members.length
 
@@ -153,7 +156,7 @@ const EditTransactionDrawer = ({
 
         if (checked) {
             const amount = form.getValues('amount')
-            const unitAmount = toMinorUnit(amount, group.currency)
+            const unitAmount = toMinorUnit(+amount, group.currency)
             const base = Math.floor(unitAmount / group.members.length)
             const remainder = unitAmount % group.members.length
 
@@ -175,7 +178,7 @@ const EditTransactionDrawer = ({
         setOpen(open)
         form.reset({
             description: transaction.description,
-            amount: transaction.amount,
+            amount: transaction.amount.toString(),
             paidBy: transaction.paidById,
             splits: transaction.splits.map(({ amount, user }) => ({
                 name: user.name,
@@ -188,7 +191,7 @@ const EditTransactionDrawer = ({
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
-                <Button size={'icon'} variant={'secondary'}>
+                <Button disabled size={'icon'} variant={'secondary'}>
                     <Pencil />
                 </Button>
             </DrawerTrigger>

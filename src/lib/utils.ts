@@ -52,7 +52,11 @@ export function sanitizeNumberInput(value: string) {
         newValue = parts[0] + '.' + parts.slice(1).join('') // Ensure only one decimal separator (.)
     }
 
-    return parseFloat(newValue.replace(/^0+(?=\d)/, '')) || 0 // Remove leading zeros
+    return newValue.replace(/^0+(?=\d)/, '') // Remove leading zeros
+}
+
+export function parseNumberInput(value: string): number {
+    return parseFloat(value) || 0
 }
 
 const currencyDecimals: Record<string, number> = {
