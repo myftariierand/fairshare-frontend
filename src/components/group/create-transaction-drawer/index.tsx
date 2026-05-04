@@ -85,6 +85,7 @@ const CreateTransactionDrawer = (props: Props) => {
     const context = Route.useRouteContext()
     const group = Route.useLoaderData()
     const search = GroupRoute.useSearch()
+    const navigate = GroupRoute.useNavigate()
 
     const form = useForm<TransactionData>({
         resolver: zodResolver(TransactionSchema),
@@ -185,6 +186,15 @@ const CreateTransactionDrawer = (props: Props) => {
                 userId: id,
                 amount: ''
             }))
+        })
+        navigate({
+            to: '.',
+            search: prev => ({
+                ...prev,
+                name: undefined,
+                price: undefined
+            }),
+            replace: true
         })
     }
 
