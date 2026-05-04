@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -18,6 +18,7 @@ import {
 } from '@/lib/utils'
 
 import { Route } from '@/routes/_auth/$group'
+import { Route as GroupRoute } from '@/routes/_auth/$group/index'
 
 import { Loader, Plus } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -83,6 +84,7 @@ const CreateTransactionDrawer = (props: Props) => {
     const params = Route.useParams()
     const context = Route.useRouteContext()
     const group = Route.useLoaderData()
+    const search = GroupRoute.useSearch()
 
     const form = useForm<TransactionData>({
         resolver: zodResolver(TransactionSchema),
@@ -120,8 +122,6 @@ const CreateTransactionDrawer = (props: Props) => {
             toast.error(getErrorMessage(error))
         }
     }
-
-    console.log(form.formState.errors)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const amount = sanitizeNumberInput(e.target.value)
@@ -187,6 +187,33 @@ const CreateTransactionDrawer = (props: Props) => {
             }))
         })
     }
+
+    const { name, price } = search
+
+    useEffect(() => {
+        if (!name || !price) return
+
+        const unitAmount = toMinorUnit(+price, group.currency)
+        const base = Math.floor(unitAmount / group.members.length)
+        const remainder = unitAmount % group.members.length
+        const splits = form.getValues('splits').map((split, i) => {
+            return {
+                ...split,
+                amount: fromMinorUnit(
+                    base + (i < remainder ? 1 : 0),
+                    group.currency
+                )
+            }
+        })
+
+        form.reset({
+            description: name,
+            amount: price.toString(),
+            paidBy: context.user.id,
+            splits
+        })
+        setOpen(true)
+    }, [name, price])
 
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>

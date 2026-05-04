@@ -6,10 +6,13 @@ import TransactionList from '@/components/group/transaction-list'
 import DebtsList from '@/components/group/debts-list'
 import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
 import Totals from '@/components/group/totals'
+import ScanReceiptDialog from '@/components/group/scan-receipt-dialog'
 
 const TabSchema = z.enum(['expenses', 'debts', 'totals'])
 const SearchSchema = z.object({
-    t: TabSchema.default('expenses')
+    t: TabSchema.default('expenses'),
+    name: z.string().optional(),
+    price: z.number().optional()
 })
 type Tab = z.infer<typeof TabSchema>
 
@@ -37,14 +40,16 @@ function RouteComponent() {
                             <TabsTrigger value='debts'>Debts</TabsTrigger>
                             <TabsTrigger value='totals'>Totals</TabsTrigger>
                         </TabsList>
-                        {search.t === 'expenses' && (
-                            <CreateTransactionDrawer
-                                triggerVariants={{
-                                    size: 'icon',
-                                    variant: 'secondary'
-                                }}
-                            />
-                        )}
+                        <div className='flex gap-2'>
+                            <ScanReceiptDialog />
+                            {search.t === 'expenses' && (
+                                <CreateTransactionDrawer
+                                    triggerVariants={{
+                                        size: 'icon'
+                                    }}
+                                />
+                            )}
+                        </div>
                     </div>
                     <TabsContent value='expenses'>
                         <TransactionList />
