@@ -14,10 +14,11 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
-import { ScanQrCodeIcon } from 'lucide-react'
+import { LoaderCircleIcon, ScanQrCodeIcon } from 'lucide-react'
 
 const ScanReceiptDialog = () => {
     const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const navigate = Route.useNavigate()
 
@@ -41,6 +42,7 @@ const ScanReceiptDialog = () => {
         formData.append('tin', tin)
         formData.append('dateTimeCreated', crtd)
 
+        setIsLoading(true)
         fetch(
             'https://efiskalizimi-app.tatime.gov.al/invoice-check/api/verifyInvoice',
             { method: 'POST', body: formData }
@@ -54,6 +56,7 @@ const ScanReceiptDialog = () => {
                 navigate({ to: '.', search: { name, price }, replace: true })
             })
             .catch(err => console.log(err))
+            .finally(() => setIsLoading(false))
     }
 
     return (
@@ -63,7 +66,12 @@ const ScanReceiptDialog = () => {
                     <ScanQrCodeIcon />
                 </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className='overflow-hidden'>
+                {isLoading && (
+                    <div className='absolute w-full h-full bg-white/75 z-10 grid place-content-center'>
+                        <LoaderCircleIcon className='animate-spin text-black size-12' />
+                    </div>
+                )}
                 <AlertDialogHeader>
                     <AlertDialogTitle>Scan Receipt</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -71,7 +79,7 @@ const ScanReceiptDialog = () => {
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <Scanner
-                    allowMultiple
+                    allowMultiple={!isLoading}
                     onScan={onScan}
                     styles={{ container: { width: '100%', aspectRatio: 1 } }}
                 />
