@@ -20,7 +20,7 @@ export const Route = createFileRoute('/_auth/join-group')({
 
         await promise.unwrap()
 
-        throw redirect({ to: '/$group', params: { group: id } })
+        throw redirect({ to: '/g/$group', params: { group: id } })
     },
     errorComponent: () => {
         return <div>Something Went Wrong!</div>

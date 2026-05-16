@@ -2,7 +2,7 @@ import { toast } from 'sonner'
 
 import { useUnfriendUserMutation } from '@/app/services/friends'
 
-import { Route } from '@/routes/_auth/$group/settings'
+import { Route } from '@/routes/_auth/g/$group/settings'
 
 import { Friend } from '@/types/friend'
 

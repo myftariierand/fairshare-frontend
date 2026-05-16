@@ -1,4 +1,4 @@
-import { Link, useRouter } from '@tanstack/react-router'
+import { Link, useMatchRoute, useRouter } from '@tanstack/react-router'
 
 import { ScanQrCode, ChevronsUpDown, Users, UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useMemo, useState } from 'react'
 import { useDrawerSlice } from '@/features/quick-actions/drawerSlice'
+import ScanReceiptDialog from '@/components/group/scan-receipt-dialog'
 
 interface DrawerOpenCallback {
     (): void
@@ -55,29 +56,47 @@ export const QuickActionsButton = () => {
         }
     }, [router.state.location.pathname, toggleDrawer])
 
+    const matchRoute = useMatchRoute()
+
+    const isOnGroupRoute = matchRoute({ to: '/g/$group', fuzzy: true })
+
     return (
-        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    size='icon'
-                    variant={'outline'}
-                    className='justify-self-center text-muted-foreground'
+        <>
+            {isOnGroupRoute ? (
+                <div className='justify-self-center'>
+                    <ScanReceiptDialog />
+                </div>
+            ) : (
+                <DropdownMenu
+                    open={dropdownOpen}
+                    onOpenChange={setDropdownOpen}
                 >
-                    <ChevronsUpDown />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                    <Link to='/scan-qr-code'>
-                        <ScanQrCode /> Scan QR code
-                    </Link>
-                </DropdownMenuItem>
-                {routeSpecificActions.map((action, index) => (
-                    <DropdownMenuItem key={index} onClick={action.onClick}>
-                        {action.icon} {action.label}
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            size='icon'
+                            variant={'outline'}
+                            className='justify-self-center text-muted-foreground'
+                        >
+                            <ChevronsUpDown />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem asChild>
+                            <Link to='/scan-qr-code'>
+                                <ScanQrCode /> Scan QR code
+                            </Link>
+                        </DropdownMenuItem>
+                        {routeSpecificActions.map((action, index) => (
+                            <DropdownMenuItem
+                                key={index}
+                                onClick={action.onClick}
+                            >
+                                {action.icon} {action.label}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )}
+        </>
     )
 }

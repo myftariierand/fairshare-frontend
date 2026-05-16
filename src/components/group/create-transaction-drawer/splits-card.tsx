@@ -13,7 +13,7 @@ import {
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import type { TransactionData } from '@/components/group/create-transaction-drawer'
 
-import { Route } from '@/routes/_auth/$group'
+import { Route } from '@/routes/_auth/g/$group'
 
 import { Member } from '@/types/group'
 

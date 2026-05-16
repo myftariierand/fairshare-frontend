@@ -17,8 +17,8 @@ import {
     parseNumberInput
 } from '@/lib/utils'
 
-import { Route } from '@/routes/_auth/$group'
-import { Route as GroupRoute } from '@/routes/_auth/$group/index'
+import { Route } from '@/routes/_auth/g/$group'
+import { Route as GroupRoute } from '@/routes/_auth/g/$group/index'
 
 import { Loader, Plus } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -228,7 +228,10 @@ const CreateTransactionDrawer = (props: Props) => {
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
-                <Button {...props.triggerVariants}>
+                <Button
+                    {...props.triggerVariants}
+                    className='fixed bottom-20 right-4'
+                >
                     <Plus /> {props.triggerLabel}
                 </Button>
             </DrawerTrigger>

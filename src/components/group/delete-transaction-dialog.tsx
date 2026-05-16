@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 
-import { Route } from '@/routes/_auth/$group/transactions.$transaction'
+import { Route } from '@/routes/_auth/g/$group/transactions.$transaction'
 
 import { useDeleteTransactionMutation } from '@/app/services/transaction'
 
@@ -30,7 +30,7 @@ const DeleteTransactionDialog = (props: Props) => {
         try {
             await deleteTransaction({ id: props.transactionId }).unwrap()
             toast.success('Transaction deleted')
-            navigate({ to: '/$group' })
+            navigate({ to: '/g/$group' })
         } catch (error) {
             toast.error('Something went wrong!')
         }

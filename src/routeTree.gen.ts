@@ -22,11 +22,11 @@ import { Route as AuthProfileImport } from './routes/_auth/profile'
 import { Route as AuthJoinGroupImport } from './routes/_auth/join-group'
 import { Route as AuthFriendsImport } from './routes/_auth/friends'
 import { Route as AuthActivityImport } from './routes/_auth/activity'
-import { Route as AuthGroupImport } from './routes/_auth/$group'
-import { Route as AuthGroupIndexImport } from './routes/_auth/$group/index'
 import { Route as AuthUserUserImport } from './routes/_auth/user.$user'
-import { Route as AuthGroupSettingsImport } from './routes/_auth/$group/settings'
-import { Route as AuthGroupTransactionsTransactionImport } from './routes/_auth/$group/transactions.$transaction'
+import { Route as AuthGGroupImport } from './routes/_auth/g/$group'
+import { Route as AuthGGroupIndexImport } from './routes/_auth/g/$group/index'
+import { Route as AuthGGroupSettingsImport } from './routes/_auth/g/$group/settings'
+import { Route as AuthGGroupTransactionsTransactionImport } from './routes/_auth/g/$group/transactions.$transaction'
 
 // Create/Update Routes
 
@@ -95,35 +95,35 @@ const AuthActivityRoute = AuthActivityImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthGroupRoute = AuthGroupImport.update({
-  id: '/$group',
-  path: '/$group',
-  getParentRoute: () => AuthRoute,
-} as any)
-
-const AuthGroupIndexRoute = AuthGroupIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthGroupRoute,
-} as any)
-
 const AuthUserUserRoute = AuthUserUserImport.update({
   id: '/user/$user',
   path: '/user/$user',
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthGroupSettingsRoute = AuthGroupSettingsImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AuthGroupRoute,
+const AuthGGroupRoute = AuthGGroupImport.update({
+  id: '/g/$group',
+  path: '/g/$group',
+  getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthGroupTransactionsTransactionRoute =
-  AuthGroupTransactionsTransactionImport.update({
+const AuthGGroupIndexRoute = AuthGGroupIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthGGroupRoute,
+} as any)
+
+const AuthGGroupSettingsRoute = AuthGGroupSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthGGroupRoute,
+} as any)
+
+const AuthGGroupTransactionsTransactionRoute =
+  AuthGGroupTransactionsTransactionImport.update({
     id: '/transactions/$transaction',
     path: '/transactions/$transaction',
-    getParentRoute: () => AuthGroupRoute,
+    getParentRoute: () => AuthGGroupRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -164,13 +164,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordImport
       parentRoute: typeof rootRoute
-    }
-    '/_auth/$group': {
-      id: '/_auth/$group'
-      path: '/$group'
-      fullPath: '/$group'
-      preLoaderRoute: typeof AuthGroupImport
-      parentRoute: typeof AuthImport
     }
     '/_auth/activity': {
       id: '/_auth/activity'
@@ -214,12 +207,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexImport
       parentRoute: typeof AuthImport
     }
-    '/_auth/$group/settings': {
-      id: '/_auth/$group/settings'
-      path: '/settings'
-      fullPath: '/$group/settings'
-      preLoaderRoute: typeof AuthGroupSettingsImport
-      parentRoute: typeof AuthGroupImport
+    '/_auth/g/$group': {
+      id: '/_auth/g/$group'
+      path: '/g/$group'
+      fullPath: '/g/$group'
+      preLoaderRoute: typeof AuthGGroupImport
+      parentRoute: typeof AuthImport
     }
     '/_auth/user/$user': {
       id: '/_auth/user/$user'
@@ -228,60 +221,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthUserUserImport
       parentRoute: typeof AuthImport
     }
-    '/_auth/$group/': {
-      id: '/_auth/$group/'
-      path: '/'
-      fullPath: '/$group/'
-      preLoaderRoute: typeof AuthGroupIndexImport
-      parentRoute: typeof AuthGroupImport
+    '/_auth/g/$group/settings': {
+      id: '/_auth/g/$group/settings'
+      path: '/settings'
+      fullPath: '/g/$group/settings'
+      preLoaderRoute: typeof AuthGGroupSettingsImport
+      parentRoute: typeof AuthGGroupImport
     }
-    '/_auth/$group/transactions/$transaction': {
-      id: '/_auth/$group/transactions/$transaction'
+    '/_auth/g/$group/': {
+      id: '/_auth/g/$group/'
+      path: '/'
+      fullPath: '/g/$group/'
+      preLoaderRoute: typeof AuthGGroupIndexImport
+      parentRoute: typeof AuthGGroupImport
+    }
+    '/_auth/g/$group/transactions/$transaction': {
+      id: '/_auth/g/$group/transactions/$transaction'
       path: '/transactions/$transaction'
-      fullPath: '/$group/transactions/$transaction'
-      preLoaderRoute: typeof AuthGroupTransactionsTransactionImport
-      parentRoute: typeof AuthGroupImport
+      fullPath: '/g/$group/transactions/$transaction'
+      preLoaderRoute: typeof AuthGGroupTransactionsTransactionImport
+      parentRoute: typeof AuthGGroupImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthGroupRouteChildren {
-  AuthGroupSettingsRoute: typeof AuthGroupSettingsRoute
-  AuthGroupIndexRoute: typeof AuthGroupIndexRoute
-  AuthGroupTransactionsTransactionRoute: typeof AuthGroupTransactionsTransactionRoute
+interface AuthGGroupRouteChildren {
+  AuthGGroupSettingsRoute: typeof AuthGGroupSettingsRoute
+  AuthGGroupIndexRoute: typeof AuthGGroupIndexRoute
+  AuthGGroupTransactionsTransactionRoute: typeof AuthGGroupTransactionsTransactionRoute
 }
 
-const AuthGroupRouteChildren: AuthGroupRouteChildren = {
-  AuthGroupSettingsRoute: AuthGroupSettingsRoute,
-  AuthGroupIndexRoute: AuthGroupIndexRoute,
-  AuthGroupTransactionsTransactionRoute: AuthGroupTransactionsTransactionRoute,
+const AuthGGroupRouteChildren: AuthGGroupRouteChildren = {
+  AuthGGroupSettingsRoute: AuthGGroupSettingsRoute,
+  AuthGGroupIndexRoute: AuthGGroupIndexRoute,
+  AuthGGroupTransactionsTransactionRoute:
+    AuthGGroupTransactionsTransactionRoute,
 }
 
-const AuthGroupRouteWithChildren = AuthGroupRoute._addFileChildren(
-  AuthGroupRouteChildren,
+const AuthGGroupRouteWithChildren = AuthGGroupRoute._addFileChildren(
+  AuthGGroupRouteChildren,
 )
 
 interface AuthRouteChildren {
-  AuthGroupRoute: typeof AuthGroupRouteWithChildren
   AuthActivityRoute: typeof AuthActivityRoute
   AuthFriendsRoute: typeof AuthFriendsRoute
   AuthJoinGroupRoute: typeof AuthJoinGroupRoute
   AuthProfileRoute: typeof AuthProfileRoute
   AuthScanQrCodeRoute: typeof AuthScanQrCodeRoute
   AuthIndexRoute: typeof AuthIndexRoute
+  AuthGGroupRoute: typeof AuthGGroupRouteWithChildren
   AuthUserUserRoute: typeof AuthUserUserRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthGroupRoute: AuthGroupRouteWithChildren,
   AuthActivityRoute: AuthActivityRoute,
   AuthFriendsRoute: AuthFriendsRoute,
   AuthJoinGroupRoute: AuthJoinGroupRoute,
   AuthProfileRoute: AuthProfileRoute,
   AuthScanQrCodeRoute: AuthScanQrCodeRoute,
   AuthIndexRoute: AuthIndexRoute,
+  AuthGGroupRoute: AuthGGroupRouteWithChildren,
   AuthUserUserRoute: AuthUserUserRoute,
 }
 
@@ -293,17 +294,17 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/$group': typeof AuthGroupRouteWithChildren
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
   '/join-group': typeof AuthJoinGroupRoute
   '/profile': typeof AuthProfileRoute
   '/scan-qr-code': typeof AuthScanQrCodeRoute
   '/': typeof AuthIndexRoute
-  '/$group/settings': typeof AuthGroupSettingsRoute
+  '/g/$group': typeof AuthGGroupRouteWithChildren
   '/user/$user': typeof AuthUserUserRoute
-  '/$group/': typeof AuthGroupIndexRoute
-  '/$group/transactions/$transaction': typeof AuthGroupTransactionsTransactionRoute
+  '/g/$group/settings': typeof AuthGGroupSettingsRoute
+  '/g/$group/': typeof AuthGGroupIndexRoute
+  '/g/$group/transactions/$transaction': typeof AuthGGroupTransactionsTransactionRoute
 }
 
 export interface FileRoutesByTo {
@@ -317,10 +318,10 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthProfileRoute
   '/scan-qr-code': typeof AuthScanQrCodeRoute
   '/': typeof AuthIndexRoute
-  '/$group/settings': typeof AuthGroupSettingsRoute
   '/user/$user': typeof AuthUserUserRoute
-  '/$group': typeof AuthGroupIndexRoute
-  '/$group/transactions/$transaction': typeof AuthGroupTransactionsTransactionRoute
+  '/g/$group/settings': typeof AuthGGroupSettingsRoute
+  '/g/$group': typeof AuthGGroupIndexRoute
+  '/g/$group/transactions/$transaction': typeof AuthGGroupTransactionsTransactionRoute
 }
 
 export interface FileRoutesById {
@@ -330,17 +331,17 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_auth/$group': typeof AuthGroupRouteWithChildren
   '/_auth/activity': typeof AuthActivityRoute
   '/_auth/friends': typeof AuthFriendsRoute
   '/_auth/join-group': typeof AuthJoinGroupRoute
   '/_auth/profile': typeof AuthProfileRoute
   '/_auth/scan-qr-code': typeof AuthScanQrCodeRoute
   '/_auth/': typeof AuthIndexRoute
-  '/_auth/$group/settings': typeof AuthGroupSettingsRoute
+  '/_auth/g/$group': typeof AuthGGroupRouteWithChildren
   '/_auth/user/$user': typeof AuthUserUserRoute
-  '/_auth/$group/': typeof AuthGroupIndexRoute
-  '/_auth/$group/transactions/$transaction': typeof AuthGroupTransactionsTransactionRoute
+  '/_auth/g/$group/settings': typeof AuthGGroupSettingsRoute
+  '/_auth/g/$group/': typeof AuthGGroupIndexRoute
+  '/_auth/g/$group/transactions/$transaction': typeof AuthGGroupTransactionsTransactionRoute
 }
 
 export interface FileRouteTypes {
@@ -351,17 +352,17 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
-    | '/$group'
     | '/activity'
     | '/friends'
     | '/join-group'
     | '/profile'
     | '/scan-qr-code'
     | '/'
-    | '/$group/settings'
+    | '/g/$group'
     | '/user/$user'
-    | '/$group/'
-    | '/$group/transactions/$transaction'
+    | '/g/$group/settings'
+    | '/g/$group/'
+    | '/g/$group/transactions/$transaction'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -374,10 +375,10 @@ export interface FileRouteTypes {
     | '/profile'
     | '/scan-qr-code'
     | '/'
-    | '/$group/settings'
     | '/user/$user'
-    | '/$group'
-    | '/$group/transactions/$transaction'
+    | '/g/$group/settings'
+    | '/g/$group'
+    | '/g/$group/transactions/$transaction'
   id:
     | '__root__'
     | '/_auth'
@@ -385,17 +386,17 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
-    | '/_auth/$group'
     | '/_auth/activity'
     | '/_auth/friends'
     | '/_auth/join-group'
     | '/_auth/profile'
     | '/_auth/scan-qr-code'
     | '/_auth/'
-    | '/_auth/$group/settings'
+    | '/_auth/g/$group'
     | '/_auth/user/$user'
-    | '/_auth/$group/'
-    | '/_auth/$group/transactions/$transaction'
+    | '/_auth/g/$group/settings'
+    | '/_auth/g/$group/'
+    | '/_auth/g/$group/transactions/$transaction'
   fileRoutesById: FileRoutesById
 }
 
@@ -435,13 +436,13 @@ export const routeTree = rootRoute
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
-        "/_auth/$group",
         "/_auth/activity",
         "/_auth/friends",
         "/_auth/join-group",
         "/_auth/profile",
         "/_auth/scan-qr-code",
         "/_auth/",
+        "/_auth/g/$group",
         "/_auth/user/$user"
       ]
     },
@@ -456,15 +457,6 @@ export const routeTree = rootRoute
     },
     "/reset-password": {
       "filePath": "reset-password.tsx"
-    },
-    "/_auth/$group": {
-      "filePath": "_auth/$group.tsx",
-      "parent": "/_auth",
-      "children": [
-        "/_auth/$group/settings",
-        "/_auth/$group/",
-        "/_auth/$group/transactions/$transaction"
-      ]
     },
     "/_auth/activity": {
       "filePath": "_auth/activity.tsx",
@@ -490,21 +482,30 @@ export const routeTree = rootRoute
       "filePath": "_auth/index.tsx",
       "parent": "/_auth"
     },
-    "/_auth/$group/settings": {
-      "filePath": "_auth/$group/settings.tsx",
-      "parent": "/_auth/$group"
+    "/_auth/g/$group": {
+      "filePath": "_auth/g/$group.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/g/$group/settings",
+        "/_auth/g/$group/",
+        "/_auth/g/$group/transactions/$transaction"
+      ]
     },
     "/_auth/user/$user": {
       "filePath": "_auth/user.$user.tsx",
       "parent": "/_auth"
     },
-    "/_auth/$group/": {
-      "filePath": "_auth/$group/index.tsx",
-      "parent": "/_auth/$group"
+    "/_auth/g/$group/settings": {
+      "filePath": "_auth/g/$group/settings.tsx",
+      "parent": "/_auth/g/$group"
     },
-    "/_auth/$group/transactions/$transaction": {
-      "filePath": "_auth/$group/transactions.$transaction.tsx",
-      "parent": "/_auth/$group"
+    "/_auth/g/$group/": {
+      "filePath": "_auth/g/$group/index.tsx",
+      "parent": "/_auth/g/$group"
+    },
+    "/_auth/g/$group/transactions/$transaction": {
+      "filePath": "_auth/g/$group/transactions.$transaction.tsx",
+      "parent": "/_auth/g/$group"
     }
   }
 }

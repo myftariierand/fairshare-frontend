@@ -5,7 +5,7 @@ import {
     // formatDistance
 } from 'date-fns'
 
-import { Route } from '@/routes/_auth/$group'
+import { Route } from '@/routes/_auth/g/$group'
 
 import { useGetTransactionsQuery } from '@/app/services/transaction'
 
@@ -73,8 +73,8 @@ const TransactionList = () => {
                                     TransactionType.expense ? (
                                         <li key={transaction.id}>
                                             <Link
-                                                from='/$group'
-                                                to='/$group/transactions/$transaction'
+                                                from='/g/$group'
+                                                to='/g/$group/transactions/$transaction'
                                                 params={{
                                                     transaction: transaction.id
                                                 }}

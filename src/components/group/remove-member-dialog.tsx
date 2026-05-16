@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 
-import { Route } from '@/routes/_auth/$group'
+import { Route } from '@/routes/_auth/g/$group'
 
 import { Member } from '@/types/group'
 

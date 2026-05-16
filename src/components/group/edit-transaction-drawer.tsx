@@ -19,7 +19,7 @@ import {
     parseNumberInput
 } from '@/lib/utils'
 
-import { Route } from '@/routes/_auth/$group'
+import { Route } from '@/routes/_auth/g/$group'
 
 import { Loader, Pencil } from 'lucide-react'
 import { Input } from '@/components/ui/input'

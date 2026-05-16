@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { format } from 'date-fns'
 
 import { Route } from '@/routes/_auth'
-import { Route as GroupLayout } from '@/routes/_auth/$group'
+import { Route as GroupLayout } from '@/routes/_auth/g/$group'
 
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'

@@ -42,7 +42,7 @@ const GroupList = () => {
                         <li key={group.id}>
                             <Button asChild variant={'ghost'} className='p-1'>
                                 <Link
-                                    to='/$group'
+                                    to='/g/$group'
                                     params={{ group: group.id }}
                                     className='flex gap-4 items-center w-full h-auto'
                                 >
@@ -59,7 +59,7 @@ const GroupList = () => {
                                         </span>
                                     </div>
                                     <MatchRoute
-                                        to='/$group'
+                                        to='/g/$group'
                                         params={{ group: group.id }}
                                         pending
                                     >

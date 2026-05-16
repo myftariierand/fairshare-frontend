@@ -5,7 +5,7 @@ import { useSettleUpMutation } from '@/app/services/transaction'
 
 import { getErrorMessage, formatAmount } from '@/lib/utils'
 
-import { Route as GroupLayout } from '@/routes/_auth/$group'
+import { Route as GroupLayout } from '@/routes/_auth/g/$group'
 
 import type { Settelment } from '@/types/group'
 

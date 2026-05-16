@@ -6,7 +6,7 @@ import { transactionApi } from '@/app/services/transaction'
 
 import { formatAmount } from '@/lib/utils'
 
-import { Route as GroupRoute } from '@/routes/_auth/$group'
+import { Route as GroupRoute } from '@/routes/_auth/g/$group'
 
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
@@ -14,22 +14,22 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import EditTransactionDrawer from '@/components/group/edit-transaction-drawer'
 import DeleteTransactionDialog from '@/components/group/delete-transaction-dialog'
 
-export const Route = createFileRoute('/_auth/$group/transactions/$transaction')(
-    {
-        loader: async ({ params }) => {
-            const promise = store.dispatch(
-                transactionApi.endpoints.getTransactionById.initiate({
-                    id: params.transaction
-                })
-            )
+export const Route = createFileRoute(
+    '/_auth/g/$group/transactions/$transaction'
+)({
+    loader: async ({ params }) => {
+        const promise = store.dispatch(
+            transactionApi.endpoints.getTransactionById.initiate({
+                id: params.transaction
+            })
+        )
 
-            const result = await promise.unwrap()
+        const result = await promise.unwrap()
 
-            return result
-        },
-        component: RouteComponent
-    }
-)
+        return result
+    },
+    component: RouteComponent
+})
 
 function RouteComponent() {
     const data = Route.useLoaderData()

@@ -2,7 +2,7 @@ import { toast } from 'sonner'
 
 import { useDeleteGroupMutation } from '@/app/services/group'
 
-import { Route } from '@/routes/_auth/$group/settings'
+import { Route } from '@/routes/_auth/g/$group/settings'
 
 import { Loader, Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'

@@ -4,7 +4,7 @@ import { useDebounceValue } from 'usehooks-ts'
 import { useLazySearchUserQuery } from '@/app/services/user'
 import { useInviteToGroupMutation } from '@/app/services/group'
 
-import { Route } from '@/routes/_auth/$group'
+import { Route } from '@/routes/_auth/g/$group'
 
 import { UserPlus, SendHorizonal, Loader, Inbox } from 'lucide-react'
 import { Input } from '@/components/ui/input'

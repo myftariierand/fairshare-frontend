@@ -3,12 +3,14 @@ import {
     Outlet,
     Link,
     useLocation,
-    useRouter
+    useRouter,
+    useSearch
 } from '@tanstack/react-router'
 import { format } from 'date-fns'
 import { QRCodeSVG } from 'qrcode.react'
 import { useScroll, motion, useTransform, useMotionValue } from 'motion/react'
 import { useLayoutEffect, useState } from 'react'
+import { z } from 'zod'
 
 import { store } from '@/app/store'
 import { groupApi } from '@/app/services/group'
@@ -30,8 +32,9 @@ import {
 import EditGroupSheet from '@/components/group/edit-group-drawer'
 import ShareLinkDialog from '@/components/group/share-link-dialog'
 import { useScrollContainer } from '@/components/layout/scroll-container-context'
+import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
 
-export const Route = createFileRoute('/_auth/$group')({
+export const Route = createFileRoute('/_auth/g/$group')({
     loader: async ({ params }) => {
         const promise = store.dispatch(
             groupApi.endpoints.getGroupById.initiate({ id: params.group })
@@ -40,13 +43,17 @@ export const Route = createFileRoute('/_auth/$group')({
 
         return result
     },
-    component: RouteComponent
+    component: RouteComponent,
+    validateSearch: z.object({
+        t: z.string().optional()
+    })
 })
 
 function RouteComponent() {
     const group = Route.useLoaderData()
     const location = useLocation()
     const router = useRouter()
+    const search = useSearch({ from: '/_auth/g/$group' })
 
     const ref = useScrollContainer()
     const { scrollYProgress } = useScroll({ container: ref })
@@ -193,7 +200,7 @@ function RouteComponent() {
                     ) : (
                         <Button asChild size={'icon'} variant={'ghost'}>
                             <Link
-                                to='/$group/settings'
+                                to='/g/$group/settings'
                                 params={{ group: group.id }}
                             >
                                 <Settings />
@@ -245,6 +252,16 @@ function RouteComponent() {
                     )}
                 </div>
             </motion.div>
+            {search.t === 'expenses' && (
+                <motion.div
+                    style={{
+                        opacity: isScrollable ? opacity : 1,
+                        transition: 'opacity 0.15s ease-in-out'
+                    }}
+                >
+                    <CreateTransactionDrawer triggerLabel='Add Expense' />
+                </motion.div>
+            )}
             <Outlet />
         </>
     )

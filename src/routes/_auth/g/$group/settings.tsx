@@ -6,9 +6,9 @@ import DeleteGroupDialog from '@/components/group/delete-group-dialog'
 import InviteToGroupDrawer from '@/components/group/invite-to-group-drawer'
 import LeaveGroupDialog from '@/components/group/leave-group-dialog'
 
-import { Route as GroupLayout } from '@/routes/_auth/$group'
+import { Route as GroupLayout } from '@/routes/_auth/g/$group'
 
-export const Route = createFileRoute('/_auth/$group/settings')({
+export const Route = createFileRoute('/_auth/g/$group/settings')({
     component: RouteComponent
 })
 

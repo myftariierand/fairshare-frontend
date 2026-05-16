@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 
-import { Route as GroupLayout } from '@/routes/_auth/$group'
+import { Route as GroupLayout } from '@/routes/_auth/g/$group'
 
 import { formatAmount } from '@/lib/utils'
 

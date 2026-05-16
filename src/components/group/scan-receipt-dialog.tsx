@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner'
 
-import { Route } from '@/routes/_auth/$group/index'
+import { Route } from '@/routes/_auth/g/$group/index'
 
 import { Button } from '@/components/ui/button'
 import {
