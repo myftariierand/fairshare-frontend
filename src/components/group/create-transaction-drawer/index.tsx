@@ -230,7 +230,10 @@ const CreateTransactionDrawer = (props: Props) => {
             <DrawerTrigger asChild>
                 <Button
                     {...props.triggerVariants}
-                    className='fixed bottom-20 right-4'
+                    className='fixed right-4'
+                    style={{
+                        bottom: `calc(5rem + env(safe-area-inset-bottom))`
+                    }}
                 >
                     <Plus /> {props.triggerLabel}
                 </Button>
