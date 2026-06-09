@@ -10,7 +10,7 @@ export function ScrollContainerProvider({ children }: PropsWithChildren) {
             <div
                 ref={ref}
                 id='app-scroll'
-                className='pb-safe-nav h-[calc(100svh-64px-80px)] overflow-auto relative'
+                className='pb-safe-nav h-[calc(100svh-64px-55px)] overflow-auto relative'
             >
                 {children}
             </div>
