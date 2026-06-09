@@ -110,7 +110,7 @@ function RouteComponent() {
             <motion.div
                 className='min-h-64 w-full absolute top-0 left-0 bg-cover before:content-[""] before:absolute before:inset-0 before:bg-white/60 dark:before:bg-black/60 -z-10'
                 style={{
-                    backgroundImage: `url(${import.meta.env.VITE_BLUR_IMG_URL}/${group.cover})`,
+                    backgroundImage: `url(${import.meta.env.VITE_IMG_URL}/c_scale,h_400,f_auto,q_auto,e_blur:2000/${group.cover})`,
                     // If not scrollable keep full opacity
                     opacity: isScrollable ? opacity : 1,
                     scale: backgroundImageScale
@@ -139,7 +139,7 @@ function RouteComponent() {
                         <div>
                             {group.cover ? (
                                 <motion.img
-                                    src={`${import.meta.env.VITE_IMG_URL}/${group.cover}`}
+                                    src={`${import.meta.env.VITE_IMG_URL}/c_fill,w_100,h_100,g_auto,f_auto,q_auto/${group.cover}`}
                                     alt=''
                                     className='size-10 rounded-full object-cover'
                                 />
@@ -186,7 +186,7 @@ function RouteComponent() {
                                 </DialogDescription>
                             </DialogHeader>
                             <div className='flex justify-center'>
-                                <div className='p-3 bg-foreground rounded-lg'>
+                                <div className='p-3 bg-white rounded-lg'>
                                     <QRCodeSVG
                                         size={200}
                                         value={`join-group:${group.id}`}
@@ -211,7 +211,7 @@ function RouteComponent() {
                 <div className='flex flex-col items-center -z-10'>
                     {group.cover ? (
                         <motion.img
-                            src={`${import.meta.env.VITE_IMG_URL}/${group.cover}`}
+                            src={`${import.meta.env.VITE_IMG_URL}/c_fill,w_400,h_400,g_auto,f_auto,q_auto/${group.cover}`}
                             alt=''
                             className='size-24 rounded-full object-cover'
                         />
