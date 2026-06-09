@@ -38,6 +38,8 @@ const FriendInvitesDrawer = () => {
     const [reject, rejectMutation] = useRejectFriendRequestMutation()
     const [cancel, cancelMutation] = useCancelFriendRequestMutation()
 
+    const hasInvites = data?.some(request => request.receiverId === id) ?? false
+
     let content
 
     if (isLoading) {
@@ -64,7 +66,7 @@ const FriendInvitesDrawer = () => {
             const now = new Date()
 
             content = (
-                <ul>
+                <ul className='space-y-2'>
                     {data.map(request => (
                         <li key={request.id} className='flex items-center'>
                             <Image className='size-12 rounded-lg' />
@@ -147,7 +149,7 @@ const FriendInvitesDrawer = () => {
                     className='size-8 relative overflow-hidden'
                 >
                     <Inbox />
-                    {!!data?.length && <Pulse />}
+                    {hasInvites && <Pulse />}
                 </Button>
             </DrawerTrigger>
             <DrawerContent className='h-full max-h-[90vh] px-3'>
