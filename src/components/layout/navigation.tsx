@@ -7,7 +7,7 @@ import { GroupInviteStatus } from '@/types/common'
 
 import { Route } from '@/routes/_auth'
 
-import { User, Activity, Users, Dot } from 'lucide-react'
+import { User, Activity, Users } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { QuickActionsButton } from '@/components/layout/quick-actions-button'
 import { PingIndicator } from '@/components/ui/ping-indicator'
@@ -21,6 +21,11 @@ export const Navigation = () => {
     const { data: groupInvites } = useGetGroupInvitesQuery({
         status: GroupInviteStatus.pending
     })
+
+    const hasFriendRequests =
+        friendRequests?.some(request => request.receiverId === user.id) ?? false
+    const hasGroupInvites =
+        groupInvites?.some(invite => invite.receiverId === user.id) ?? false
 
     return (
         <nav className='grid w-full max-w-md grid-cols-5 items-center border-t mb-safe-nav h-16 fixed bottom-0 bg-background'>
@@ -36,7 +41,7 @@ export const Navigation = () => {
                 <Users />
                 <span className='relative'>
                     Groups
-                    {!!groupInvites?.length && (
+                    {hasGroupInvites && (
                         <PingIndicator className='absolute -top-1 -right-1' />
                     )}
                 </span>
@@ -53,11 +58,8 @@ export const Navigation = () => {
                 <User />
                 <span className='relative'>
                     Friends
-                    {!!friendRequests?.length && (
-                        <Dot
-                            size={32}
-                            className='text-destructive absolute -top-4 -right-5'
-                        />
+                    {hasFriendRequests && (
+                        <PingIndicator className='absolute -top-1 -right-1' />
                     )}
                 </span>
             </Link>
