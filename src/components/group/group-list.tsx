@@ -48,7 +48,11 @@ const GroupList = () => {
                                 >
                                     <Image
                                         className='size-12 rounded-lg shrink-0'
-                                        src={`c_fill,w_100,h_100,g_auto,f_auto,q_auto/${group.cover}`}
+                                        src={
+                                            group.cover
+                                                ? `c_fill,w_100,h_100,g_auto,f_auto,q_auto/${group.cover}`
+                                                : undefined
+                                        }
                                     />
                                     <div className='flex flex-col grow'>
                                         <span className='font-semibold text-wrap'>
