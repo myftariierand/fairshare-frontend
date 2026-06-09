@@ -33,6 +33,7 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select'
+import { Bug } from 'lucide-react'
 
 /* -------------------- ZOD SCHEMA -------------------- */
 
@@ -85,7 +86,8 @@ export const BugReportDialog = () => {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button size='sm' variant='outline'>
-                    Report a Problem
+                    <Bug />
+                    REPORT
                 </Button>
             </DialogTrigger>
 
