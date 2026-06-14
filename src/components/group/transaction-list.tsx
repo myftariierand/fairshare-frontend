@@ -1,9 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import {
-    // differenceInDays,
-    format
-    // formatDistance
-} from 'date-fns'
+import { format } from 'date-fns'
 
 import { Route } from '@/routes/_auth/g/$group'
 
@@ -20,7 +16,6 @@ import {
 } from 'lucide-react'
 
 const TransactionList = () => {
-    // const now = new Date()
     const params = Route.useParams()
     const group = Route.useLoaderData()
 
@@ -63,15 +58,18 @@ const TransactionList = () => {
             content = (
                 <div className='space-y-4'>
                     {Object.entries(grouped).map(([key, transactions]) => (
-                        <div key={key} className='space-y-3'>
+                        <div key={key} className='space-y-3 card'>
                             <span className='font-semibold block text-sm text-muted-foreground'>
                                 {key}
                             </span>
-                            <ul className='space-y-2'>
+                            <ul className='bg-card rounded-xl border divide-y divide-border'>
                                 {transactions.map(transaction =>
                                     transaction.type ===
                                     TransactionType.expense ? (
-                                        <li key={transaction.id}>
+                                        <li
+                                            key={transaction.id}
+                                            className='p-2'
+                                        >
                                             <Link
                                                 from='/g/$group'
                                                 to='/g/$group/transactions/$transaction'
@@ -80,7 +78,7 @@ const TransactionList = () => {
                                                 }}
                                                 className='flex gap-3 items-center w-full h-auto'
                                             >
-                                                <div className='[&_svg]:size-6 size-12 rounded-lg shrink-0 text-muted-foreground bg-secondary grid place-content-center'>
+                                                <div className='[&_svg]:size-4 size-8 rounded-full shrink-0 text-muted-foreground bg-secondary grid place-content-center'>
                                                     {getIcon(
                                                         transaction.description
                                                     )}

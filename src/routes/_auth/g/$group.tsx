@@ -3,7 +3,6 @@ import {
     Outlet,
     Link,
     useLocation,
-    useRouter,
     useSearch
 } from '@tanstack/react-router'
 import { format } from 'date-fns'
@@ -15,11 +14,8 @@ import { z } from 'zod'
 import { store } from '@/app/store'
 import { groupApi } from '@/app/services/group'
 
-import { formatAmount } from '@/lib/utils'
-
-import { Settings, QrCode, ArrowLeft, Dot } from 'lucide-react'
+import { Settings, QrCode, Dot } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import {
     Dialog,
     DialogContent,
@@ -33,6 +29,7 @@ import EditGroupSheet from '@/components/group/edit-group-drawer'
 import ShareLinkDialog from '@/components/group/share-link-dialog'
 import { useScrollContainer } from '@/components/layout/scroll-container-context'
 import CreateTransactionDrawer from '@/components/group/create-transaction-drawer'
+import { Image } from '@/components/ui/image'
 
 export const Route = createFileRoute('/_auth/g/$group')({
     loader: async ({ params }) => {
@@ -52,7 +49,6 @@ export const Route = createFileRoute('/_auth/g/$group')({
 function RouteComponent() {
     const group = Route.useLoaderData()
     const location = useLocation()
-    const router = useRouter()
     const search = useSearch({ from: '/_auth/g/$group' })
 
     const ref = useScrollContainer()
@@ -96,80 +92,25 @@ function RouteComponent() {
     }, [scrollYProgress, isScrollable, guardedProgress])
 
     const opacity = useTransform(guardedProgress, [0, 0.4], [1, 0])
-    const backgroundImageScale = useTransform(guardedProgress, [0, 1], [1, 0.7])
-    const scrollHeaderOpacity = useTransform(guardedProgress, [0, 0.7], [0, 1])
-    const scrollHeaderZIndex = useTransform(guardedProgress, v =>
-        v >= 0.4 ? 10 : -1
-    )
-    const scrollHeaderContentOpacity = useTransform(guardedProgress, v =>
-        v >= 0.6 ? 1 : 0
-    )
 
     return (
         <>
-            <motion.div
-                className='min-h-64 w-full absolute top-0 left-0 bg-cover before:content-[""] before:absolute before:inset-0 before:bg-white/60 dark:before:bg-black/60 -z-10'
-                style={{
-                    backgroundImage: `url(${import.meta.env.VITE_IMG_URL}/c_scale,h_400,f_auto,q_auto,e_blur:2000/${group.cover})`,
-                    // If not scrollable keep full opacity
-                    opacity: isScrollable ? opacity : 1,
-                    scale: backgroundImageScale
-                }}
-            ></motion.div>
-
-            <motion.div
-                className='fixed w-md top-0'
-                style={{ zIndex: scrollHeaderZIndex }}
-            >
-                <motion.div
-                    className='p-4 flex w-full items-center mx-auto max-w-md dark:bg-black bg-background shadow-xl'
-                    style={{
-                        opacity: isScrollable ? scrollHeaderOpacity : 0
-                    }}
-                >
-                    <motion.div
-                        style={{
-                            opacity: isScrollable
-                                ? scrollHeaderContentOpacity
-                                : 0,
-                            transition: 'opacity 0.2s ease-in-out'
-                        }}
-                        className='flex items-center'
-                    >
-                        <div>
-                            {group.cover ? (
-                                <motion.img
-                                    src={`${import.meta.env.VITE_IMG_URL}/c_fill,w_100,h_100,g_auto,f_auto,q_auto/${group.cover}`}
-                                    alt=''
-                                    className='size-10 rounded-full object-cover'
-                                />
-                            ) : (
-                                <div></div>
-                            )}
-                        </div>
-                        <div className='flex flex-col ml-3'>
-                            <motion.h1 className='font-semibold text-md'>
-                                {group.name}
-                            </motion.h1>
-                            <motion.span className='flex items-center text-sm'>
-                                {group.members.length} people <Dot />
-                                {format(group.createdAt, 'dd MMMM yyyy')}
-                            </motion.span>
-                        </div>
-                    </motion.div>
-                </motion.div>
-            </motion.div>
-
-            <motion.div className='relative pt-8 pb-4 min-h-64 w-full flex items-center justify-center'>
-                <div className='absolute top-2 right-2 left-2 flex items-center gap-2'>
-                    <Button
-                        size={'icon'}
-                        variant={'outline'}
-                        className='rounded-full size-7 mr-auto'
-                        onClick={() => router.history.back()}
-                    >
-                        <ArrowLeft />
-                    </Button>
+            <header className='flex gap-2 bg-card border-b p-2 sticky top-0 items-center z-10'>
+                <Image
+                    className='size-8 object-cover rounded'
+                    src={`/c_fill,w_400,h_400,g_auto,f_auto,q_auto/${group.cover}`}
+                />
+                <div className='flex-1'>
+                    <h1 className='font-semibold text-lg leading-none'>
+                        {group.name}
+                    </h1>
+                    <p className='flex items-center text-xs'>
+                        {format(group.createdAt, 'dd MMMM yyyy')}
+                        <Dot />
+                        {group.members.length} people
+                    </p>
+                </div>
+                <div className='flex items-center gap-2'>
                     <ShareLinkDialog groupId={group.id} />
                     <Dialog>
                         <DialogTrigger asChild>
@@ -208,50 +149,7 @@ function RouteComponent() {
                         </Button>
                     )}
                 </div>
-                <div className='flex flex-col items-center -z-10'>
-                    {group.cover ? (
-                        <motion.img
-                            src={`${import.meta.env.VITE_IMG_URL}/c_fill,w_400,h_400,g_auto,f_auto,q_auto/${group.cover}`}
-                            alt=''
-                            className='size-24 rounded-full object-cover'
-                        />
-                    ) : (
-                        <div></div>
-                    )}
-                    <motion.h1 className='font-semibold text-lg mt-3'>
-                        {group.name}
-                    </motion.h1>
-                    <motion.span className='flex items-center text-sm'>
-                        {group.members.length} people <Dot />
-                        {format(group.createdAt, 'dd MMMM yyyy')}
-                    </motion.span>{' '}
-                    {!!group.settlements.length && (
-                        <>
-                            <Separator className='my-2 bg-white/25 max-w-10 mx-auto' />
-                            <ul className='text-sm font-medium'>
-                                {group.settlements.map(
-                                    ({ from, to, amount }) => (
-                                        <li key={from.name + to.name}>
-                                            {from.name.split(' ')[0]}{' '}
-                                            <span className='text-muted-foreground'>
-                                                owes
-                                            </span>{' '}
-                                            {formatAmount(
-                                                amount,
-                                                group.currency
-                                            )}{' '}
-                                            <span className='text-muted-foreground'>
-                                                to
-                                            </span>{' '}
-                                            {to.name.split(' ')[0]}
-                                        </li>
-                                    )
-                                )}
-                            </ul>
-                        </>
-                    )}
-                </div>
-            </motion.div>
+            </header>
             {search.t === 'expenses' && (
                 <motion.div
                     style={{
