@@ -131,7 +131,7 @@ function RouteComponent() {
                                     className='flex items-center gap-2 min-w-[100px]'
                                 >
                                     <Avatar className='size-8'>
-                                        <AvatarFallback>
+                                        <AvatarFallback className='border'>
                                             {name.slice(0, 1)}
                                         </AvatarFallback>
                                     </Avatar>
@@ -140,10 +140,12 @@ function RouteComponent() {
                                             {name.split(' ')[0]}
                                         </p>
                                         <p
-                                            className={`text-xs font-mono mt-0.5 whitespace-nowrap ${balance > 0.01 ? 'text-success' : balance < -0.01 ? 'text-destructive' : 'text-muted-foreground'}`}
+                                            className={`text-xs font-mono font-bold mt-0.5 whitespace-nowrap ${balance > 0.01 ? 'text-success' : balance < -0.01 ? 'text-destructive' : 'text-muted-foreground'}`}
                                         >
-                                            {balance > 0.01 ? '+' : ''}€
-                                            {balance.toFixed(2)}
+                                            {formatAmount(
+                                                balance,
+                                                group.currency
+                                            )}
                                         </p>
                                     </div>
                                 </div>

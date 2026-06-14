@@ -98,7 +98,11 @@ function RouteComponent() {
             <header className='flex gap-2 bg-card border-b p-2 sticky top-0 items-center z-10'>
                 <Image
                     className='size-8 object-cover rounded'
-                    src={`/c_fill,w_400,h_400,g_auto,f_auto,q_auto/${group.cover}`}
+                    src={
+                        group.cover
+                            ? `/c_fill,w_400,h_400,g_auto,f_auto,q_auto/${group.cover}`
+                            : undefined
+                    }
                 />
                 <div className='flex-1'>
                     <h1 className='font-semibold text-lg leading-none'>
