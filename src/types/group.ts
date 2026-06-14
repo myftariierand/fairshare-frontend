@@ -34,7 +34,7 @@ export type Transaction = {
     createdAt: Date
     updatedAt: Date
     type: TransactionType
-    splits: { userId: string }[]
+    splits: { userId: string; amount: number }[]
 }
 
 export type SingleGroup = {
