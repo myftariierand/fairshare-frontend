@@ -28,9 +28,10 @@ type BaseTransaction = {
     id: string
     description: string
     createdAt: Date
-    paidBy: string
+    paidBy: User
     amount: number
     balance: number
+    splits: { userId: string; amount: number }[]
 }
 
 export type Transaction =
