@@ -24,17 +24,38 @@ export const MemberSchema = z.object({
 
 export type Member = z.infer<typeof MemberSchema>
 
-export type Transaction = {
+type BaseTransaction = {
     id: string
-    groupId: string
-    createdById: string
-    paidBy: User
-    amount: number
     description: string
     createdAt: Date
-    updatedAt: Date
-    type: TransactionType
-    splits: { userId: string; amount: number }[]
+    paidBy: string
+    amount: number
+    balance: number
+}
+
+export type Transaction =
+    | (BaseTransaction & {
+          type: TransactionType.expense
+          category: TransactionCategory
+      })
+    | (BaseTransaction & {
+          type: TransactionType.settlement
+          category: null
+      })
+
+export enum TransactionCategory {
+    FOOD = 'FOOD',
+    GROCERIES = 'GROCERIES',
+    ACCOMMODATION = 'ACCOMMODATION',
+    TRANSPORTATION = 'TRANSPORTATION',
+    UTILITIES = 'UTILITIES',
+    ENTERTAINMENT = 'ENTERTAINMENT',
+    SHOPPING = 'SHOPPING',
+    TRAVEL = 'TRAVEL',
+    GIFTS = 'GIFTS',
+    HEALTH = 'HEALTH',
+    FEES = 'FEES',
+    OTHER = 'OTHER'
 }
 
 export type SingleGroup = {

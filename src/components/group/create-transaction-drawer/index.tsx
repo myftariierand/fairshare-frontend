@@ -16,6 +16,7 @@ import {
     fromMinorUnit,
     parseNumberInput
 } from '@/lib/utils'
+import { transactionCategories } from '@/lib/get-transaction-icon'
 
 import { Route } from '@/routes/_auth/g/$group'
 import { Route as GroupRoute } from '@/routes/_auth/g/$group/index'
@@ -53,6 +54,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import SplitsCard from '@/components/group/create-transaction-drawer/splits-card'
 
 const TransactionSchema = z.object({
+    category: z.string(),
     description: z.string().min(4, 'Must be at least 4 characters long.'),
     amount: z.string().refine(val => parseNumberInput(val) > 0, {
         message: 'Amount must be a positive number'
@@ -90,6 +92,7 @@ const CreateTransactionDrawer = (props: Props) => {
     const form = useForm<TransactionData>({
         resolver: zodResolver(TransactionSchema),
         defaultValues: {
+            category: '',
             description: '',
             amount: '',
             paidBy: context.user.id,
@@ -252,6 +255,42 @@ const CreateTransactionDrawer = (props: Props) => {
                             onSubmit={form.handleSubmit(onSubmit)}
                             className='space-y-4 px-4 grow'
                         >
+                            <FormField
+                                control={form.control}
+                                name='category'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Category*</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder='Category' />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {Object.entries(
+                                                    transactionCategories
+                                                ).map(
+                                                    ([
+                                                        value,
+                                                        { emoji, label }
+                                                    ]) => (
+                                                        <SelectItem
+                                                            key={label}
+                                                            value={value}
+                                                        >
+                                                            {emoji} {label}
+                                                        </SelectItem>
+                                                    )
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name='description'

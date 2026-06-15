@@ -295,3 +295,54 @@ export const getIcon = (query: string) => {
 
     return result.length > 0 ? result[0].item.icon : <ReceiptText />
 }
+
+export const transactionCategories = {
+    FOOD: {
+        label: 'Food',
+        emoji: '🍔'
+    },
+    GROCERIES: {
+        label: 'Groceries',
+        emoji: '🛒'
+    },
+    ACCOMMODATION: {
+        label: 'Accommodation',
+        emoji: '🏠'
+    },
+    TRANSPORTATION: {
+        label: 'Transportation',
+        emoji: '🚗'
+    },
+    UTILITIES: {
+        label: 'Utilities',
+        emoji: '⚡'
+    },
+    ENTERTAINMENT: {
+        label: 'Entertainment',
+        emoji: '🎉'
+    },
+    SHOPPING: {
+        label: 'Shopping',
+        emoji: '🛍️'
+    },
+    TRAVEL: {
+        label: 'Travel',
+        emoji: '✈️'
+    },
+    GIFTS: {
+        label: 'Gifts',
+        emoji: '🎁'
+    },
+    HEALTH: {
+        label: 'Health',
+        emoji: '🏥'
+    },
+    FEES: {
+        label: 'Fees',
+        emoji: '📄'
+    },
+    OTHER: {
+        label: 'Other',
+        emoji: '📦'
+    }
+} as const

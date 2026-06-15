@@ -1,6 +1,7 @@
 import { api } from '@/app/api'
 import { User } from '@/types/user'
 import { TransactionType } from '@/types/common'
+import { TransactionCategory } from '@/types/group'
 
 type CreateTransaction = {
     groupId: string
@@ -10,15 +11,24 @@ type CreateTransaction = {
     splits: { userId: string; amount: number }[]
 }
 
-type Transaction = {
+type BaseTransaction = {
     id: string
     description: string
     createdAt: Date
     paidBy: string
     amount: number
     balance: number
-    type: TransactionType
 }
+
+type Transaction =
+    | (BaseTransaction & {
+          type: TransactionType.expense
+          category: TransactionCategory
+      })
+    | (BaseTransaction & {
+          type: TransactionType.settlement
+          category: null
+      })
 
 export type SingleTransaction = {
     groupId: string
