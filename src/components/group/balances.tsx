@@ -36,7 +36,8 @@ const Balances = () => {
     >
 
     const totalExpenses = data.transactions.reduce(
-        (acc, curr) => acc + curr.amount,
+        (acc, curr) =>
+            acc + curr.type === TransactionType.expense ? curr.amount : 0,
         0
     )
 
