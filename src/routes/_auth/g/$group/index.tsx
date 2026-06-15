@@ -132,7 +132,7 @@ function RouteComponent() {
                                 >
                                     <Avatar className='size-8'>
                                         <AvatarFallback className='border'>
-                                            {name.slice(0, 1)}
+                                            {name.slice(0, 2)}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
