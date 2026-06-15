@@ -43,7 +43,7 @@ const ShareLinkDialog = ({ groupId }: { groupId: string }) => {
                         Show this link with friends so they can join your group.
                     </DialogDescription>
                 </DialogHeader>
-                <pre className='px-4 my-4 rounded-xl bg-zinc-950 py-4 dark:bg-zinc-900 overflow-hidden whitespace-nowrap text-ellipsis'>
+                <pre className='px-4 my-4 rounded-xl bg-card py-4 overflow-hidden whitespace-nowrap text-ellipsis'>
                     <code className='relative rounded text-sm'>{link}</code>
                 </pre>
                 <Button size={'lg'} variant={'secondary'} onClick={handleCopy}>
