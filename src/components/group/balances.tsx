@@ -37,7 +37,7 @@ const Balances = () => {
 
     const totalExpenses = data.transactions.reduce(
         (acc, curr) =>
-            acc + curr.type === TransactionType.expense ? curr.amount : 0,
+            acc + (curr.type === TransactionType.expense ? curr.amount : 0),
         0
     )
 
@@ -75,9 +75,9 @@ const Balances = () => {
                                                 )}
                                             </span>
                                         </div>
-                                        <div className='h-1 rounded-full bg-muted mt-1 overflow-hidden'>
+                                        <div className='h-1 rounded-full bg-muted-foreground/10 mt-1 overflow-hidden'>
                                             <div
-                                                className='h-full rounded-full bg-primary/60'
+                                                className='h-full rounded-full bg-primary'
                                                 style={{
                                                     width: `${(total / totalExpenses) * 100}%`
                                                 }}
