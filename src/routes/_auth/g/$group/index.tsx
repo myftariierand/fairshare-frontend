@@ -144,7 +144,8 @@ function RouteComponent() {
                                         >
                                             {formatAmount(
                                                 balance,
-                                                group.currency
+                                                group.currency,
+                                                'never'
                                             )}
                                         </p>
                                     </div>

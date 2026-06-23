@@ -21,13 +21,18 @@ export const getErrorMessage = (error: unknown) => {
     }
 }
 
-export function formatAmount(number: number, currency: string) {
+export function formatAmount(
+    number: number,
+    currency: string,
+    signDisplay?: keyof Intl.NumberFormatOptionsSignDisplayRegistry
+) {
     const userLocale = new Intl.NumberFormat().resolvedOptions().locale
 
     return new Intl.NumberFormat(userLocale, {
         style: 'currency',
         minimumFractionDigits: 2,
-        currency
+        currency,
+        signDisplay
     }).format(number)
 }
 
