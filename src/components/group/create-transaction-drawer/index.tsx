@@ -26,13 +26,6 @@ import { Input } from '@/components/ui/input'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select'
-import {
     Form,
     FormControl,
     FormField,
@@ -52,6 +45,8 @@ import {
 } from '@/components/ui/drawer'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import SplitsCard from '@/components/group/create-transaction-drawer/splits-card'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 const TransactionSchema = z.object({
     category: z.string(),
@@ -92,7 +87,7 @@ const CreateTransactionDrawer = (props: Props) => {
     const form = useForm<TransactionData>({
         resolver: zodResolver(TransactionSchema),
         defaultValues: {
-            category: '',
+            category: 'OTHER',
             description: '',
             amount: '',
             paidBy: context.user.id,
@@ -181,6 +176,7 @@ const CreateTransactionDrawer = (props: Props) => {
         setOpen(open)
         setSplitEqually(true)
         form.reset({
+            category: 'OTHER',
             description: '',
             amount: '',
             paidBy: context.user.id,
@@ -220,6 +216,7 @@ const CreateTransactionDrawer = (props: Props) => {
         })
 
         form.reset({
+            category: 'OTHER',
             description: name,
             amount: price.toString(),
             paidBy: context.user.id,
@@ -241,7 +238,7 @@ const CreateTransactionDrawer = (props: Props) => {
                     <Plus /> {props.triggerLabel}
                 </Button>
             </DrawerTrigger>
-            <DrawerContent className='h-full max-h-[90vh]'>
+            <DrawerContent>
                 <DrawerHeader>
                     <DrawerTitle>ADD A NEW TRANSACTION</DrawerTitle>
                     <DrawerDescription>
@@ -253,41 +250,38 @@ const CreateTransactionDrawer = (props: Props) => {
                         <form
                             id='transaction-form'
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className='space-y-4 px-4 grow'
+                            className='space-y-4 px-4'
                         >
                             <FormField
                                 control={form.control}
                                 name='category'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Category*</FormLabel>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                        <FormLabel>Category</FormLabel>
+                                        <ToggleGroup
+                                            type='single'
+                                            className='flex-wrap justify-start'
+                                            value={field.value}
+                                            onValueChange={value => {
+                                                if (value) field.onChange(value)
+                                            }}
                                         >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder='Category' />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {Object.entries(
-                                                    transactionCategories
-                                                ).map(
-                                                    ([
-                                                        value,
-                                                        { emoji, label }
-                                                    ]) => (
-                                                        <SelectItem
-                                                            key={label}
-                                                            value={value}
-                                                        >
-                                                            {emoji} {label}
-                                                        </SelectItem>
-                                                    )
-                                                )}
-                                            </SelectContent>
-                                        </Select>
+                                            {Object.entries(
+                                                transactionCategories
+                                            ).map(
+                                                ([value, { emoji, label }]) => (
+                                                    <ToggleGroupItem
+                                                        key={label}
+                                                        value={value}
+                                                        className='shrink-0 whitespace-nowrap grow'
+                                                        variant={'outline'}
+                                                        size={'sm'}
+                                                    >
+                                                        {emoji} {label}
+                                                    </ToggleGroupItem>
+                                                )
+                                            )}
+                                        </ToggleGroup>
                                     </FormItem>
                                 )}
                             />
@@ -335,26 +329,42 @@ const CreateTransactionDrawer = (props: Props) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Paid By*</FormLabel>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                        <ToggleGroup
+                                            type='single'
+                                            className='flex-wrap justify-start'
+                                            value={field.value}
+                                            onValueChange={value => {
+                                                if (value) field.onChange(value)
+                                            }}
                                         >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {group.members.map(member => (
-                                                    <SelectItem
+                                            {[...group.members]
+                                                .sort(a =>
+                                                    a.id === context.user.id
+                                                        ? -1
+                                                        : 1
+                                                )
+                                                .map(member => (
+                                                    <ToggleGroupItem
                                                         key={member.id}
                                                         value={member.id}
+                                                        className='shrink-0 whitespace-nowrap'
+                                                        variant={'outline'}
                                                     >
-                                                        {member.name}
-                                                    </SelectItem>
+                                                        <Avatar className='size-5'>
+                                                            <AvatarFallback className='border text-xs'>
+                                                                {member.name.slice(
+                                                                    0,
+                                                                    2
+                                                                )}
+                                                            </AvatarFallback>
+                                                        </Avatar>
+                                                        {context.user.id ===
+                                                        member.id
+                                                            ? 'You'
+                                                            : member.name}
+                                                    </ToggleGroupItem>
                                                 ))}
-                                            </SelectContent>
-                                        </Select>
+                                        </ToggleGroup>
                                     </FormItem>
                                 )}
                             />
