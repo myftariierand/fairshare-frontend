@@ -240,9 +240,9 @@ const CreateTransactionDrawer = (props: Props) => {
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader>
-                    <DrawerTitle>ADD A NEW TRANSACTION</DrawerTitle>
+                    <DrawerTitle>NEW EXPENSE</DrawerTitle>
                     <DrawerDescription>
-                        Create a transaction and share it with your group.
+                        Add an expense and share it with this group.
                     </DrawerDescription>
                 </DrawerHeader>
                 <ScrollArea>
