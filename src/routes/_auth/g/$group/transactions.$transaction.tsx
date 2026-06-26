@@ -68,7 +68,9 @@ function RouteComponent() {
                 </Avatar>
                 <div className='text-muted-foreground'>
                     <span className='text-foreground font-medium'>
-                        {data.paidBy.name.split(' ')[0]}
+                        {data.paidById === user.id
+                            ? 'You'
+                            : data.paidBy.name.split(' ')[0]}
                     </span>{' '}
                     paid{' '}
                     <span className='text-foreground font-medium'>
