@@ -7,6 +7,11 @@ import { Loader, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
 import { Spinner } from '@/components/ui/spinner'
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger
+} from '@/components/ui/collapsible'
 
 const GroupList = () => {
     const { data, isLoading, isError, isSuccess } = useGetGroupsQuery()
@@ -36,54 +41,148 @@ const GroupList = () => {
                 </div>
             )
         } else {
+            const activeGroups = data.filter(
+                group =>
+                    group._count.transactions === 0 || group.remainingDebts > 0
+            )
+            const settledGroups = data.filter(
+                group =>
+                    group._count.transactions > 0 && group.remainingDebts === 0
+            )
+
             content = (
-                <ul>
-                    {data.map(group => (
-                        <li key={group.id}>
-                            <Button asChild variant={'ghost'} className='p-1'>
-                                <Link
-                                    to='/g/$group'
-                                    params={{ group: group.id }}
-                                    className='flex gap-4 items-center w-full h-auto'
+                <>
+                    <ul>
+                        {activeGroups.map(group => (
+                            <li key={group.id}>
+                                <Button
+                                    asChild
+                                    variant={'ghost'}
+                                    className='p-1'
                                 >
-                                    <Image
-                                        className='size-12 rounded-lg shrink-0'
-                                        src={
-                                            group.cover
-                                                ? `c_fill,w_100,h_100,g_auto,f_auto,q_auto/${group.cover}`
-                                                : undefined
-                                        }
-                                    />
-                                    <div className='flex flex-col grow'>
-                                        <span className='font-semibold text-wrap'>
-                                            {group.name}
-                                        </span>
-                                        <span className='text-xs text-muted-foreground'>
-                                            {group._count.members} member(s)
-                                        </span>
-                                    </div>
-                                    <MatchRoute
+                                    <Link
                                         to='/g/$group'
                                         params={{ group: group.id }}
-                                        pending
+                                        className='flex gap-4 items-center w-full h-auto'
                                     >
-                                        {match => (
-                                            <Spinner
-                                                show={!!match}
-                                                wait='delay-50'
-                                            />
-                                        )}
-                                    </MatchRoute>
-                                    <span className='text-xs text-muted-foreground'>
-                                        {formatDistance(group.createdAt, now, {
-                                            addSuffix: true
-                                        })}
-                                    </span>
-                                </Link>
-                            </Button>
-                        </li>
-                    ))}
-                </ul>
+                                        <Image
+                                            className='size-12 rounded-lg shrink-0'
+                                            src={
+                                                group.cover
+                                                    ? `c_fill,w_100,h_100,g_auto,f_auto,q_auto/${group.cover}`
+                                                    : undefined
+                                            }
+                                        />
+                                        <div className='flex flex-col grow'>
+                                            <span className='font-semibold text-wrap'>
+                                                {group.name}
+                                            </span>
+                                            <span className='text-xs text-muted-foreground'>
+                                                {group._count.members} member(s)
+                                            </span>
+                                        </div>
+                                        <MatchRoute
+                                            to='/g/$group'
+                                            params={{ group: group.id }}
+                                            pending
+                                        >
+                                            {match => (
+                                                <Spinner
+                                                    show={!!match}
+                                                    wait='delay-50'
+                                                />
+                                            )}
+                                        </MatchRoute>
+                                        <span className='text-xs text-muted-foreground'>
+                                            {formatDistance(
+                                                group.createdAt,
+                                                now,
+                                                {
+                                                    addSuffix: true
+                                                }
+                                            )}
+                                        </span>
+                                    </Link>
+                                </Button>
+                            </li>
+                        ))}
+                    </ul>
+                    {settledGroups.length > 0 && (
+                        <Collapsible className='grow'>
+                            <CollapsibleTrigger asChild>
+                                <Button variant={'ghost'} className='w-full'>
+                                    View Settled Groups ({settledGroups.length})
+                                </Button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent
+                                asChild
+                                className='flex flex-wrap gap-1'
+                            >
+                                <ul>
+                                    {settledGroups.map(group => (
+                                        <li key={group.id} className='w-full'>
+                                            <Button
+                                                asChild
+                                                variant={'ghost'}
+                                                className='p-1'
+                                            >
+                                                <Link
+                                                    to='/g/$group'
+                                                    params={{ group: group.id }}
+                                                    className='flex gap-4 items-center w-full h-auto'
+                                                >
+                                                    <Image
+                                                        className='size-12 rounded-lg shrink-0'
+                                                        src={
+                                                            group.cover
+                                                                ? `c_fill,w_100,h_100,g_auto,f_auto,q_auto/${group.cover}`
+                                                                : undefined
+                                                        }
+                                                    />
+                                                    <div className='flex flex-col grow'>
+                                                        <span className='font-semibold text-wrap'>
+                                                            {group.name}
+                                                        </span>
+                                                        <span className='text-xs text-muted-foreground'>
+                                                            {
+                                                                group._count
+                                                                    .members
+                                                            }{' '}
+                                                            member(s)
+                                                        </span>
+                                                    </div>
+                                                    <MatchRoute
+                                                        to='/g/$group'
+                                                        params={{
+                                                            group: group.id
+                                                        }}
+                                                        pending
+                                                    >
+                                                        {match => (
+                                                            <Spinner
+                                                                show={!!match}
+                                                                wait='delay-50'
+                                                            />
+                                                        )}
+                                                    </MatchRoute>
+                                                    <span className='text-xs text-muted-foreground'>
+                                                        {formatDistance(
+                                                            group.createdAt,
+                                                            now,
+                                                            {
+                                                                addSuffix: true
+                                                            }
+                                                        )}
+                                                    </span>
+                                                </Link>
+                                            </Button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </CollapsibleContent>
+                        </Collapsible>
+                    )}
+                </>
             )
         }
     }

@@ -9,9 +9,11 @@ export type Group = {
     currency: string
     createdAt: string
     createdById: string
+    remainingDebts: number
     cover?: string
     _count: {
         members: number
+        transactions: number
     }
 }
 
