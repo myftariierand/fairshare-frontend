@@ -38,25 +38,29 @@ function RouteComponent() {
 
     return (
         <div className='m-4'>
-            <div className='flex space-x-3'>
-                <div className='flex-1'>
-                    <h2 className='text-xl font-medium'>{data.description}</h2>
-                    <h3 className='text-3xl font-bold'>
-                        {formatAmount(data.amount, group.currency)}
-                    </h3>
-                    <div className='text-muted-foreground'>
-                        Added by{' '}
-                        <span className='text-foreground font-medium'>
-                            {data.createdBy.name.split(' ')[0]}
-                        </span>{' '}
-                        on{' '}
-                        <span className='text-foreground font-medium whitespace-nowrap'>
-                            {format(data.createdAt, 'dd MMMM yyyy')}
-                        </span>
+            <div>
+                <div className='flex space-x-2'>
+                    <div className='mr-auto'>
+                        <h2 className='text-xl font-medium'>
+                            {data.description}
+                        </h2>
+                        <h3 className='text-3xl font-bold'>
+                            {formatAmount(data.amount, group.currency)}
+                        </h3>
                     </div>
+                    <EditTransactionDrawer transaction={data} />
+                    <DeleteTransactionDialog transactionId={data.id} />
                 </div>
-                <EditTransactionDrawer transaction={data} />
-                <DeleteTransactionDialog transactionId={data.id} />
+                <div className='text-muted-foreground'>
+                    Added by{' '}
+                    <span className='text-foreground font-medium'>
+                        {data.createdBy.name.split(' ')[0]}
+                    </span>{' '}
+                    on{' '}
+                    <span className='text-foreground font-medium whitespace-nowrap'>
+                        {format(data.createdAt, 'dd MMMM yyyy')}
+                    </span>
+                </div>
             </div>
             <Separator className='my-4' />
             <div className='flex items-center gap-3 mb-4'>
