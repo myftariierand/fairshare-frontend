@@ -39,7 +39,7 @@ const DeleteTransactionDialog = (props: Props) => {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button size={'icon'} variant={'secondary'}>
+                <Button size={'icon'} variant={'destructive'}>
                     <Trash />
                 </Button>
             </AlertDialogTrigger>
