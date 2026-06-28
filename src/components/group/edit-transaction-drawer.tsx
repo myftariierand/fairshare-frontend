@@ -46,6 +46,7 @@ import {
 } from '@/components/ui/drawer'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const TransactionSchema = z.object({
     category: z.string(),
@@ -196,184 +197,190 @@ const EditTransactionDrawer = ({
                     <Pencil /> Edit
                 </Button>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent className='h-full max-h-[90dvh]'>
                 <DrawerHeader>
                     <DrawerTitle>EDIT EXPENSE</DrawerTitle>
                     <DrawerDescription>
                         Edit an expense and share it with your group.
                     </DrawerDescription>
                 </DrawerHeader>
-                <Form {...form}>
-                    <form
-                        id='transaction-form'
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className='space-y-4 px-4'
-                    >
-                        <FormField
-                            control={form.control}
-                            name='category'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Category</FormLabel>
-                                    <ToggleGroup
-                                        type='single'
-                                        className='flex-wrap justify-start'
-                                        value={field.value}
-                                        onValueChange={value => {
-                                            if (value) field.onChange(value)
-                                        }}
-                                    >
-                                        {Object.entries(
-                                            transactionCategories
-                                        ).map(([value, { emoji, label }]) => (
-                                            <ToggleGroupItem
-                                                key={label}
-                                                value={value}
-                                                className='shrink-0 whitespace-nowrap grow'
-                                                variant={'outline'}
-                                                size={'sm'}
-                                            >
-                                                {emoji} {label}
-                                            </ToggleGroupItem>
-                                        ))}
-                                    </ToggleGroup>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='description'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='Plane Tickets'
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='amount'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Total Amount</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder={formatAmount(
-                                                25,
-                                                group.currency
+                <ScrollArea>
+                    <Form {...form}>
+                        <form
+                            id='transaction-form'
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className='space-y-4 px-4'
+                        >
+                            <FormField
+                                control={form.control}
+                                name='category'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Category</FormLabel>
+                                        <ToggleGroup
+                                            type='single'
+                                            className='flex-wrap justify-start'
+                                            value={field.value}
+                                            onValueChange={value => {
+                                                if (value) field.onChange(value)
+                                            }}
+                                        >
+                                            {Object.entries(
+                                                transactionCategories
+                                            ).map(
+                                                ([value, { emoji, label }]) => (
+                                                    <ToggleGroupItem
+                                                        key={label}
+                                                        value={value}
+                                                        className='shrink-0 whitespace-nowrap grow'
+                                                        variant={'outline'}
+                                                        size={'sm'}
+                                                    >
+                                                        {emoji} {label}
+                                                    </ToggleGroupItem>
+                                                )
                                             )}
-                                            value={field.value || ''}
-                                            onChange={e => handleChange(e)}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name='paidBy'
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Paid By*</FormLabel>
-                                    <ToggleGroup
-                                        type='single'
-                                        className='flex-wrap justify-start'
-                                        value={field.value}
-                                        onValueChange={value => {
-                                            if (value) field.onChange(value)
-                                        }}
-                                    >
-                                        {[...group.members]
-                                            .sort(a =>
-                                                a.id === context.user.id
-                                                    ? -1
-                                                    : 1
-                                            )
-                                            .map(member => (
-                                                <ToggleGroupItem
-                                                    key={member.id}
-                                                    value={member.id}
-                                                    className='shrink-0 whitespace-nowrap'
-                                                    variant={'outline'}
-                                                >
-                                                    <Avatar className='size-5'>
-                                                        <AvatarFallback className='border text-xs'>
-                                                            {member.name.slice(
-                                                                0,
-                                                                2
-                                                            )}
-                                                        </AvatarFallback>
-                                                    </Avatar>
-                                                    {context.user.id ===
-                                                    member.id
-                                                        ? 'You'
-                                                        : member.name}
-                                                </ToggleGroupItem>
-                                            ))}
-                                    </ToggleGroup>
-                                </FormItem>
-                            )}
-                        />
-                        <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                            <div className='space-y-0.5'>
-                                <FormLabel className='text-base'>
-                                    Split Equally
-                                </FormLabel>
-                                <FormDescription>
-                                    Disable this if you want to manually specify
-                                    the split amounts for each group member.
-                                </FormDescription>
-                            </div>
-                            <FormControl>
-                                <Switch
-                                    checked={splitEqually}
-                                    onCheckedChange={handleSplitEqually}
-                                />
-                            </FormControl>
-                        </FormItem>
-                        {!splitEqually && (
-                            <ul className='space-y-2'>
-                                {fields.map((split, index) => (
-                                    <li key={split.id}>
-                                        <FormField
-                                            control={form.control}
-                                            name={`splits.${index}.amount`}
-                                            render={({ field }) => (
-                                                <FormItem className='flex flex-row items-center justify-between space-y-0'>
-                                                    <FormLabel className='text-base'>
-                                                        {split.name}
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            {...field}
-                                                            className='w-auto'
-                                                            onChange={e =>
-                                                                field.onChange(
-                                                                    sanitizeNumberInput(
-                                                                        e.target
-                                                                            .value
+                                        </ToggleGroup>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='description'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder='Plane Tickets'
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='amount'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Total Amount</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                placeholder={formatAmount(
+                                                    25,
+                                                    group.currency
+                                                )}
+                                                value={field.value || ''}
+                                                onChange={e => handleChange(e)}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name='paidBy'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Paid By*</FormLabel>
+                                        <ToggleGroup
+                                            type='single'
+                                            className='flex-wrap justify-start'
+                                            value={field.value}
+                                            onValueChange={value => {
+                                                if (value) field.onChange(value)
+                                            }}
+                                        >
+                                            {[...group.members]
+                                                .sort(a =>
+                                                    a.id === context.user.id
+                                                        ? -1
+                                                        : 1
+                                                )
+                                                .map(member => (
+                                                    <ToggleGroupItem
+                                                        key={member.id}
+                                                        value={member.id}
+                                                        className='shrink-0 whitespace-nowrap'
+                                                        variant={'outline'}
+                                                    >
+                                                        <Avatar className='size-5'>
+                                                            <AvatarFallback className='border text-xs'>
+                                                                {member.name.slice(
+                                                                    0,
+                                                                    2
+                                                                )}
+                                                            </AvatarFallback>
+                                                        </Avatar>
+                                                        {context.user.id ===
+                                                        member.id
+                                                            ? 'You'
+                                                            : member.name}
+                                                    </ToggleGroupItem>
+                                                ))}
+                                        </ToggleGroup>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                                <div className='space-y-0.5'>
+                                    <FormLabel className='text-base'>
+                                        Split Equally
+                                    </FormLabel>
+                                    <FormDescription>
+                                        Disable this if you want to manually
+                                        specify the split amounts for each group
+                                        member.
+                                    </FormDescription>
+                                </div>
+                                <FormControl>
+                                    <Switch
+                                        checked={splitEqually}
+                                        onCheckedChange={handleSplitEqually}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                            {!splitEqually && (
+                                <ul className='space-y-2'>
+                                    {fields.map((split, index) => (
+                                        <li key={split.id}>
+                                            <FormField
+                                                control={form.control}
+                                                name={`splits.${index}.amount`}
+                                                render={({ field }) => (
+                                                    <FormItem className='flex flex-row items-center justify-between space-y-0'>
+                                                        <FormLabel className='text-base'>
+                                                            {split.name}
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                {...field}
+                                                                className='w-auto'
+                                                                onChange={e =>
+                                                                    field.onChange(
+                                                                        sanitizeNumberInput(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        )
                                                                     )
-                                                                )
-                                                            }
-                                                        />
-                                                    </FormControl>
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </form>
-                </Form>
+                                                                }
+                                                            />
+                                                        </FormControl>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </form>
+                    </Form>
+                </ScrollArea>
                 <DrawerFooter>
                     <Button
                         form='transaction-form'

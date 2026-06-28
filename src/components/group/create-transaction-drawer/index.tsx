@@ -43,6 +43,11 @@ import {
     DrawerTitle,
     DrawerTrigger
 } from '@/components/ui/drawer'
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger
+} from '@/components/ui/collapsible'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import SplitsCard from '@/components/group/create-transaction-drawer/splits-card'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
@@ -238,7 +243,7 @@ const CreateTransactionDrawer = (props: Props) => {
                     <Plus /> {props.triggerLabel}
                 </Button>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent className='h-full max-h-[90dvh]'>
                 <DrawerHeader>
                     <DrawerTitle>NEW EXPENSE</DrawerTitle>
                     <DrawerDescription>
@@ -260,27 +265,73 @@ const CreateTransactionDrawer = (props: Props) => {
                                         <FormLabel>Category</FormLabel>
                                         <ToggleGroup
                                             type='single'
-                                            className='flex-wrap justify-start'
+                                            className='flex-col'
                                             value={field.value}
                                             onValueChange={value => {
                                                 if (value) field.onChange(value)
                                             }}
                                         >
-                                            {Object.entries(
-                                                transactionCategories
-                                            ).map(
-                                                ([value, { emoji, label }]) => (
-                                                    <ToggleGroupItem
-                                                        key={label}
-                                                        value={value}
-                                                        className='shrink-0 whitespace-nowrap grow'
-                                                        variant={'outline'}
-                                                        size={'sm'}
-                                                    >
-                                                        {emoji} {label}
-                                                    </ToggleGroupItem>
+                                            <div className='flex flex-wrap justify-start gap-1'>
+                                                {Object.entries(
+                                                    transactionCategories
                                                 )
-                                            )}
+                                                    .slice(0, 10)
+                                                    .map(
+                                                        ([
+                                                            value,
+                                                            { emoji, label }
+                                                        ]) => (
+                                                            <ToggleGroupItem
+                                                                key={label}
+                                                                value={value}
+                                                                className='shrink-0 whitespace-nowrap grow'
+                                                                variant={
+                                                                    'outline'
+                                                                }
+                                                                size={'sm'}
+                                                            >
+                                                                {emoji} {label}
+                                                            </ToggleGroupItem>
+                                                        )
+                                                    )}
+                                            </div>
+                                            <Collapsible className='grow'>
+                                                <CollapsibleContent className='flex flex-wrap gap-1'>
+                                                    {Object.entries(
+                                                        transactionCategories
+                                                    )
+                                                        .slice(10)
+                                                        .map(
+                                                            ([
+                                                                value,
+                                                                { emoji, label }
+                                                            ]) => (
+                                                                <ToggleGroupItem
+                                                                    key={label}
+                                                                    value={
+                                                                        value
+                                                                    }
+                                                                    className='shrink-0 whitespace-nowrap grow'
+                                                                    variant={
+                                                                        'outline'
+                                                                    }
+                                                                    size={'sm'}
+                                                                >
+                                                                    {emoji}{' '}
+                                                                    {label}
+                                                                </ToggleGroupItem>
+                                                            )
+                                                        )}
+                                                </CollapsibleContent>
+                                                <CollapsibleTrigger asChild>
+                                                    <Button
+                                                        variant={'link'}
+                                                        className='w-full'
+                                                    >
+                                                        More Categories
+                                                    </Button>
+                                                </CollapsibleTrigger>
+                                            </Collapsible>
                                         </ToggleGroup>
                                     </FormItem>
                                 )}

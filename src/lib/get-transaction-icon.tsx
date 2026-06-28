@@ -297,6 +297,10 @@ export const getIcon = (query: string) => {
 }
 
 export const transactionCategories = {
+    DRINKS: {
+        label: 'Drinks',
+        emoji: '🍺'
+    },
     FOOD: {
         label: 'Food',
         emoji: '🍔'
@@ -313,9 +317,13 @@ export const transactionCategories = {
         label: 'Transportation',
         emoji: '🚗'
     },
-    UTILITIES: {
-        label: 'Utilities',
-        emoji: '⚡'
+    COFFEE: {
+        label: 'Coffee',
+        emoji: '☕'
+    },
+    FEES: {
+        label: 'Fees',
+        emoji: '📄'
     },
     ENTERTAINMENT: {
         label: 'Entertainment',
@@ -325,24 +333,69 @@ export const transactionCategories = {
         label: 'Shopping',
         emoji: '🛍️'
     },
-    TRAVEL: {
-        label: 'Travel',
-        emoji: '✈️'
+    OTHER: {
+        label: 'Other',
+        emoji: '📦'
+    },
+
+    SUBSCRIPTIONS: {
+        label: 'Subscriptions',
+        emoji: '📺'
+    },
+    EDUCATION: {
+        label: 'Education',
+        emoji: '📚'
+    },
+    SPORTS: {
+        label: 'Sports',
+        emoji: '⚽'
+    },
+    PETS: {
+        label: 'Pets',
+        emoji: '🐶'
     },
     GIFTS: {
         label: 'Gifts',
         emoji: '🎁'
     },
+    TRAVEL: {
+        label: 'Travel',
+        emoji: '✈️'
+    },
     HEALTH: {
         label: 'Health',
         emoji: '🏥'
     },
-    FEES: {
-        label: 'Fees',
-        emoji: '📄'
+    TAXES: {
+        label: 'Taxes',
+        emoji: '💰'
     },
-    OTHER: {
-        label: 'Other',
-        emoji: '📦'
+    MAINTENANCE: {
+        label: 'Maintenance',
+        emoji: '🔧'
+    },
+    INSURANCE: {
+        label: 'Insurance',
+        emoji: '🛡️'
+    },
+    CHILDCARE: {
+        label: 'Childcare',
+        emoji: '🧸'
+    },
+    WORK: {
+        label: 'Work',
+        emoji: '💼'
+    },
+    DONATIONS: {
+        label: 'Donations',
+        emoji: '❤️'
+    },
+    PERSONAL_CARE: {
+        label: 'Personal Care',
+        emoji: '💇'
+    },
+    UTILITIES: {
+        label: 'Utilities',
+        emoji: '⚡'
     }
 } as const
