@@ -18,6 +18,7 @@ import {
     fromMinorUnit,
     parseNumberInput
 } from '@/lib/utils'
+import { transactionCategories } from '@/lib/get-transaction-icon'
 
 import { Route } from '@/routes/_auth/g/$group'
 
@@ -25,13 +26,6 @@ import { Loader, Pencil } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select'
 import {
     Form,
     FormControl,
@@ -50,8 +44,11 @@ import {
     DrawerTitle,
     DrawerTrigger
 } from '@/components/ui/drawer'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 const TransactionSchema = z.object({
+    category: z.string(),
     description: z.string(),
     amount: z.string().refine(val => parseNumberInput(val) > 0, {
         message: 'Amount must be a positive number'
@@ -61,7 +58,9 @@ const TransactionSchema = z.object({
         .object({
             name: z.string(),
             userId: z.string().uuid(),
-            amount: z.number().positive()
+            amount: z.string().refine(val => parseNumberInput(val) > 0, {
+                message: 'Amount must be a positive number'
+            })
         })
         .array()
 })
@@ -86,6 +85,7 @@ const EditTransactionDrawer = ({
     const router = useRouter()
     const params = Route.useParams()
     const group = Route.useLoaderData()
+    const context = Route.useRouteContext()
 
     const form = useForm<TransactionData>({
         resolver: zodResolver(TransactionSchema),
@@ -96,7 +96,7 @@ const EditTransactionDrawer = ({
             splits: transaction.splits.map(({ amount, user }) => ({
                 name: user.name,
                 userId: user.id,
-                amount: amount
+                amount: amount.toString()
             }))
         }
     })
@@ -142,7 +142,7 @@ const EditTransactionDrawer = ({
 
         const updatedSplits = form.getValues('splits').map((split, i) => ({
             ...split,
-            amount: +fromMinorUnit(
+            amount: fromMinorUnit(
                 base + (i < remainder ? 1 : 0),
                 group.currency
             )
@@ -163,7 +163,7 @@ const EditTransactionDrawer = ({
             const updatedSplits = form.getValues('splits').map((split, i) => {
                 return {
                     ...split,
-                    amount: +fromMinorUnit(
+                    amount: fromMinorUnit(
                         base + (i < remainder ? 1 : 0),
                         group.currency
                     )
@@ -177,13 +177,14 @@ const EditTransactionDrawer = ({
     const handleOpenChange = (open: boolean) => {
         setOpen(open)
         form.reset({
+            category: transaction.category ?? '',
             description: transaction.description,
             amount: transaction.amount.toString(),
             paidBy: transaction.paidById,
             splits: transaction.splits.map(({ amount, user }) => ({
                 name: user.name,
                 userId: user.id,
-                amount: amount
+                amount: amount.toString()
             }))
         })
     }
@@ -191,15 +192,15 @@ const EditTransactionDrawer = ({
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
-                <Button disabled size={'icon'} variant={'secondary'}>
-                    <Pencil />
+                <Button variant={'default'}>
+                    <Pencil /> Edit
                 </Button>
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader>
-                    <DrawerTitle>EDIT TRANSACTION</DrawerTitle>
+                    <DrawerTitle>EDIT EXPENSE</DrawerTitle>
                     <DrawerDescription>
-                        Edit a transaction and share it with your group.
+                        Edit an expense and share it with your group.
                     </DrawerDescription>
                 </DrawerHeader>
                 <Form {...form}>
@@ -208,6 +209,37 @@ const EditTransactionDrawer = ({
                         onSubmit={form.handleSubmit(onSubmit)}
                         className='space-y-4 px-4'
                     >
+                        <FormField
+                            control={form.control}
+                            name='category'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Category</FormLabel>
+                                    <ToggleGroup
+                                        type='single'
+                                        className='flex-wrap justify-start'
+                                        value={field.value}
+                                        onValueChange={value => {
+                                            if (value) field.onChange(value)
+                                        }}
+                                    >
+                                        {Object.entries(
+                                            transactionCategories
+                                        ).map(([value, { emoji, label }]) => (
+                                            <ToggleGroupItem
+                                                key={label}
+                                                value={value}
+                                                className='shrink-0 whitespace-nowrap grow'
+                                                variant={'outline'}
+                                                size={'sm'}
+                                            >
+                                                {emoji} {label}
+                                            </ToggleGroupItem>
+                                        ))}
+                                    </ToggleGroup>
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name='description'
@@ -250,27 +282,43 @@ const EditTransactionDrawer = ({
                             name='paidBy'
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Paid By</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
+                                    <FormLabel>Paid By*</FormLabel>
+                                    <ToggleGroup
+                                        type='single'
+                                        className='flex-wrap justify-start'
+                                        value={field.value}
+                                        onValueChange={value => {
+                                            if (value) field.onChange(value)
+                                        }}
                                     >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {transaction.splits.map(split => (
-                                                <SelectItem
-                                                    key={split.userId}
-                                                    value={split.userId}
+                                        {[...group.members]
+                                            .sort(a =>
+                                                a.id === context.user.id
+                                                    ? -1
+                                                    : 1
+                                            )
+                                            .map(member => (
+                                                <ToggleGroupItem
+                                                    key={member.id}
+                                                    value={member.id}
+                                                    className='shrink-0 whitespace-nowrap'
+                                                    variant={'outline'}
                                                 >
-                                                    {split.user.name}
-                                                </SelectItem>
+                                                    <Avatar className='size-5'>
+                                                        <AvatarFallback className='border text-xs'>
+                                                            {member.name.slice(
+                                                                0,
+                                                                2
+                                                            )}
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                    {context.user.id ===
+                                                    member.id
+                                                        ? 'You'
+                                                        : member.name}
+                                                </ToggleGroupItem>
                                             ))}
-                                        </SelectContent>
-                                    </Select>
+                                    </ToggleGroup>
                                 </FormItem>
                             )}
                         />
