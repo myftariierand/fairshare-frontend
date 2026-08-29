@@ -41,20 +41,15 @@ function RouteComponent() {
         .filter(transaction => transaction.type === TransactionType.expense)
         .reduce((acc, curr) => acc + +curr.amount, 0)
 
-    const userTransactions = group.transactions.filter(transaction => {
-        const userIds = transaction.splits.map(split => split.userId)
-
-        return (
-            userIds.includes(user.id) &&
-            transaction.type === TransactionType.expense
+    const userShare = group.transactions
+        .filter(
+            transaction =>
+                transaction.type === TransactionType.expense &&
+                transaction.splits.some(split => split.userId === user.id)
         )
-    })
-
-    const userTotal = userTransactions.reduce(
-        (acc, curr) => acc + +curr.amount,
-        0
-    )
-    const userShare = userTotal / group.members.length
+        .flatMap(transaction => transaction.splits)
+        .filter(split => split.userId === user.id)
+        .reduce((acc, split) => acc + split.amount, 0)
 
     function getGroupBalances() {
         // Get all group members so we include people with zero activity too
@@ -110,7 +105,7 @@ function RouteComponent() {
                     </Card>
                     <Card className='flex-1'>
                         <CardHeader className='p-3'>
-                            <CardDescription>Per Person</CardDescription>
+                            <CardDescription>Your Share</CardDescription>
                             <CardTitle>
                                 {formatAmount(userShare, group.currency)}
                             </CardTitle>
