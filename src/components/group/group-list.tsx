@@ -65,7 +65,7 @@ const GroupList = () => {
                                 <img
                                     src={`${import.meta.env.VITE_IMG_URL}/${group.cover}`}
                                     alt='active group cover'
-                                    className='relative h-36 w-full object-cover brightness-60 dark:brightness-40 rounded-xl'
+                                    className='relative h-36 w-full object-cover rounded-xl'
                                 />
                             )}
                             <CardHeader className='p-4'>
