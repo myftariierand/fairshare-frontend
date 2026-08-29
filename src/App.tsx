@@ -33,7 +33,7 @@ const App = () => {
                 </div>
             ) : (
                 <>
-                    <Toaster richColors theme='light' position='top-center' />
+                    <Toaster richColors theme='system' position='top-center' />
                     <RouterProvider router={router} context={{ user: data }} />
                 </>
             )}

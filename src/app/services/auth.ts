@@ -5,7 +5,7 @@ import { RegisterData } from '@/schema/register'
 
 import { logout } from '@/features/auth/authSlice'
 
-import type { User } from '@/types/user'
+import type { Profile, User } from '@/types/user'
 
 type AuthResponse = {
     accessToken: string
@@ -47,7 +47,7 @@ export const authApi = api.injectEndpoints({
                 body: credentials
             })
         }),
-        getProfile: builder.query<User, void>({
+        getProfile: builder.query<Profile, void>({
             query: () => ({
                 url: '/auth/profile',
                 method: 'GET'

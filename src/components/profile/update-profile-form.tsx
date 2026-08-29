@@ -8,7 +8,7 @@ import { useUpdateProfileMutation } from '@/app/services/auth'
 
 import { getErrorMessage } from '@/lib/utils'
 
-import { Route } from '@/routes/_auth/profile'
+import { Route } from '@/routes/_auth/profile.settings'
 
 import {
     Form,
@@ -45,10 +45,10 @@ const UpdateProfileForm = () => {
 
     const onSubmit = async (data: ProfileData) => {
         try {
-            const user = await updateProfile(data).unwrap()
-            form.reset({ name: user.name, email: user.email })
+            const updatedUser = await updateProfile(data).unwrap()
+            form.reset({ name: updatedUser.name, email: updatedUser.email })
             toast.success('Account updated')
-            router.update({ context: { user } })
+            router.update({ context: { user: { ...user, ...updatedUser } } })
             router.invalidate()
         } catch (error) {
             toast.error(getErrorMessage(error))

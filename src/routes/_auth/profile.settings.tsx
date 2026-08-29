@@ -11,12 +11,11 @@ import {
     CardHeader,
     CardTitle
 } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import ToggleTheme from '@/features/theme/toggle-theme'
 import UpdateProfileForm from '@/components/profile/update-profile-form'
 import ChangePasswordForm from '@/components/profile/change-password-form'
 
-export const Route = createFileRoute('/_auth/profile')({
+export const Route = createFileRoute('/_auth/profile/settings')({
     component: RouteComponent
 })
 
@@ -26,18 +25,6 @@ function RouteComponent() {
 
     return (
         <div className='flex flex-col flex-1 my-3 space-y-3 mx-2'>
-            <header className='flex items-center gap-4'>
-                <Avatar>
-                    <AvatarImage />
-                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div className='font-semibold'>
-                    <h2 className='text-lg'>{user.name}</h2>
-                    <h1 className='text-base text-muted-foreground'>
-                        {user.email}
-                    </h1>
-                </div>
-            </header>
             <Card>
                 <CardHeader>
                     <CardTitle>Account</CardTitle>
