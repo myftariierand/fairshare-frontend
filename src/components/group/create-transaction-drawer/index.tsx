@@ -196,13 +196,14 @@ const CreateTransactionDrawer = (props: Props) => {
             search: prev => ({
                 ...prev,
                 name: undefined,
-                price: undefined
+                price: undefined,
+                drawer: undefined
             }),
             replace: true
         })
     }
 
-    const { name, price } = search
+    const { name, price, drawer } = search
 
     useEffect(() => {
         if (!name || !price) return
@@ -229,6 +230,10 @@ const CreateTransactionDrawer = (props: Props) => {
         })
         setOpen(true)
     }, [name, price])
+
+    useEffect(() => {
+        setOpen(drawer ?? false)
+    }, [drawer])
 
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
@@ -412,7 +417,9 @@ const CreateTransactionDrawer = (props: Props) => {
                                                         {context.user.id ===
                                                         member.id
                                                             ? 'You'
-                                                            : member.name}
+                                                            : member.name.split(
+                                                                  ' '
+                                                              )[0]}
                                                     </ToggleGroupItem>
                                                 ))}
                                         </ToggleGroup>

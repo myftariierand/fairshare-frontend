@@ -18,7 +18,8 @@ const TabSchema = z.enum(['expenses', 'debts', 'balances'])
 const SearchSchema = z.object({
     t: TabSchema.default('expenses'),
     name: z.string().optional(),
-    price: z.number().optional()
+    price: z.number().optional(),
+    drawer: z.boolean().optional()
 })
 type Tab = z.infer<typeof TabSchema>
 

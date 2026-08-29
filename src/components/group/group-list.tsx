@@ -1,9 +1,9 @@
 import { Link, MatchRoute } from '@tanstack/react-router'
-import { formatDistance } from 'date-fns'
+import { format, formatDistance } from 'date-fns'
 
 import { useGetGroupsQuery } from '@/app/services/group'
 
-import { Loader, Users } from 'lucide-react'
+import { Eye, Loader, Plus, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Image } from '@/components/ui/image'
 import { Spinner } from '@/components/ui/spinner'
@@ -12,6 +12,13 @@ import {
     CollapsibleContent,
     CollapsibleTrigger
 } from '@/components/ui/collapsible'
+import {
+    Card,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle
+} from '@/components/ui/card'
 
 const GroupList = () => {
     const { data, isLoading, isError, isSuccess } = useGetGroupsQuery()
@@ -52,8 +59,54 @@ const GroupList = () => {
 
             content = (
                 <>
-                    <ul>
-                        {activeGroups.map(group => (
+                    {activeGroups.map(group => (
+                        <Card key={group.id} className='mb-4'>
+                            {!!group.cover && (
+                                <img
+                                    src={`${import.meta.env.VITE_IMG_URL}/${group.cover}`}
+                                    alt='active group cover'
+                                    className='relative h-36 w-full object-cover brightness-60 dark:brightness-40 rounded-xl'
+                                />
+                            )}
+                            <CardHeader className='p-4'>
+                                <CardTitle>{group.name}</CardTitle>
+                                <CardDescription>
+                                    {format(group.createdAt, 'MMM dd, yyyy')}{' '}
+                                    &bull; {group.remainingDebts} remaining
+                                    debts
+                                </CardDescription>
+                            </CardHeader>
+                            <CardFooter className='gap-2 p-2 pt-0'>
+                                <Button
+                                    asChild
+                                    variant={'outline'}
+                                    className='flex-1'
+                                >
+                                    <Link
+                                        to='/g/$group'
+                                        params={{ group: group.id }}
+                                        search={{ drawer: true }}
+                                    >
+                                        <Plus /> Add Expense
+                                    </Link>
+                                </Button>
+                                <Button
+                                    asChild
+                                    variant={'outline'}
+                                    className='flex-1'
+                                >
+                                    <Link
+                                        to='/g/$group'
+                                        params={{ group: group.id }}
+                                    >
+                                        <Eye /> View Group
+                                    </Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    ))}
+                    {/* <ul>
+                        {activeGroups.splice(1).map(group => (
                             <li key={group.id}>
                                 <Button
                                     asChild
@@ -106,7 +159,7 @@ const GroupList = () => {
                                 </Button>
                             </li>
                         ))}
-                    </ul>
+                    </ul> */}
                     {settledGroups.length > 0 && (
                         <Collapsible className='grow'>
                             <CollapsibleTrigger asChild>
