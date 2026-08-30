@@ -28,6 +28,9 @@ function RouteComponent() {
     const { user } = Route.useRouteContext()
 
     const transactions = user.groups.flatMap(group => group.transactions)
+    const involvedTransactions = transactions.filter(transactions =>
+        transactions.splits.some(split => split.userId === user.id)
+    ).length
 
     return (
         <div>
@@ -38,7 +41,7 @@ function RouteComponent() {
                         currentUserId={user.id}
                         transactions={transactions}
                     />
-                    <div className='flex gap-3.5 flex-wrap -mt-1'>
+                    <div className='grid grid-cols-3 space-x-2'>
                         <StatChip
                             icon={Users}
                             value={user.groups.length}
@@ -51,7 +54,7 @@ function RouteComponent() {
                         />
                         <StatChip
                             icon={CreditCard}
-                            value={transactions.length}
+                            value={involvedTransactions}
                             label='Transactions'
                         />
                     </div>
@@ -140,7 +143,7 @@ function ProfileHeader({ user }: { user: User }) {
 function computeBalances(
     currentUserId: string,
     transactions: Group['transactions']
-) {
+): Balances {
     const pairwise: Record<string, number> = {}
 
     for (const txn of transactions) {
@@ -149,15 +152,15 @@ function computeBalances(
         for (const split of splits) {
             if (split.userId === paidById) continue // payer's own share isn't a debt
 
-            // split.userId owes paidById split.amount
+            const amount = Number(split.amount)
+
             if (paidById === currentUserId) {
-                // someone owes ME
-                pairwise[split.userId] =
-                    (pairwise[split.userId] ?? 0) + Number(split.amount)
+                // split.userId owes me `amount` (or, for a settlement recorded as
+                // a reverse entry, this cancels what I previously owed them).
+                pairwise[split.userId] = (pairwise[split.userId] ?? 0) + amount
             } else if (split.userId === currentUserId) {
-                // I owe the payer
-                pairwise[paidById] =
-                    (pairwise[paidById] ?? 0) - Number(split.amount)
+                // I owe paidById `amount` (or this cancels what they owed me).
+                pairwise[paidById] = (pairwise[paidById] ?? 0) - amount
             }
         }
     }
@@ -176,7 +179,6 @@ function computeBalances(
         pairwise
     }
 }
-
 interface Balances {
     net: number
     owedToYou: number
@@ -224,11 +226,8 @@ function BalanceTicket({
                         const positive = net >= 0
 
                         return (
-                            <>
-                                <div
-                                    key={currency}
-                                    className='flex flex-wrap justify-between gap-4'
-                                >
+                            <div key={currency}>
+                                <div className='flex flex-wrap justify-between gap-4'>
                                     <div>
                                         <div
                                             className='uppercase text-[10px] font-mono'
@@ -266,7 +265,7 @@ function BalanceTicket({
                                     </div>
                                 </div>
                                 {index < currencies.length - 1 && <Separator />}
-                            </>
+                            </div>
                         )
                     })}
                 </CardContent>
@@ -289,7 +288,7 @@ function StatChip({
     label: string
 }) {
     return (
-        <Card className='flex-1 min-w-[140px]'>
+        <Card>
             <CardContent className='p-4 flex items-center gap-3'>
                 <Icon size={16} />
                 <div>
