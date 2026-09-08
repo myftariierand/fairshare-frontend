@@ -8,6 +8,7 @@ export type User = {
     createdAt: Date
     updatedAt: Date
     provider: string
+    emailVerified: boolean
 }
 
 export interface Group extends RootGroup {

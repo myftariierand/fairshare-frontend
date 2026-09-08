@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type AuthState = {
     token: string | null
+    emailVerified: boolean
 }
 
 const initialState: AuthState = {
-    token: null
+    token: null,
+    emailVerified: false
 }
 
 const authSlice = createSlice({
@@ -19,12 +21,15 @@ const authSlice = createSlice({
             const { accessToken } = action.payload
             state.token = accessToken
         },
+        setVerified: (state, action: PayloadAction<boolean>) => {
+            state.emailVerified = action.payload
+        },
         logout: state => {
             state.token = null
         }
     }
 })
 
-export const { setCredentials, logout } = authSlice.actions
+export const { setCredentials, setVerified, logout } = authSlice.actions
 
 export default authSlice.reducer

@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as VerifyEmailImport } from './routes/verify-email'
 import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
@@ -30,6 +31,12 @@ import { Route as AuthGGroupSettingsImport } from './routes/_auth/g/$group/setti
 import { Route as AuthGGroupTransactionsTransactionImport } from './routes/_auth/g/$group/transactions.$transaction'
 
 // Create/Update Routes
+
+const VerifyEmailRoute = VerifyEmailImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ResetPasswordRoute = ResetPasswordImport.update({
   id: '/reset-password',
@@ -172,6 +179,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordImport
       parentRoute: typeof rootRoute
     }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth/activity': {
       id: '/_auth/activity'
       path: '/activity'
@@ -310,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
   '/join-group': typeof AuthJoinGroupRoute
@@ -329,6 +344,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
   '/join-group': typeof AuthJoinGroupRoute
@@ -349,6 +365,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
   '/_auth/activity': typeof AuthActivityRoute
   '/_auth/friends': typeof AuthFriendsRoute
   '/_auth/join-group': typeof AuthJoinGroupRoute
@@ -371,6 +388,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
+    | '/verify-email'
     | '/activity'
     | '/friends'
     | '/join-group'
@@ -389,6 +407,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
+    | '/verify-email'
     | '/activity'
     | '/friends'
     | '/join-group'
@@ -407,6 +426,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
+    | '/verify-email'
     | '/_auth/activity'
     | '/_auth/friends'
     | '/_auth/join-group'
@@ -428,6 +448,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -436,6 +457,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
 }
 
 export const routeTree = rootRoute
@@ -452,7 +474,8 @@ export const routeTree = rootRoute
         "/forgot-password",
         "/login",
         "/register",
-        "/reset-password"
+        "/reset-password",
+        "/verify-email"
       ]
     },
     "/_auth": {
@@ -480,6 +503,9 @@ export const routeTree = rootRoute
     },
     "/reset-password": {
       "filePath": "reset-password.tsx"
+    },
+    "/verify-email": {
+      "filePath": "verify-email.tsx"
     },
     "/_auth/activity": {
       "filePath": "_auth/activity.tsx",
