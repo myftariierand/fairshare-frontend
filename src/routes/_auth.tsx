@@ -12,6 +12,10 @@ export const Route = createFileRoute('/_auth')({
         if (!user) {
             throw redirect({ to: '/login' })
         }
+
+        if (user && !user.emailVerified) {
+            throw redirect({ to: '/verify-email' })
+        }
     },
     component: RouteComponent
 })

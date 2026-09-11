@@ -94,6 +94,20 @@ export const authApi = api.injectEndpoints({
                 body
             }),
             invalidatesTags: ['Profile']
+        }),
+        verifyOtp: builder.mutation<void, { otp: string; email: string }>({
+            query: body => ({
+                url: '/auth/verify-email/verify',
+                method: 'POST',
+                body
+            })
+        }),
+        resendOtp: builder.mutation<void, { email: string }>({
+            query: body => ({
+                url: '/auth/verify-email/send',
+                method: 'POST',
+                body
+            })
         })
     })
 })
@@ -108,5 +122,7 @@ export const {
     useResetPasswordMutation,
     useSendResetPasswordEmailMutation,
     useVerifyResetTokenQuery,
-    useUpdateProfileMutation
+    useUpdateProfileMutation,
+    useVerifyOtpMutation,
+    useResendOtpMutation
 } = authApi
