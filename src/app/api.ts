@@ -64,7 +64,8 @@ export const api = createApi({
         'User',
         'Transaction',
         'Profile',
-        'Activity'
+        'Activity',
+        'Task'
     ],
     endpoints: () => ({})
 })

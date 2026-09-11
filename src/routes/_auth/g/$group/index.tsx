@@ -14,7 +14,7 @@ import TransactionList from '@/components/group/transaction-list'
 import DebtsList from '@/components/group/debts-list'
 import { TransactionType } from '@/types/common'
 
-const TabSchema = z.enum(['expenses', 'debts', 'balances'])
+const TabSchema = z.enum(['expenses', 'debts', 'balances', 'notes'])
 const SearchSchema = z.object({
     t: TabSchema.default('expenses'),
     name: z.string().optional(),
@@ -30,6 +30,7 @@ export const Route = createFileRoute('/_auth/g/$group/')({
 import { Route as GroupLayout } from '@/routes/_auth/g/$group'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import Balances from '@/components/group/balances'
+import Notes from '@/components/group/notes'
 
 function RouteComponent() {
     const search = Route.useSearch()
@@ -160,6 +161,7 @@ function RouteComponent() {
                         <TabsTrigger value='expenses'>Expenses</TabsTrigger>
                         <TabsTrigger value='debts'>Settle Up</TabsTrigger>
                         <TabsTrigger value='balances'>Balances</TabsTrigger>
+                        <TabsTrigger value='notes'>Notes</TabsTrigger>
                     </TabsList>
                     <TabsContent value='expenses'>
                         <TransactionList />
@@ -169,6 +171,9 @@ function RouteComponent() {
                     </TabsContent>
                     <TabsContent value='balances'>
                         <Balances />
+                    </TabsContent>
+                    <TabsContent value='notes'>
+                        <Notes />
                     </TabsContent>
                 </Tabs>
             </div>
