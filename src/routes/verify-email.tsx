@@ -60,8 +60,8 @@ function RouteComponent() {
         try {
             await verifyOtp({ ...data, email: context.user.email }).unwrap()
 
-            const profileResponse = await getProfile()
-            if (!profileResponse.data?.emailVerified) {
+            const profile = await getProfile().unwrap()
+            if (!profile.emailVerified) {
                 toast.error('Invalid or expired code. Please try again.')
                 return
             }
@@ -69,7 +69,7 @@ function RouteComponent() {
             toast.success('Email verified successfully!')
             router.update({
                 context: {
-                    user: profileResponse.data
+                    user: profile
                 }
             })
             navigate({ to: '/' })
