@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/field'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { GripVerticalIcon, TrashIcon } from 'lucide-react'
+import { GripVerticalIcon, NotebookIcon, TrashIcon } from 'lucide-react'
 import { useState } from 'react'
 
 import {
@@ -74,56 +74,66 @@ const Notes = () => {
                     onKeyDown={handleKeyDown}
                 />
             </Field>
-            <Card>
-                <DragDropProvider
-                    onDragEnd={event => {
-                        if (event.canceled) return
-                        const { source } = event.operation
-                        if (isSortable(source)) {
-                            const { initialIndex, index } = source
-                            if (initialIndex !== index) {
-                                const reordered = [...items]
-                                const [removed] = reordered.splice(
-                                    initialIndex,
-                                    1
-                                )
-                                reordered.splice(index, 0, removed)
-                                reorderTasks({
-                                    groupId,
-                                    orderedIds: reordered.map(t => t.id)
-                                })
+            {!items.length ? (
+                <div className='grid place-items-center mt-12 text-muted-foreground space-y-2'>
+                    <NotebookIcon />
+                    <span className='text-sm font-medium'>No Tasks</span>
+                </div>
+            ) : (
+                <Card>
+                    <DragDropProvider
+                        onDragEnd={event => {
+                            if (event.canceled) return
+                            const { source } = event.operation
+                            if (isSortable(source)) {
+                                const { initialIndex, index } = source
+                                if (initialIndex !== index) {
+                                    const reordered = [...items]
+                                    const [removed] = reordered.splice(
+                                        initialIndex,
+                                        1
+                                    )
+                                    reordered.splice(index, 0, removed)
+                                    reorderTasks({
+                                        groupId,
+                                        orderedIds: reordered.map(t => t.id)
+                                    })
+                                }
                             }
-                        }
-                    }}
-                >
-                    <CardContent ref={containerRef} className='space-y-2 p-6'>
-                        <ul className='space-y-2'>
-                            {items.map((item, index) => (
-                                <SortableItem
-                                    key={item.id}
-                                    index={index}
-                                    container={containerRef}
-                                    item={item}
-                                    userId={user.id}
-                                    onToggle={done =>
-                                        updateTask({
-                                            groupId,
-                                            taskId: item.id,
-                                            done
-                                        })
-                                    }
-                                    onDelete={() =>
-                                        deleteTask({
-                                            taskId: item.id,
-                                            groupId: groupId
-                                        })
-                                    }
-                                />
-                            ))}
-                        </ul>
-                    </CardContent>
-                </DragDropProvider>
-            </Card>
+                        }}
+                    >
+                        <CardContent
+                            ref={containerRef}
+                            className='space-y-2 p-6'
+                        >
+                            <ul className='space-y-2'>
+                                {items.map((item, index) => (
+                                    <SortableItem
+                                        key={item.id}
+                                        index={index}
+                                        container={containerRef}
+                                        item={item}
+                                        userId={user.id}
+                                        onToggle={done =>
+                                            updateTask({
+                                                groupId,
+                                                taskId: item.id,
+                                                done
+                                            })
+                                        }
+                                        onDelete={() =>
+                                            deleteTask({
+                                                taskId: item.id,
+                                                groupId: groupId
+                                            })
+                                        }
+                                    />
+                                ))}
+                            </ul>
+                        </CardContent>
+                    </DragDropProvider>
+                </Card>
+            )}
         </div>
     )
 }
