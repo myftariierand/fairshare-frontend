@@ -1,7 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
+import { Route as GroupLayout } from '@/routes/_auth/g/$group'
+
+import { useGetTasksQuery } from '@/app/services/task'
+
 import { formatAmount } from '@/lib/utils'
+
+import { TransactionType } from '@/types/common'
 
 import {
     Card,
@@ -10,9 +16,12 @@ import {
     CardDescription
 } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import TransactionList from '@/components/group/transaction-list'
 import DebtsList from '@/components/group/debts-list'
-import { TransactionType } from '@/types/common'
+import Balances from '@/components/group/balances'
+import Notes from '@/components/group/notes'
 
 const TabSchema = z.enum(['expenses', 'debts', 'balances', 'notes'])
 const SearchSchema = z.object({
@@ -27,16 +36,15 @@ export const Route = createFileRoute('/_auth/g/$group/')({
     validateSearch: SearchSchema,
     component: RouteComponent
 })
-import { Route as GroupLayout } from '@/routes/_auth/g/$group'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import Balances from '@/components/group/balances'
-import Notes from '@/components/group/notes'
 
 function RouteComponent() {
     const search = Route.useSearch()
     const navigate = Route.useNavigate()
     const { user } = Route.useRouteContext()
     const group = GroupLayout.useLoaderData()
+
+    const { data: items = [] } = useGetTasksQuery(group.id)
+    const pendingTasks = items.filter(task => !task.done)
 
     const total = group.transactions
         .filter(transaction => transaction.type === TransactionType.expense)
@@ -161,7 +169,17 @@ function RouteComponent() {
                         <TabsTrigger value='expenses'>Expenses</TabsTrigger>
                         <TabsTrigger value='debts'>Settle Up</TabsTrigger>
                         <TabsTrigger value='balances'>Balances</TabsTrigger>
-                        <TabsTrigger value='notes'>Notes</TabsTrigger>
+                        <TabsTrigger value='notes'>
+                            Notes
+                            {!!pendingTasks.length && (
+                                <Badge
+                                    variant={'outline'}
+                                    className='ml-2 px-2 py-0 h-5 grid place-content-center text-xs'
+                                >
+                                    {pendingTasks.length}
+                                </Badge>
+                            )}
+                        </TabsTrigger>
                     </TabsList>
                     <TabsContent value='expenses'>
                         <TransactionList />
