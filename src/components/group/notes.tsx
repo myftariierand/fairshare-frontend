@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { DragDropProvider } from '@dnd-kit/react'
 import { useSortable, isSortable } from '@dnd-kit/react/sortable'
 import { RestrictToVerticalAxis } from '@dnd-kit/abstract/modifiers'
@@ -63,6 +63,11 @@ const Notes = () => {
         }
     }
 
+    const sortedItems = useMemo(
+        () => [...items].sort((a, b) => Number(a.done) - Number(b.done)),
+        [items]
+    )
+
     return (
         <div className='space-y-2'>
             <Field>
@@ -107,7 +112,7 @@ const Notes = () => {
                             className='space-y-2 p-6'
                         >
                             <ul className='space-y-2'>
-                                {items.map((item, index) => (
+                                {sortedItems.map((item, index) => (
                                     <SortableItem
                                         key={item.id}
                                         index={index}
@@ -164,6 +169,11 @@ function SortableItem({
         index,
         element,
         handle: handleRef,
+        transition: {
+            duration: 250,
+            easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+            idle: true // animate even when no drag is in progress — this is the key flag
+        },
         modifiers: [
             RestrictToElement.configure({ element: () => container.current }),
             RestrictToVerticalAxis
@@ -199,7 +209,12 @@ function SortableItem({
                 >
                     <TrashIcon />
                 </Button>
-                <Button variant='ghost' size='icon' ref={handleRef}>
+                <Button
+                    ref={handleRef}
+                    variant='ghost'
+                    size='icon'
+                    disabled={item.done}
+                >
                     <GripVerticalIcon />
                 </Button>
             </Field>

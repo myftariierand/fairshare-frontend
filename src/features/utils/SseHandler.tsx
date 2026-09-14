@@ -97,11 +97,20 @@ const SseHandler = () => {
                     )
                     router.invalidate()
                     break
+                case SseEventType.CHECKLIST_ITEM_ADDED:
+                case SseEventType.CHECKLIST_ITEM_DELETED:
+                case SseEventType.CHECKLIST_ITEM_UPDATED:
+                case SseEventType.CHECKLIST_ITEM_REORDERED:
+                    store.dispatch(api.util.invalidateTags(['Task']))
+                    break
                 default:
                     break
             }
 
-            if (data.type !== SseEventType.FRIEND_REMOVED) {
+            if (
+                data.type !== SseEventType.FRIEND_REMOVED &&
+                data.type !== SseEventType.CHECKLIST_ITEM_REORDERED
+            ) {
                 sound.play()
                 toast.info(data.message)
             }

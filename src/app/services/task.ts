@@ -46,14 +46,14 @@ export const tasksApi = api.injectEndpoints({
                         'getTasks',
                         groupId,
                         draft => {
-                            draft.push({
+                            draft.unshift({
                                 id: tempId,
                                 text,
                                 done: false,
-                                position: draft.length,
+                                position: (draft[0]?.position ?? 0) - 1,
                                 groupId,
                                 createdById: 'me',
-                                createdBy: { id: 'me', name: 'You' }
+                                createdBy: { id: 'me', name: 'Me' }
                             })
                         }
                     )
