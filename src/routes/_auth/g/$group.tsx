@@ -134,7 +134,7 @@ function RouteComponent() {
                                 <div className='p-3 bg-white rounded-lg'>
                                     <QRCodeSVG
                                         size={200}
-                                        value={`join-group:${group.id}`}
+                                        value={`https://app.fairshare.world/join-group/${group.id}`}
                                     />
                                 </div>
                             </div>
