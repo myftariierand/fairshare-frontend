@@ -105,61 +105,6 @@ const GroupList = () => {
                             </CardFooter>
                         </Card>
                     ))}
-                    {/* <ul>
-                        {activeGroups.splice(1).map(group => (
-                            <li key={group.id}>
-                                <Button
-                                    asChild
-                                    variant={'ghost'}
-                                    className='p-1'
-                                >
-                                    <Link
-                                        to='/g/$group'
-                                        params={{ group: group.id }}
-                                        className='flex gap-4 items-center w-full h-auto'
-                                    >
-                                        <Image
-                                            className='size-12 rounded-lg shrink-0'
-                                            src={
-                                                group.cover
-                                                    ? `c_fill,w_100,h_100,g_auto,f_auto,q_auto/${group.cover}`
-                                                    : undefined
-                                            }
-                                        />
-                                        <div className='flex flex-col grow'>
-                                            <span className='font-semibold text-wrap'>
-                                                {group.name}
-                                            </span>
-                                            <span className='text-xs text-muted-foreground'>
-                                                {group._count.members} member(s)
-                                            </span>
-                                        </div>
-                                        <MatchRoute
-                                            to='/g/$group'
-                                            params={{ group: group.id }}
-                                            pending
-                                        >
-                                            {match => (
-                                                <Spinner
-                                                    show={!!match}
-                                                    wait='delay-50'
-                                                />
-                                            )}
-                                        </MatchRoute>
-                                        <span className='text-xs text-muted-foreground'>
-                                            {formatDistance(
-                                                group.createdAt,
-                                                now,
-                                                {
-                                                    addSuffix: true
-                                                }
-                                            )}
-                                        </span>
-                                    </Link>
-                                </Button>
-                            </li>
-                        ))}
-                    </ul> */}
                     {settledGroups.length > 0 && (
                         <Collapsible className='grow'>
                             <CollapsibleTrigger asChild>
