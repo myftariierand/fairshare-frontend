@@ -18,7 +18,7 @@ const ShareLinkDialog = ({ groupId }: { groupId: string }) => {
         import.meta.env.MODE === 'development'
             ? 'http://localhost:5173'
             : 'https://app.fairshare.world'
-    const link = `${domain}/join-group?id=${groupId}`
+    const link = `${domain}/join-group/${groupId}`
 
     const handleCopy = async () => {
         try {

@@ -1,26 +1,19 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { z } from 'zod'
 
 import { store } from '@/app/store'
 import { groupApi } from '@/app/services/group'
 
 import { Spinner } from '@/components/ui/spinner'
 
-const SearchSchema = z.object({
-    id: z.string().uuid()
-})
-
-export const Route = createFileRoute('/_auth/join-group')({
-    validateSearch: SearchSchema,
-    loaderDeps: ({ search: { id } }) => ({ id }),
-    loader: async ({ deps: { id } }) => {
+export const Route = createFileRoute('/_auth/join-group/$groupId')({
+    loader: async ({ params: { groupId } }) => {
         const promise = store.dispatch(
-            groupApi.endpoints.joinGroup.initiate({ groupId: id })
+            groupApi.endpoints.joinGroup.initiate({ groupId })
         )
 
         await promise.unwrap()
 
-        throw redirect({ to: '/g/$group', params: { group: id } })
+        throw redirect({ to: '/g/$group', params: { group: groupId } })
     },
     errorComponent: () => {
         return <div>Something Went Wrong!</div>
