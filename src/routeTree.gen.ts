@@ -24,7 +24,7 @@ import { Route as AuthActivityImport } from './routes/_auth/activity'
 import { Route as AuthProfileIndexImport } from './routes/_auth/profile.index'
 import { Route as AuthUserUserImport } from './routes/_auth/user.$user'
 import { Route as AuthProfileSettingsImport } from './routes/_auth/profile.settings'
-import { Route as AuthJoinGroupGroupIdImport } from './routes/_auth/join-group.$groupId'
+import { Route as AuthJoinGroupTokenImport } from './routes/_auth/join-group.$token'
 import { Route as AuthGGroupImport } from './routes/_auth/g/$group'
 import { Route as AuthGGroupIndexImport } from './routes/_auth/g/$group/index'
 import { Route as AuthGGroupSettingsImport } from './routes/_auth/g/$group/settings'
@@ -109,9 +109,9 @@ const AuthProfileSettingsRoute = AuthProfileSettingsImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthJoinGroupGroupIdRoute = AuthJoinGroupGroupIdImport.update({
-  id: '/join-group/$groupId',
-  path: '/join-group/$groupId',
+const AuthJoinGroupTokenRoute = AuthJoinGroupTokenImport.update({
+  id: '/join-group/$token',
+  path: '/join-group/$token',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -221,11 +221,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthGGroupImport
       parentRoute: typeof AuthImport
     }
-    '/_auth/join-group/$groupId': {
-      id: '/_auth/join-group/$groupId'
-      path: '/join-group/$groupId'
-      fullPath: '/join-group/$groupId'
-      preLoaderRoute: typeof AuthJoinGroupGroupIdImport
+    '/_auth/join-group/$token': {
+      id: '/_auth/join-group/$token'
+      path: '/join-group/$token'
+      fullPath: '/join-group/$token'
+      preLoaderRoute: typeof AuthJoinGroupTokenImport
       parentRoute: typeof AuthImport
     }
     '/_auth/profile/settings': {
@@ -298,7 +298,7 @@ interface AuthRouteChildren {
   AuthScanQrCodeRoute: typeof AuthScanQrCodeRoute
   AuthIndexRoute: typeof AuthIndexRoute
   AuthGGroupRoute: typeof AuthGGroupRouteWithChildren
-  AuthJoinGroupGroupIdRoute: typeof AuthJoinGroupGroupIdRoute
+  AuthJoinGroupTokenRoute: typeof AuthJoinGroupTokenRoute
   AuthProfileSettingsRoute: typeof AuthProfileSettingsRoute
   AuthUserUserRoute: typeof AuthUserUserRoute
   AuthProfileIndexRoute: typeof AuthProfileIndexRoute
@@ -310,7 +310,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthScanQrCodeRoute: AuthScanQrCodeRoute,
   AuthIndexRoute: AuthIndexRoute,
   AuthGGroupRoute: AuthGGroupRouteWithChildren,
-  AuthJoinGroupGroupIdRoute: AuthJoinGroupGroupIdRoute,
+  AuthJoinGroupTokenRoute: AuthJoinGroupTokenRoute,
   AuthProfileSettingsRoute: AuthProfileSettingsRoute,
   AuthUserUserRoute: AuthUserUserRoute,
   AuthProfileIndexRoute: AuthProfileIndexRoute,
@@ -330,7 +330,7 @@ export interface FileRoutesByFullPath {
   '/scan-qr-code': typeof AuthScanQrCodeRoute
   '/': typeof AuthIndexRoute
   '/g/$group': typeof AuthGGroupRouteWithChildren
-  '/join-group/$groupId': typeof AuthJoinGroupGroupIdRoute
+  '/join-group/$token': typeof AuthJoinGroupTokenRoute
   '/profile/settings': typeof AuthProfileSettingsRoute
   '/user/$user': typeof AuthUserUserRoute
   '/profile': typeof AuthProfileIndexRoute
@@ -349,7 +349,7 @@ export interface FileRoutesByTo {
   '/friends': typeof AuthFriendsRoute
   '/scan-qr-code': typeof AuthScanQrCodeRoute
   '/': typeof AuthIndexRoute
-  '/join-group/$groupId': typeof AuthJoinGroupGroupIdRoute
+  '/join-group/$token': typeof AuthJoinGroupTokenRoute
   '/profile/settings': typeof AuthProfileSettingsRoute
   '/user/$user': typeof AuthUserUserRoute
   '/profile': typeof AuthProfileIndexRoute
@@ -371,7 +371,7 @@ export interface FileRoutesById {
   '/_auth/scan-qr-code': typeof AuthScanQrCodeRoute
   '/_auth/': typeof AuthIndexRoute
   '/_auth/g/$group': typeof AuthGGroupRouteWithChildren
-  '/_auth/join-group/$groupId': typeof AuthJoinGroupGroupIdRoute
+  '/_auth/join-group/$token': typeof AuthJoinGroupTokenRoute
   '/_auth/profile/settings': typeof AuthProfileSettingsRoute
   '/_auth/user/$user': typeof AuthUserUserRoute
   '/_auth/profile/': typeof AuthProfileIndexRoute
@@ -394,7 +394,7 @@ export interface FileRouteTypes {
     | '/scan-qr-code'
     | '/'
     | '/g/$group'
-    | '/join-group/$groupId'
+    | '/join-group/$token'
     | '/profile/settings'
     | '/user/$user'
     | '/profile'
@@ -412,7 +412,7 @@ export interface FileRouteTypes {
     | '/friends'
     | '/scan-qr-code'
     | '/'
-    | '/join-group/$groupId'
+    | '/join-group/$token'
     | '/profile/settings'
     | '/user/$user'
     | '/profile'
@@ -432,7 +432,7 @@ export interface FileRouteTypes {
     | '/_auth/scan-qr-code'
     | '/_auth/'
     | '/_auth/g/$group'
-    | '/_auth/join-group/$groupId'
+    | '/_auth/join-group/$token'
     | '/_auth/profile/settings'
     | '/_auth/user/$user'
     | '/_auth/profile/'
@@ -486,7 +486,7 @@ export const routeTree = rootRoute
         "/_auth/scan-qr-code",
         "/_auth/",
         "/_auth/g/$group",
-        "/_auth/join-group/$groupId",
+        "/_auth/join-group/$token",
         "/_auth/profile/settings",
         "/_auth/user/$user",
         "/_auth/profile/"
@@ -532,8 +532,8 @@ export const routeTree = rootRoute
         "/_auth/g/$group/transactions/$transaction"
       ]
     },
-    "/_auth/join-group/$groupId": {
-      "filePath": "_auth/join-group.$groupId.tsx",
+    "/_auth/join-group/$token": {
+      "filePath": "_auth/join-group.$token.tsx",
       "parent": "/_auth"
     },
     "/_auth/profile/settings": {

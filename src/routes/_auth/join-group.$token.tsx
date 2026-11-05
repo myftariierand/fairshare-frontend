@@ -5,15 +5,15 @@ import { groupApi } from '@/app/services/group'
 
 import { Spinner } from '@/components/ui/spinner'
 
-export const Route = createFileRoute('/_auth/join-group/$groupId')({
-    loader: async ({ params: { groupId } }) => {
+export const Route = createFileRoute('/_auth/join-group/$token')({
+    loader: async ({ params: { token } }) => {
         const promise = store.dispatch(
-            groupApi.endpoints.joinGroup.initiate({ groupId })
+            groupApi.endpoints.joinGroup.initiate({ token })
         )
 
-        await promise.unwrap()
+        const group = await promise.unwrap()
 
-        throw redirect({ to: '/g/$group', params: { group: groupId } })
+        throw redirect({ to: '/g/$group', params: { group: group.id } })
     },
     errorComponent: () => {
         return <div>Something Went Wrong!</div>

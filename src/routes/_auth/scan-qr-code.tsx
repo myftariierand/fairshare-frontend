@@ -24,20 +24,24 @@ function RouteComponent() {
     const router = useRouter()
     const navigate = Route.useNavigate()
     const [open, setOpen] = useState(false)
-    const [groupId, setGroupId] = useState('')
+    const [token, setToken] = useState('')
 
     const [joinGroup, { isLoading }] = useJoinGroupMutation()
 
     const handleConfirm = async () => {
-        await joinGroup({ groupId }).unwrap()
-        navigate({ to: `/${groupId}`, replace: true })
+        const group = await joinGroup({ token }).unwrap()
+        navigate({
+            to: '/g/$group',
+            params: { group: group.id },
+            replace: true
+        })
     }
 
     const onScan = (result: IDetectedBarcode[]) => {
-        const value = result[0].rawValue
+        const scannedToken = result[0].rawValue.split('/join-group/')[1]
 
-        if (value.includes('join-group')) {
-            setGroupId(value.replace('join-group:', ''))
+        if (scannedToken) {
+            setToken(scannedToken)
             setOpen(true)
         }
     }
@@ -50,7 +54,7 @@ function RouteComponent() {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. {groupId}
+                            You'll join this group and see its expenses.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

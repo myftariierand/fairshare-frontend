@@ -3,6 +3,8 @@ import { api } from '@/app/api'
 import type { GroupInviteStatus } from '@/types/common'
 import type { Group, SingleGroup, GroupInvite } from '@/types/group'
 
+type InviteLink = { token: string; canReset: boolean }
+
 export const groupApi = api.injectEndpoints({
     endpoints: builder => ({
         getGroups: builder.query<Group[], void>({
@@ -104,12 +106,30 @@ export const groupApi = api.injectEndpoints({
             }),
             invalidatesTags: [{ type: 'GroupInvite', id: 'LIST' }]
         }),
-        joinGroup: builder.mutation<void, { groupId: string }>({
-            query: ({ groupId }) => ({
-                url: `/groups/${groupId}/join`,
+        joinGroup: builder.mutation<Group, { token: string }>({
+            query: ({ token }) => ({
+                url: `/groups/join/${token}`,
                 method: 'POST'
             }),
             invalidatesTags: [{ type: 'Group', id: 'LIST' }]
+        }),
+        getInviteLink: builder.query<InviteLink, { groupId: string }>({
+            query: ({ groupId }) => ({
+                url: `/groups/${groupId}/invite-link`,
+                method: 'GET'
+            }),
+            providesTags: (_result, _error, { groupId }) => [
+                { type: 'Group', id: groupId }
+            ]
+        }),
+        resetInviteLink: builder.mutation<InviteLink, { groupId: string }>({
+            query: ({ groupId }) => ({
+                url: `/groups/${groupId}/invite-link/reset`,
+                method: 'POST'
+            }),
+            invalidatesTags: (_result, _error, { groupId }) => [
+                { type: 'Group', id: groupId }
+            ]
         }),
         removeMember: builder.mutation<
             Group,
@@ -150,6 +170,8 @@ export const {
     useAcceptGroupInviteMutation,
     useRejectGroupInviteMutation,
     useJoinGroupMutation,
+    useGetInviteLinkQuery,
+    useResetInviteLinkMutation,
     useRemoveMemberMutation,
     useLeaveGroupMutation
 } = groupApi
