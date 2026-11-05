@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 
 import { store } from '@/app/store'
 import { api } from '@/app/api'
+import { sseApi } from '@/app/services/sse'
 
 import { SseEventType } from '@/types/sse'
 
@@ -18,13 +19,14 @@ const SseHandler = () => {
     useEffect(() => {
         if (!user) return
 
-        const eventSource = new EventSource(
-            `${import.meta.env.VITE_API_URL}/sse/subscribe/${user.id}`
-        )
+        let eventSource: EventSource | null = null
+        let retryTimer: ReturnType<typeof setTimeout> | undefined
+        let attempts = 0
+        let stopped = false
 
         const sound = new Audio('/notification.wav')
 
-        eventSource.addEventListener('event', event => {
+        const handleEvent = (event: MessageEvent) => {
             const data = JSON.parse(event.data)
 
             store.dispatch(api.util.invalidateTags(['Activity']))
@@ -114,9 +116,51 @@ const SseHandler = () => {
                 sound.play()
                 toast.info(data.message)
             }
-        })
+        }
 
-        return () => eventSource.close()
+        const retry = () => {
+            if (stopped) return
+
+            attempts++
+            retryTimer = setTimeout(
+                connect,
+                Math.min(1000 * 2 ** attempts, 30_000)
+            )
+        }
+
+        // A ticket works once, so every connection needs a new one and the browser's
+        // own reconnect, which reuses the URL, can't be relied on
+        const connect = async () => {
+            try {
+                const { ticket } = await store
+                    .dispatch(sseApi.endpoints.createSseTicket.initiate())
+                    .unwrap()
+
+                if (stopped) return
+
+                eventSource = new EventSource(
+                    `${import.meta.env.VITE_API_URL}/sse/subscribe?ticket=${encodeURIComponent(ticket)}`
+                )
+                eventSource.onopen = () => {
+                    attempts = 0
+                }
+                eventSource.addEventListener('event', handleEvent)
+                eventSource.onerror = () => {
+                    eventSource?.close()
+                    retry()
+                }
+            } catch {
+                retry()
+            }
+        }
+
+        connect()
+
+        return () => {
+            stopped = true
+            clearTimeout(retryTimer)
+            eventSource?.close()
+        }
     }, [user, navigate, router])
 
     return null
