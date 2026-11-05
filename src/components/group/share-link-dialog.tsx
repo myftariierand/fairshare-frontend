@@ -1,5 +1,10 @@
 import { useState } from 'react'
 
+import {
+    useGetInviteLinkQuery,
+    useResetInviteLinkMutation
+} from '@/app/services/group'
+
 import { Share2, Copy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,11 +19,15 @@ import {
 const ShareLinkDialog = ({ groupId }: { groupId: string }) => {
     const [copied, setCopied] = useState(false)
 
+    const { data: inviteLink } = useGetInviteLinkQuery({ groupId })
+    const [resetInviteLink, { isLoading: isResetting }] =
+        useResetInviteLinkMutation()
+
     const domain =
         import.meta.env.MODE === 'development'
             ? 'http://localhost:5173'
             : 'https://app.fairshare.world'
-    const link = `${domain}/join-group/${groupId}`
+    const link = inviteLink ? `${domain}/join-group/${inviteLink.token}` : ''
 
     const handleCopy = async () => {
         try {
@@ -26,6 +35,15 @@ const ShareLinkDialog = ({ groupId }: { groupId: string }) => {
             setCopied(true)
         } catch (err) {
             console.error('Failed to copy: ', err)
+        }
+    }
+
+    const handleReset = async () => {
+        try {
+            await resetInviteLink({ groupId }).unwrap()
+            setCopied(false)
+        } catch (err) {
+            console.error('Failed to reset link: ', err)
         }
     }
 
@@ -46,9 +64,23 @@ const ShareLinkDialog = ({ groupId }: { groupId: string }) => {
                 <pre className='px-4 my-4 rounded-xl bg-card py-4 overflow-hidden whitespace-nowrap text-ellipsis'>
                     <code className='relative rounded text-sm'>{link}</code>
                 </pre>
-                <Button size={'lg'} variant={'secondary'} onClick={handleCopy}>
+                <Button
+                    size={'lg'}
+                    variant={'secondary'}
+                    onClick={handleCopy}
+                    disabled={!link}
+                >
                     {copied ? 'Copied to Clipboard' : 'Copy Link'} <Copy />
                 </Button>
+                {inviteLink?.canReset && (
+                    <Button
+                        variant={'ghost'}
+                        onClick={handleReset}
+                        disabled={isResetting}
+                    >
+                        Reset link (old links and QR codes stop working)
+                    </Button>
+                )}
             </DialogContent>
         </Dialog>
     )

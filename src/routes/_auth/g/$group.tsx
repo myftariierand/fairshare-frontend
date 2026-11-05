@@ -12,7 +12,7 @@ import { useLayoutEffect, useState } from 'react'
 import { z } from 'zod'
 
 import { store } from '@/app/store'
-import { groupApi } from '@/app/services/group'
+import { groupApi, useGetInviteLinkQuery } from '@/app/services/group'
 
 import { Settings, QrCode, Dot } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -50,6 +50,7 @@ function RouteComponent() {
     const group = Route.useLoaderData()
     const location = useLocation()
     const search = useSearch({ from: '/_auth/g/$group' })
+    const { data: inviteLink } = useGetInviteLinkQuery({ groupId: group.id })
 
     const ref = useScrollContainer()
     const { scrollYProgress } = useScroll({ container: ref })
@@ -132,10 +133,12 @@ function RouteComponent() {
                             </DialogHeader>
                             <div className='flex justify-center'>
                                 <div className='p-3 bg-white rounded-lg'>
-                                    <QRCodeSVG
-                                        size={200}
-                                        value={`https://app.fairshare.world/join-group/${group.id}`}
-                                    />
+                                    {inviteLink && (
+                                        <QRCodeSVG
+                                            size={200}
+                                            value={`https://app.fairshare.world/join-group/${inviteLink.token}`}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </DialogContent>
