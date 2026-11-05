@@ -2,6 +2,8 @@ import { toast } from 'sonner'
 
 import { useLeaveGroupMutation } from '@/app/services/group'
 
+import { getErrorMessage } from '@/lib/utils'
+
 import { Route } from '@/routes/_auth/g/$group/settings'
 
 import { Loader, LogOut } from 'lucide-react'
@@ -29,7 +31,7 @@ const LeaveGroupDialog = () => {
             toast.success('Left group successfully')
             navigate({ to: '/' })
         } catch (error) {
-            toast.error('Something went wrong!')
+            toast.error(getErrorMessage(error))
         }
     }
 
