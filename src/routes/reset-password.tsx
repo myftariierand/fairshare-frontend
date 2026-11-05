@@ -22,8 +22,8 @@ import { authApi } from '@/app/services/auth'
 
 const PasswordChangeSchema = z
     .object({
-        password: z.string().min(1, {
-            message: 'New password is required.'
+        password: z.string().min(8, {
+            message: 'Use at least 8 characters.'
         }),
         confirmPassword: z.string().min(1, {
             message: 'Password confirmation is required.'

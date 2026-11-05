@@ -4,7 +4,7 @@ export const RegisterSchema = z
     .object({
         name: z.string().min(4, 'This field is required!'),
         email: z.string().min(1, 'This field is required!').email(),
-        password: z.string().min(1, 'This field is required!'),
+        password: z.string().min(8, 'Use at least 8 characters'),
         confirmPassword: z.string().min(1, 'This field is required!')
     })
     .superRefine((args, ctx) => {
