@@ -45,7 +45,12 @@ const baseQueryWithReauth: BaseQueryFn<
                 setCredentials({ accessToken: refreshResult.data.accessToken })
             )
             result = await baseQuery(args, api, extraOptions)
-        } else {
+        } else if (
+            refreshResult.error?.status === 401 ||
+            refreshResult.error?.status === 403
+        ) {
+            // Only when the session is really over: being rate limited, a server error
+            // or a dropped connection shouldn't log anyone out
             api.dispatch(logout())
         }
     }
