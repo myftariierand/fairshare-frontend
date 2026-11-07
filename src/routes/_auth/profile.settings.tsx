@@ -14,6 +14,7 @@ import {
 import ToggleTheme from '@/features/theme/toggle-theme'
 import UpdateProfileForm from '@/components/profile/update-profile-form'
 import ChangePasswordForm from '@/components/profile/change-password-form'
+import DeleteAccountDialog from '@/components/profile/delete-account-dialog'
 
 export const Route = createFileRoute('/_auth/profile/settings')({
     component: RouteComponent
@@ -68,6 +69,7 @@ function RouteComponent() {
             >
                 <LogOut /> Logout
             </Button>
+            <DeleteAccountDialog needsPassword={user.provider === 'local'} />
         </div>
     )
 }
