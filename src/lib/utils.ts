@@ -54,7 +54,7 @@ export function sanitizeNumberInput(value: string) {
     const parts = newValue.split(/[,.]/) // Split on '.' or ','
 
     if (parts.length > 1) {
-        newValue = parts[0] + '.' + parts.slice(1).join('') // Ensure only one decimal separator (.)
+        newValue = parts[0] + '.' + parts.slice(1).join('').slice(0, 2) // Ensure only one decimal separator (.)
     }
 
     return newValue.replace(/^0+(?=\d)/, '') // Remove leading zeros
