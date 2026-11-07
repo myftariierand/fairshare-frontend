@@ -40,6 +40,27 @@ export const authApi = api.injectEndpoints({
                 }
             }
         }),
+        deleteAccount: builder.mutation<void, { password: string }>({
+            query: body => ({
+                url: '/auth/delete-account',
+                method: 'POST',
+                body
+            }),
+            onQueryStarted: async (
+                _queryArgument,
+                { dispatch, queryFulfilled }
+            ) => {
+                try {
+                    await queryFulfilled
+                    dispatch(logout())
+                    setTimeout(() => {
+                        dispatch(api.util.resetApiState())
+                    }, 1000)
+                } catch {
+                    // The form shows the error
+                }
+            }
+        }),
         register: builder.mutation<AuthResponse, RegisterData>({
             query: credentials => ({
                 url: '/auth/register',
@@ -115,6 +136,7 @@ export const authApi = api.injectEndpoints({
 export const {
     useLoginMutation,
     useLogoutMutation,
+    useDeleteAccountMutation,
     useRegisterMutation,
     useGetProfileQuery,
     useLazyGetProfileQuery,

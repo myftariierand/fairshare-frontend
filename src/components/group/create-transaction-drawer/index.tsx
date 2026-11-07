@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -14,7 +14,8 @@ import {
     sanitizeNumberInput,
     toMinorUnit,
     fromMinorUnit,
-    parseNumberInput
+    parseNumberInput,
+    newIdempotencyKey
 } from '@/lib/utils'
 import { transactionCategories } from '@/lib/get-transaction-icon'
 
@@ -105,12 +106,14 @@ const CreateTransactionDrawer = (props: Props) => {
     })
 
     const [createTransaction, { isLoading }] = useCreateTransactionMutation()
+    const idempotencyKey = useRef(newIdempotencyKey())
 
     const onSubmit = async (data: TransactionData) => {
         try {
             const transformedData = {
                 ...data,
                 groupId: params.group,
+                idempotencyKey: idempotencyKey.current,
                 amount: parseNumberInput(data.amount),
                 splits: data.splits.map(split => ({
                     ...split,
@@ -118,6 +121,7 @@ const CreateTransactionDrawer = (props: Props) => {
                 }))
             }
             await createTransaction(transformedData).unwrap()
+            idempotencyKey.current = newIdempotencyKey()
             setOpen(false)
             form.reset()
             toast.success('Transaction added successfully')

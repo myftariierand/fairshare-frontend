@@ -4,6 +4,7 @@ import { TransactionType } from '@/types/common'
 import { TransactionCategory } from '@/types/group'
 
 type CreateTransaction = {
+    idempotencyKey?: string
     groupId: string
     amount: number
     description: string

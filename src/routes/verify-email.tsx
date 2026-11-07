@@ -62,7 +62,9 @@ function RouteComponent() {
 
             const profile = await getProfile().unwrap()
             if (!profile.emailVerified) {
-                toast.error('Invalid or expired code. Please try again.')
+                toast.error(
+                    'Invalid or expired code. Try again, or request a new one.'
+                )
                 return
             }
 
@@ -81,7 +83,9 @@ function RouteComponent() {
     const handleResendOtp = async () => {
         try {
             await resendOtp({ email: context.user.email }).unwrap()
-            toast.success('OTP resent successfully!')
+            toast.success(
+                'Check your inbox. We send at most one code a minute.'
+            )
         } catch (error) {
             toast.error(getErrorMessage(error))
         }
