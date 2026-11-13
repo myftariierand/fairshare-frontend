@@ -182,8 +182,8 @@ function RouteComponent() {
 
                     <div className='text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  '>
                         By clicking continue, you agree to our{' '}
-                        <a href='#'>Terms of Service</a> and{' '}
-                        <a href='#'>Privacy Policy</a>.
+                        <Link to='/terms'>Terms of Service</Link> and{' '}
+                        <Link to='/privacy'>Privacy Policy</Link>.
                     </div>
                 </div>
             </div>
