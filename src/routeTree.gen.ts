@@ -12,10 +12,13 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as VerifyEmailImport } from './routes/verify-email'
+import { Route as TermsImport } from './routes/terms'
 import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as RegisterImport } from './routes/register'
+import { Route as PrivacyImport } from './routes/privacy'
 import { Route as LoginImport } from './routes/login'
 import { Route as ForgotPasswordImport } from './routes/forgot-password'
+import { Route as DeleteAccountImport } from './routes/delete-account'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthScanQrCodeImport } from './routes/_auth/scan-qr-code'
@@ -38,6 +41,12 @@ const VerifyEmailRoute = VerifyEmailImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TermsRoute = TermsImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ResetPasswordRoute = ResetPasswordImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -50,6 +59,12 @@ const RegisterRoute = RegisterImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PrivacyRoute = PrivacyImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
@@ -59,6 +74,12 @@ const LoginRoute = LoginImport.update({
 const ForgotPasswordRoute = ForgotPasswordImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DeleteAccountRoute = DeleteAccountImport.update({
+  id: '/delete-account',
+  path: '/delete-account',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -151,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
+    '/delete-account': {
+      id: '/delete-account'
+      path: '/delete-account'
+      fullPath: '/delete-account'
+      preLoaderRoute: typeof DeleteAccountImport
+      parentRoute: typeof rootRoute
+    }
     '/forgot-password': {
       id: '/forgot-password'
       path: '/forgot-password'
@@ -165,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyImport
+      parentRoute: typeof rootRoute
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -177,6 +212,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordImport
+      parentRoute: typeof rootRoute
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsImport
       parentRoute: typeof rootRoute
     }
     '/verify-email': {
@@ -320,10 +362,13 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
+  '/delete-account': typeof DeleteAccountRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
@@ -340,10 +385,13 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/delete-account': typeof DeleteAccountRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/activity': typeof AuthActivityRoute
   '/friends': typeof AuthFriendsRoute
@@ -361,10 +409,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/delete-account': typeof DeleteAccountRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/_auth/activity': typeof AuthActivityRoute
   '/_auth/friends': typeof AuthFriendsRoute
@@ -384,10 +435,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
+    | '/delete-account'
     | '/forgot-password'
     | '/login'
+    | '/privacy'
     | '/register'
     | '/reset-password'
+    | '/terms'
     | '/verify-email'
     | '/activity'
     | '/friends'
@@ -403,10 +457,13 @@ export interface FileRouteTypes {
     | '/g/$group/transactions/$transaction'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/delete-account'
     | '/forgot-password'
     | '/login'
+    | '/privacy'
     | '/register'
     | '/reset-password'
+    | '/terms'
     | '/verify-email'
     | '/activity'
     | '/friends'
@@ -422,10 +479,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_auth'
+    | '/delete-account'
     | '/forgot-password'
     | '/login'
+    | '/privacy'
     | '/register'
     | '/reset-password'
+    | '/terms'
     | '/verify-email'
     | '/_auth/activity'
     | '/_auth/friends'
@@ -444,19 +504,25 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
+  DeleteAccountRoute: typeof DeleteAccountRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  TermsRoute: typeof TermsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
+  DeleteAccountRoute: DeleteAccountRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  TermsRoute: TermsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
 }
 
@@ -471,10 +537,13 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_auth",
+        "/delete-account",
         "/forgot-password",
         "/login",
+        "/privacy",
         "/register",
         "/reset-password",
+        "/terms",
         "/verify-email"
       ]
     },
@@ -492,17 +561,26 @@ export const routeTree = rootRoute
         "/_auth/profile/"
       ]
     },
+    "/delete-account": {
+      "filePath": "delete-account.tsx"
+    },
     "/forgot-password": {
       "filePath": "forgot-password.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
     },
+    "/privacy": {
+      "filePath": "privacy.tsx"
+    },
     "/register": {
       "filePath": "register.tsx"
     },
     "/reset-password": {
       "filePath": "reset-password.tsx"
+    },
+    "/terms": {
+      "filePath": "terms.tsx"
     },
     "/verify-email": {
       "filePath": "verify-email.tsx"
